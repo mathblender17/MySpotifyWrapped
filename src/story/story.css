@@ -12,7 +12,7 @@
 .frame {
   position: absolute;
   left: 50%;
-  top: calc(50% + 28px);
+  top: calc(50% - 14px);
   width: 210px;
   height: 373px;
   transform-origin: center;
