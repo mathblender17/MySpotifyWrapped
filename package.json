@@ -1,0 +1,32 @@
+{
+  "name": "ongaku-densha",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathblender17/MySpotifyWrapped.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mathblender17/MySpotifyWrapped/issues"
+  },
+  "homepage": "https://github.com/mathblender17/MySpotifyWrapped#readme",
+  "devDependencies": {
+    "jsdom": "^30.1.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3"
+  },
+  "private": true
+}
