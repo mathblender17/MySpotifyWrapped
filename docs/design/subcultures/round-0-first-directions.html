@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Round 0 - First theme directions</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected{outline:4px solid #1ed760}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Reggae+One&family=Zen+Maru+Gothic:wght@700;900&family=Noto+Serif+JP:wght@900&display=swap" rel="stylesheet">
+<style>
+  .phones{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;margin:24px 0}
+  .phone{width:270px;height:480px;border-radius:28px;overflow:hidden;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.35);flex:none}
+  .cap{width:270px;text-align:left}
+  .cap h3{margin:12px 0 4px}
+  .cap p{margin:0;font-size:13px;opacity:.8;line-height:1.45}
+  .pick{cursor:pointer}
+  .pick.selected .phone{outline:4px solid #1ed760;outline-offset:4px}
+
+  /* A — Gyaru Deco */
+  .gy{background:radial-gradient(circle at 30% 20%,#ff9ad5 0,#ff4fb0 35%,#b14cff 75%,#5b2cff 100%);color:#fff;font-family:'Zen Maru Gothic',sans-serif}
+  .gy .grid{position:absolute;inset:0;background-image:radial-gradient(#fff6 1.2px,transparent 1.4px);background-size:14px 14px}
+  .gy .frame{position:absolute;inset:14px;border:3px dashed #fff;border-radius:20px}
+  .gy .tag{position:absolute;top:30px;left:24px;background:#fff200;color:#ff2d95;font-weight:900;padding:4px 10px;transform:rotate(-6deg);font-size:13px;border-radius:6px;box-shadow:3px 3px 0 #000}
+  .gy .num{position:absolute;top:70px;left:20px;font-family:'Rampart One';font-size:120px;line-height:1;color:#fff;text-shadow:4px 4px 0 #ff2d95,8px 8px 0 #000}
+  .gy .art{position:absolute;top:200px;left:22px;font-family:'Dela Gothic One';font-size:34px;line-height:1.05;transform:rotate(-3deg);-webkit-text-stroke:1.5px #000;text-shadow:3px 3px 0 #000}
+  .gy .jp{position:absolute;top:290px;left:24px;font-family:'DotGothic16';font-size:15px;background:#000;padding:2px 8px;transform:rotate(2deg)}
+  .gy .min{position:absolute;bottom:56px;left:22px;font-weight:900;font-size:16px}
+  .gy .min b{display:block;white-space:nowrap;font-size:38px;font-family:'Dela Gothic One';color:#fff200;-webkit-text-stroke:1.5px #000}
+  .gy .st{position:absolute;font-size:30px}
+  .gy .kao{position:absolute;bottom:24px;right:20px;background:#fff;color:#ff2d95;font-size:12px;padding:3px 8px;border-radius:12px;font-weight:900;transform:rotate(-4deg)}
+
+  /* B — Shibuya Neon */
+  .ne{background:linear-gradient(180deg,#05010f 0%,#120428 60%,#250a3d 100%);color:#fff;font-family:'Zen Maru Gothic',sans-serif}
+  .ne .rain{position:absolute;inset:0;background:repeating-linear-gradient(100deg,transparent 0 22px,#7cf7ff18 22px 23px)}
+  .ne .sign{position:absolute;top:24px;right:18px;writing-mode:vertical-rl;font-family:'Dela Gothic One';font-size:30px;color:#ff3cac;text-shadow:0 0 6px #ff3cac,0 0 18px #ff3cac,0 0 40px #ff3cac;letter-spacing:4px}
+  .ne .sign2{position:absolute;top:40px;right:62px;writing-mode:vertical-rl;font-family:'DotGothic16';font-size:16px;color:#3cf6ff;text-shadow:0 0 6px #3cf6ff,0 0 16px #3cf6ff}
+  .ne .lbl{position:absolute;top:36px;left:22px;font-family:'DotGothic16';color:#3cf6ff;font-size:13px;letter-spacing:2px}
+  .ne .num{position:absolute;top:150px;left:20px;font-family:'Dela Gothic One';font-size:20px;color:#fff200;text-shadow:0 0 10px #fff200}
+  .ne .art{position:absolute;top:180px;left:20px;right:90px;font-family:'Dela Gothic One';font-size:36px;line-height:1.05;text-shadow:0 0 12px #ff3cac}
+  .ne .min{position:absolute;bottom:70px;left:20px;font-family:'DotGothic16';font-size:14px;color:#3cf6ff}
+  .ne .min b{display:block;font-family:'Dela Gothic One';font-size:46px;color:#fff;text-shadow:0 0 14px #3cf6ff}
+  .ne .floor{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(0deg,#ff3cac55,transparent)}
+
+  /* C — Tabloid / Manga Print */
+  .tb{background:#fff8e7;color:#111;font-family:'Noto Serif JP',serif}
+  .tb .ht{position:absolute;inset:0;background-image:radial-gradient(#e6002e 1.6px,transparent 1.8px);background-size:9px 9px;opacity:.25}
+  .tb .speed{position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 75% 30%,#0000 0 4deg,#0001 4deg 6deg)}
+  .tb .band{position:absolute;top:0;left:0;right:0;background:#e6002e;color:#fff200;font-family:'Dela Gothic One';font-size:15px;padding:10px 16px;letter-spacing:1px}
+  .tb .fx{position:absolute;top:60px;right:10px;font-family:'Reggae One';font-size:58px;color:#111;transform:rotate(12deg);-webkit-text-stroke:2px #fff200;line-height:.9}
+  .tb .num{position:absolute;top:150px;left:18px;background:#111;color:#fff200;font-family:'Dela Gothic One';font-size:16px;padding:4px 10px}
+  .tb .art{position:absolute;top:184px;left:16px;right:16px;font-weight:900;font-size:44px;line-height:1;letter-spacing:-1px}
+  .tb .min{position:absolute;bottom:56px;left:18px;font-family:'Dela Gothic One';font-size:15px}
+  .tb .min b{display:block;font-size:50px;color:#e6002e;-webkit-text-stroke:1.5px #111}
+  .tb .foot{position:absolute;bottom:0;left:0;right:0;background:#111;color:#fff;font-family:'DotGothic16';font-size:11px;padding:8px 14px}
+</style>
+
+<h2>Which Japan direction should the base theme be?</h2>
+<p class="subtitle">Each phone shows the same slide ("Your #1 artist of 2025") so you can compare the styles directly. Three.js adds a moving 3D layer behind each one, described under each phone. Click one, or tell me in the terminal to mix them.</p>
+
+<div class="phones">
+  <div class="pick" data-choice="gyaru" onclick="toggleSelect(this)">
+    <div class="phone gy">
+      <div class="grid"></div><div class="frame"></div>
+      <div class="tag">2025 ♡ まとめ</div>
+      <div class="num">#1</div>
+      <div class="art">KENDRICK<br>LAMAR</div>
+      <div class="jp">ｹﾝﾄﾞﾘｯｸ・ﾗﾏｰ ☆ 最強</div>
+      <div class="st" style="top:40px;right:28px">💖</div>
+      <div class="st" style="top:150px;right:22px;font-size:40px">⭐</div>
+      <div class="st" style="top:330px;right:40px;font-size:26px">🎀</div>
+      <div class="st" style="bottom:120px;right:24px;font-size:22px">✨</div>
+      <div class="min">you played them<b>4,812 min</b></div>
+      <div class="kao">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</div>
+    </div>
+    <div class="cap"><h3>A · Gyaru Deco</h3><p>Purikura photo-booth frames, sticker-bombing, glitter gradients, flip-phone kaomoji and broken half-width katakana. Loud, cute, chaotic. <b>3D:</b> stickers and sparkles fly toward the camera, and a glitter-shader background.</p></div>
+  </div>
+
+  <div class="pick" data-choice="neon" onclick="toggleSelect(this)">
+    <div class="phone ne">
+      <div class="rain"></div>
+      <div class="sign">音楽王</div>
+      <div class="sign2">カラオケ・二十四時間</div>
+      <div class="lbl">渋谷 ／ SHIBUYA · 2025</div>
+      <div class="num">#1 ARTIST</div>
+      <div class="art">KENDRICK LAMAR</div>
+      <div class="min">再生時間 · minutes<b>4,812</b></div>
+      <div class="floor"></div>
+    </div>
+    <div class="cap"><h3>B · Shibuya Neon</h3><p>Rainy back-alley nights, vertical neon signs, karaoke and arcade glow. Moody and street, the closest fit to rap. <b>3D:</b> the camera flies down a procedural neon alley, with one new sign per slide and puddle reflections.</p></div>
+  </div>
+
+  <div class="pick" data-choice="tabloid" onclick="toggleSelect(this)">
+    <div class="phone tb">
+      <div class="ht"></div><div class="speed"></div>
+      <div class="band">号外!! 2025 年間まとめ</div>
+      <div class="fx">ドド<br>ド!!</div>
+      <div class="num">第1位 / #1</div>
+      <div class="art">KENDRICK LAMAR</div>
+      <div class="min">total listening<b>4,812分</b></div>
+      <div class="foot">★ YOUR YEAR IN SOUND · 特別号 ★</div>
+    </div>
+    <div class="cap"><h3>C · Tabloid Manga</h3><p>A "gōgai" extra-edition newspaper meets manga panels: halftone, speed lines, and huge ドドド sound effects. Red, yellow and black. <b>3D:</b> paper panels flip and slam in like page turns.</p></div>
+  </div>
+</div>
+
+<p class="subtitle">Whichever you pick becomes the base, and the other two can be added later as extra themes.</p>
+
+</body></html>

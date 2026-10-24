@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Round 1 - Subculture gallery</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected{outline:4px solid #1ed760}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Reggae+One&family=Zen+Maru+Gothic:wght@700;900&family=Noto+Serif+JP:wght@900&family=Yuji+Syuku&family=Kaisei+Decol:wght@700&family=Press+Start+2P&family=Hachi+Maru+Pop&family=Zen+Kurenaido&display=swap" rel="stylesheet">
+<style>
+  .idea{border:2px solid #1ed760;border-radius:14px;padding:16px 20px;margin:18px 0 8px;background:#1ed76012}
+  .idea h3{margin:0 0 6px}
+  .idea p{margin:0;font-size:14px;line-height:1.55}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .z{position:relative;z-index:2}
+  .sp{flex:1}
+
+  /* 1 ganguro / yamanba */
+  .gan{background:linear-gradient(160deg,#6b3a1d,#3a1c0b);color:#fff;font-family:'Dela Gothic One'}
+  .gan:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,#ff8a0018 0 10px,transparent 10px 20px)}
+  .gan .hair{position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:conic-gradient(#ff2fa0,#ffe600,#00e1ff,#fff,#ff2fa0);filter:blur(1px);opacity:.9}
+  .gan .eye{display:flex;gap:6px;margin:6px 0}.gan .eye i{display:block;width:44px;height:10px;background:#fff;border-radius:10px}
+  .gan .t{font-size:11px;color:#ffe600;font-family:'DotGothic16'}
+  .gan .big{font-size:30px;line-height:1;text-shadow:3px 3px 0 #ff2fa0}
+  .gan .lips{width:70px;height:16px;border-radius:0 0 40px 40px;background:#fff;margin-top:8px}
+
+  /* 2 keitai deco-mail */
+  .kei{background:#c8c8d0;font-family:'DotGothic16';align-items:center;justify-content:center}
+  .kei .flip{width:150px;background:linear-gradient(#ff7ac6,#e0369a);border-radius:22px 22px 8px 8px;padding:12px 10px 18px;box-shadow:inset 0 0 0 3px #fff8}
+  .kei .scr{background:#0c0c18;border-radius:6px;padding:8px;color:#fff;font-size:11px;line-height:1.5;height:170px}
+  .kei .scr .h{background:#ff4fb0;color:#fff;margin:-8px -8px 6px;padding:2px 6px;font-size:10px}
+  .kei .scr b{color:#ffe600;font-size:14px}
+  .kei .strap{position:absolute;right:30px;bottom:40px;font-size:26px}
+
+  /* 3 host club */
+  .host{background:radial-gradient(circle at 50% 0,#3b2a00,#000 70%);color:#f8d77a;font-family:'Noto Serif JP'}
+  .host .hd{text-align:center;font-size:10px;letter-spacing:4px}
+  .host .n1{margin:10px auto 0;width:118px;height:150px;border:3px solid #f8d77a;box-shadow:0 0 18px #f8d77a88,inset 0 0 18px #f8d77a55;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:8px;background:linear-gradient(#222,#000)}
+  .host .n1 .k{font-family:'Dela Gothic One';font-size:34px;color:#fff;text-shadow:0 0 10px #f8d77a}
+  .host .n1 .nm{font-size:12px;color:#fff}
+  .host .row{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .host .row div{width:52px;height:64px;border:2px solid #b89c4c;font-size:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px}
+  .host .ch{text-align:center;font-size:11px;margin-top:10px;color:#fff}
+
+  /* 4 train */
+  .trn{background:#f4f4f0;color:#111;font-family:'Zen Maru Gothic'}
+  .trn .led{background:#111;color:#ff9a1f;font-family:'DotGothic16';font-size:12px;padding:8px;border-radius:4px;text-shadow:0 0 4px #ff9a1f;line-height:1.6}
+  .trn .led span{color:#58ff7a}
+  .trn .sign{margin-top:22px;background:#fff;border:1px solid #ccc;text-align:center;padding:10px 4px 0}
+  .trn .sign .jp{font-family:'Noto Serif JP';font-size:30px}
+  .trn .sign .en{font-size:12px;font-weight:900;letter-spacing:2px}
+  .trn .sign .bar{height:12px;background:#2db34a;margin-top:8px;display:flex;justify-content:space-between;padding:0 6px;font-size:10px;color:#fff;align-items:center}
+  .trn .nx{display:flex;justify-content:space-between;font-size:11px;margin-top:4px;font-weight:900}
+
+  /* 5 food review */
+  .food{background:#fffaf0;color:#3a2a1a;font-family:'Zen Maru Gothic'}
+  .food .stars{color:#f08a00;font-size:20px;letter-spacing:1px}
+  .food .score{font-family:'Dela Gothic One';font-size:44px;color:#e05a00;line-height:1}
+  .food .rv{font-size:11px;background:#fff;border:1px solid #eadcc6;padding:6px;margin-top:8px;border-radius:6px}
+  .food .tk{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}
+  .food .tk div{background:linear-gradient(#ffe36b,#f5b800);border:2px solid #8a6a00;border-radius:4px;font-size:10px;text-align:center;padding:5px 2px;font-weight:900}
+  .food .tk div:first-child{background:linear-gradient(#ff8c7a,#e8442b);color:#fff}
+
+  /* 6 weather */
+  .wx{background:linear-gradient(#0b62c4,#0a3f87);color:#fff;font-family:'Zen Maru Gothic'}
+  .wx .bar{background:#fff;color:#0a3f87;font-weight:900;font-size:12px;padding:4px 8px;border-radius:4px;display:inline-block}
+  .wx .map{margin:12px 0;height:120px;position:relative}
+  .wx .isl{position:absolute;background:#5fd16a;border-radius:40% 60% 50% 40%;border:2px solid #fff}
+  .wx .ic{position:absolute;font-size:20px}
+  .wx .fc{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:10px;text-align:center}
+  .wx .fc div{background:#ffffff22;border-radius:4px;padding:4px 0}
+  .wx .fc b{display:block;font-size:16px}
+
+  /* 7 idol */
+  .idol{background:linear-gradient(#ffe9f6,#fff);color:#d4007a;font-family:'Hachi Maru Pop'}
+  .idol .ch{background:#fff;padding:8px 8px 26px;box-shadow:0 6px 16px #0003;transform:rotate(-4deg);width:130px;margin:6px auto 0}
+  .idol .ch .pic{height:110px;background:linear-gradient(135deg,#ff9ad5,#9ad6ff)}
+  .idol .ch .sig{font-size:13px;margin-top:4px}
+  .idol .oshi{text-align:center;font-family:'Dela Gothic One';font-size:20px;margin-top:14px}
+  .idol .pen{display:flex;justify-content:center;gap:5px;margin-top:8px}
+  .idol .pen i{width:8px;height:44px;border-radius:4px;box-shadow:0 0 10px currentColor}
+
+  /* 8 sumo banzuke */
+  .sumo{background:#efe3c4;color:#111;font-family:'Yuji Syuku'}
+  .sumo .hd{text-align:center;font-size:20px;border-bottom:2px solid #111;padding-bottom:4px}
+  .sumo .cols{display:flex;flex-direction:row-reverse;justify-content:space-between;margin-top:10px;flex:1}
+  .sumo .cols div{writing-mode:vertical-rl;font-size:15px;border-left:1px solid #1115;padding:0 2px}
+  .sumo .cols .y{font-size:24px;color:#a00}
+  .sumo .ft{font-size:10px;text-align:center;font-family:'Zen Maru Gothic'}
+
+  /* 9 koshien scoreboard */
+  .kos{background:#0e3b22;color:#fff;font-family:'DotGothic16'}
+  .kos .bd{background:#062414;border:3px solid #c9c9c9;padding:6px;font-size:10px}
+  .kos table{width:100%;border-collapse:collapse;text-align:center}
+  .kos td{border:1px solid #2c5a3f;padding:2px 0}
+  .kos .hl{color:#ffe600}
+  .kos .tt{font-family:'Dela Gothic One';font-size:22px;margin-top:16px;line-height:1.1}
+  .kos .sub{font-size:11px;color:#9fe0b5;margin-top:6px}
+
+  /* 10 high school */
+  .hs{background:#f7f5ee;color:#1a2a4a;font-family:'Zen Kurenaido'}
+  .hs .cv{background:#1a2a4a;color:#fff;text-align:center;padding:6px;font-size:14px;font-family:'Noto Serif JP'}
+  .hs table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+  .hs td{border:1px solid #1a2a4a55;padding:4px}
+  .hs td:last-child{text-align:center;font-size:18px;color:#c00}
+  .hs .hanko{position:absolute;bottom:24px;right:20px;width:46px;height:46px;border:3px solid #d0021b;border-radius:50%;color:#d0021b;font-family:'Noto Serif JP';display:flex;align-items:center;justify-content:center;font-size:14px;transform:rotate(-12deg)}
+  .hs .cm{font-size:12px;margin-top:10px}
+
+  /* 11 anime eyecatch */
+  .ani{background:repeating-conic-gradient(from 0deg at 50% 45%,#ffde00 0 10deg,#ff7a00 10deg 20deg);color:#111;align-items:center;justify-content:center;text-align:center}
+  .ani .ep{background:#fff;border:4px solid #111;padding:10px 12px;transform:rotate(-3deg);font-family:'Dela Gothic One'}
+  .ani .ep small{display:block;font-size:11px;color:#e6002e}
+  .ani .ep .t{font-size:20px;line-height:1.15}
+  .ani .nx{margin-top:18px;background:#111;color:#fff;font-family:'DotGothic16';font-size:11px;padding:4px 10px}
+
+  /* 12 manga ranking */
+  .mg{background:#fff;color:#111;font-family:'Dela Gothic One';padding:10px}
+  .mg .pn{border:3px solid #111;margin-bottom:6px;position:relative;overflow:hidden}
+  .mg .p1{height:150px;background:repeating-linear-gradient(90deg,#fff 0 3px,#111 3px 4px);display:flex;align-items:center;justify-content:center}
+  .mg .p1 span{background:#fff;padding:4px 8px;font-size:28px;border:3px solid #111}
+  .mg .p2{display:flex;gap:6px;flex:1}
+  .mg .p2 .pn{flex:1;font-size:11px;padding:6px;font-family:'Zen Maru Gothic';font-weight:900}
+  .mg .bub{background:#fff;border:2px solid #111;border-radius:50%;padding:12px 8px;font-size:12px;text-align:center}
+  .mg .fx{position:absolute;right:4px;top:2px;font-family:'Reggae One';font-size:26px;color:#e6002e}
+
+  /* 13 JRPG */
+  .rpg{background:#000;color:#fff;font-family:'DotGothic16';font-size:13px}
+  .rpg .win{border:3px solid #fff;border-radius:6px;padding:8px;margin-bottom:8px;background:#0a0a6a}
+  .rpg .win.b{background:#000}
+  .rpg .row{display:flex;justify-content:space-between}
+  .rpg .cur{color:#ffe600}
+
+  /* 14 gacha */
+  .gac{background:radial-gradient(circle at 50% 45%,#fff 0,#ffe7a0 12%,#b06bff 40%,#14002e 80%);align-items:center;justify-content:center;color:#fff;font-family:'Dela Gothic One'}
+  .gac .card{width:120px;height:170px;border-radius:10px;background:linear-gradient(135deg,#ff6ad5,#ffd700,#6af0ff,#ff6ad5);padding:3px;box-shadow:0 0 30px #fff}
+  .gac .card div{height:100%;border-radius:8px;background:linear-gradient(#2a0f5a,#120530);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px}
+  .gac .ssr{font-size:34px;background:linear-gradient(90deg,#ff6ad5,#ffd700,#6af0ff);-webkit-background-clip:text;color:transparent}
+  .gac .st{color:#ffd700;margin-top:4px}
+  .gac .lb{margin-top:14px;font-size:12px;letter-spacing:2px}
+
+  /* 15 rhythm game result */
+  .rhy{background:linear-gradient(135deg,#00103a,#3b0066);color:#fff;font-family:'Dela Gothic One'}
+  .rhy .fc{font-family:'Rampart One';font-size:30px;color:#6af0ff;text-shadow:0 0 10px #6af0ff;transform:skew(-8deg)}
+  .rhy .rk{font-size:90px;line-height:1;background:linear-gradient(#fff6a0,#ffb400);-webkit-background-clip:text;color:transparent;text-align:center;margin:6px 0}
+  .rhy .ln{display:flex;justify-content:space-between;font-family:'DotGothic16';font-size:12px;border-bottom:1px solid #fff3;padding:3px 0}
+  .rhy .ln b{color:#ffe600}
+
+  /* 16 kouhaku */
+  .kou{background:linear-gradient(90deg,#d0021b 50%,#f5f5f5 50%);font-family:'Dela Gothic One';text-align:center}
+  .kou .hd{background:#111;color:#ffd700;font-size:13px;padding:6px;border-radius:4px}
+  .kou .vs{display:flex;justify-content:space-between;margin-top:18px;font-size:12px}
+  .kou .vs div{width:45%}
+  .kou .r{color:#fff}.kou .w{color:#d0021b}
+  .kou .sc{font-size:40px;line-height:1}
+  .kou .bv{margin-top:auto;background:#111;color:#fff;font-size:20px;padding:6px;border-radius:4px}
+
+  /* 17 omikuji */
+  .omi{background:#7a0c0c;align-items:center}
+  .omi .slip{background:#fdf8ec;width:120px;flex:1;margin:4px 0;font-family:'Yuji Syuku';color:#111;display:flex;flex-direction:column;align-items:center;padding:10px 4px;border:1px solid #c9a}
+  .omi .slip .kk{writing-mode:vertical-rl;font-size:54px;color:#c00;line-height:1}
+  .omi .slip .hd{font-size:12px;border-bottom:1px solid #111;width:100%;text-align:center;padding-bottom:4px;margin-bottom:8px}
+  .omi .slip .ln{font-size:11px;margin-top:8px;font-family:'Zen Kurenaido';text-align:center}
+
+  /* 18 dekotora / bosozoku */
+  .dek{background:#0a0a0a;color:#fff;font-family:'Dela Gothic One'}
+  .dek .chrome{background:linear-gradient(#fff,#9a9a9a 45%,#3a3a3a 50%,#d9d9d9);-webkit-background-clip:text;color:transparent;font-size:34px;line-height:1;text-align:center}
+  .dek .lights{display:flex;justify-content:space-between;margin:10px 0}
+  .dek .lights i{width:14px;height:14px;border-radius:50%}
+  .dek .pan{border:3px solid #ffd700;padding:8px;text-align:center;background:linear-gradient(#5a0090,#200040)}
+  .dek .pan .k{font-family:'Yuji Syuku';font-size:30px;color:#ffd700}
+  .dek .st{font-size:12px;text-align:center;margin-top:8px;color:#ff4f4f}
+
+  /* 19 visual kei */
+  .vk{background:radial-gradient(circle at 50% 30%,#3a0010,#000 70%);color:#eee;font-family:'Kaisei Decol';text-align:center}
+  .vk .rose{font-size:40px;margin-top:10px;filter:hue-rotate(-20deg)}
+  .vk .t{font-size:30px;color:#c4002f;text-shadow:0 0 12px #c4002f;line-height:1.1;margin-top:10px}
+  .vk .s{font-size:12px;letter-spacing:4px;margin-top:10px;color:#aaa}
+  .vk .cr{margin-top:auto;font-size:11px;color:#888}
+
+  /* 20 karaoke score */
+  .kar{background:linear-gradient(#1a0040,#5a00a0);color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .kar .tt{font-size:12px;background:#ffffff22;padding:4px;border-radius:4px}
+  .kar .sc{font-family:'Rampart One';font-size:56px;color:#ffe600;text-shadow:0 0 14px #ff7a00;margin-top:16px;line-height:1}
+  .kar .sc small{font-size:24px}
+  .kar .rad{display:flex;justify-content:space-around;margin-top:14px;font-size:10px;font-family:'DotGothic16'}
+  .kar .rad div b{display:block;font-size:16px;color:#6af0ff}
+  .kar .cm{margin-top:auto;font-family:'Hachi Maru Pop';font-size:12px;background:#fff;color:#5a00a0;border-radius:14px;padding:6px}
+</style>
+
+<h2>Japan subculture gallery: pick every one you like</h2>
+<p class="subtitle">These are 20 Japanese subcultures. Each is paired with a Wrapped stat it naturally fits, and that pairing is what makes this unique. Click to select as many as you like (it's multi-select).</p>
+
+<div class="idea">
+  <h3>💡 The big idea: "Japan as a whole" = one story that tours Japan</h3>
+  <p>Instead of one style, each slide happens in a different subculture. Your top 5 artists are hosts on a <b>host-club ranking board</b>. Your years are stops on a <b>train line</b>. Your #1 song is an <b>SSR gacha pull</b>. Your music personality is an <b>omikuji fortune</b>. Your genres get a <b>school report card</b>. Three.js carries the camera from one world to the next like a train ride. Gyaru "garble" stays as the connecting voice through the whole story: the captions, the scribbles and the broken gyaru-moji text.</p>
+</div>
+
+<div class="grp">Street &amp; fashion</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="ganguro" onclick="toggleSelect(this)"><div class="ph gan"><div class="hair"></div><div class="z t">ガングロ ✦ 渋谷センター街</div><div class="sp"></div><div class="z eye"><i></i><i></i></div><div class="z big">TOP GENRE<br>パラパラ<br>HIP-HOP</div><div class="z lips"></div></div><h4>Ganguro / Yamanba (reverse gyaru)</h4><p>Deep tan, white eye stripes, rainbow hair: the rebellion against pale-skin beauty norms. <b>→ Top genre slide</b></p></div>
+  <div class="it" data-choice="keitai" onclick="toggleSelect(this)"><div class="ph kei"><div class="flip"><div class="scr"><div class="h">✉ 新着ﾒｰﾙ 1件</div>ぁたしの<br>No.1ゎ…<br><b>☆ ケンドリック ☆</b><br>4812分も<br>聴ぃてたょ〜<br>(*´ω｀*)ﾉ♡</div></div><div class="strap">🎀</div></div><h4>Keitai deco-mail (gyaru-moji)</h4><p>A 2000s flip phone, deco emoji, and gyaru-moji broken writing (ぁ ゎ ょ). This is the "garbled" voice. <b>→ Any stat as a text message</b></p></div>
+  <div class="it" data-choice="dekotora" onclick="toggleSelect(this)"><div class="ph dek"><div class="chrome">爆音<br>街道</div><div class="lights"><i style="background:#ff2f2f;box-shadow:0 0 8px #ff2f2f"></i><i style="background:#ffd700;box-shadow:0 0 8px #ffd700"></i><i style="background:#2fff6a;box-shadow:0 0 8px #2fff6a"></i><i style="background:#2fc6ff;box-shadow:0 0 8px #2fc6ff"></i><i style="background:#ff2fd0;box-shadow:0 0 8px #ff2fd0"></i></div><div class="pan"><div class="k">夜露死苦</div><div style="font-size:12px">LOUDEST MONTH · AUG</div><div style="font-size:30px">9,204 min</div></div><div class="st">— 全国制覇 —</div></div><h4>Dekotora / Bosozoku</h4><p>Chrome-and-neon decorated trucks, biker-gang kanji (夜露死苦 = "yoroshiku"). Peak yankii. <b>→ Your loudest month</b></p></div>
+  <div class="it" data-choice="visualkei" onclick="toggleSelect(this)"><div class="ph vk"><div class="rose">🥀</div><div class="t">深夜の<br>旋律</div><div class="s">MIDNIGHT LISTENER</div><div style="font-size:36px;white-space:nowrap;margin-top:12px;font-family:'Dela Gothic One'">2:47 AM</div><div style="font-size:11px">your most-played hour</div><div class="cr">✝ 漆黒の夜想曲 ✝</div></div><h4>Visual kei</h4><p>Gothic rock theatrics: roses, crosses, crimson and black. (Was this your "Weibo"? Tell me if not.) <b>→ Your late-night listening</b></p></div>
+</div>
+
+<div class="grp">Nightlife &amp; idols</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="hostclub" onclick="toggleSelect(this)"><div class="ph host"><div class="hd">✦ 2025 年間売上 RANKING ✦</div><div class="n1"><div class="k">No.1</div><div class="nm">KENDRICK</div></div><div class="row"><div>No.2</div><div>No.3</div><div>No.4</div></div><div class="ch">🍾 シャンパンタワー × 4,812 min</div></div><h4>Host / hostess club</h4><p>The gold-framed glowing ranking board outside every Kabukicho club, plus a champagne tower. <b>→ Top 5 artists</b></p></div>
+  <div class="it" data-choice="idol" onclick="toggleSelect(this)"><div class="ph idol"><div style="text-align:center;font-size:13px">♡ 今年の推し ♡</div><div class="ch"><div class="pic"></div><div class="sig">SZA ♡ ありがと!</div></div><div class="oshi">推し活 312回</div><div class="pen"><i style="background:#ff4fb0;color:#ff4fb0"></i><i style="background:#ffe600;color:#ffe600"></i><i style="background:#3cf6ff;color:#3cf6ff"></i><i style="background:#7a5cff;color:#7a5cff"></i><i style="background:#58ff7a;color:#58ff7a"></i></div></div><h4>Idol / oshi-katsu</h4><p>Cheki polaroids, penlight colors and "oshi" (your fave) devotion. (Was this your "attracting"?) <b>→ Your most-replayed artist</b></p></div>
+  <div class="it" data-choice="karaoke" onclick="toggleSelect(this)"><div class="ph kar"><div class="tt">♪ 採点結果 ♪</div><div class="sc">96<small>.812</small></div><div style="font-size:12px;margin-top:4px">LISTENER SCORE</div><div class="rad"><div><b>A+</b>音程</div><div><b>S</b>安定</div><div><b>B</b>冒険</div></div><div class="cm">ジャンルの幅をもっと広げよう! ♪</div></div><h4>Karaoke scoring</h4><p>The scoring screen after you sing, with a radar of skills and a cheeky comment. <b>→ Overall listener score</b></p></div>
+  <div class="it" data-choice="kouhaku" onclick="toggleSelect(this)"><div class="ph kou"><div class="hd">紅白歌合戦 2025</div><div class="vs"><div class="r">紅組<div class="sc">58%</div>SZA</div><div class="w">白組<div class="sc">42%</div>DRAKE</div></div><div class="sp"></div><div class="bv">紅組の勝ち!</div></div><h4>Kōhaku year-end song battle</h4><p>Japan's New Year's Eve TV ritual: a red team against a white team. The most Wrapped-coded tradition there is. <b>→ Your top-2 artist showdown</b></p></div>
+</div>
+
+<div class="grp">Everyday Japan</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="train" onclick="toggleSelect(this)"><div class="ph trn"><div class="led">普通 <span>2025</span> 行 · 定刻<br>次は 2026 ▶ 発車</div><div class="sign"><div class="jp">二〇二五</div><div class="en">2025</div><div class="bar"><span>◀ 2024</span><span>2026 ▶</span></div></div><div class="nx"><span>14,221 min</span><span>327 artists</span></div><div class="sp"></div><div style="font-size:11px;text-align:center">♪ 発車メロディー: your #1 song</div></div><h4>Train / densha</h4><p>Station signs, the orange LED departure board, line colors, and departure jingles. <b>→ The year picker: each year is a station</b></p></div>
+  <div class="it" data-choice="food" onclick="toggleSelect(this)"><div class="ph food"><div style="font-size:12px;font-weight:900">あなたの耳 · 口コミ評価</div><div class="score">3.92</div><div class="stars">★★★★☆</div><div class="rv">「ジャンルの味が深い。毎日通いたい名店。」— 常連 2,104人</div><div class="tk"><div>HIP-HOP<br>大盛</div><div>R&amp;B</div><div>J-POP</div><div>LO-FI</div><div>JAZZ</div><div>売切</div></div></div><h4>Food review + ticket machine</h4><p>Gourmet review-site 3.5-star snobbery and the ramen-shop ticket machine. <b>→ Your genre menu and taste rating</b></p></div>
+  <div class="it" data-choice="weather" onclick="toggleSelect(this)"><div class="ph wx"><span class="bar">♪ 音楽天気予報</span><div class="map"><div class="isl" style="width:40px;height:30px;top:6px;right:26px"></div><div class="isl" style="width:70px;height:36px;top:40px;right:52px;transform:rotate(-30deg)"></div><div class="isl" style="width:40px;height:26px;top:82px;left:40px"></div><div class="ic" style="top:0;right:60px">☀</div><div class="ic" style="top:50px;left:30px">🌸</div><div class="ic" style="top:84px;right:40px">⛈</div></div><div class="fc"><div>春<b>☀</b>Pop</div><div>夏<b>🔥</b>Rap</div><div>秋<b>🍁</b>R&amp;B</div><div>冬<b>❄</b>Lo-fi</div></div></div><h4>TV weather / sakura forecast</h4><p>The weather-map broadcast and the cherry-blossom front forecast. <b>→ Seasonal mood: what you played each season</b></p></div>
+  <div class="it" data-choice="omikuji" onclick="toggleSelect(this)"><div class="ph omi"><div class="slip"><div class="hd">音楽みくじ 第十七番</div><div class="kk">大吉</div><div class="ln">新しい出会いあり<br>失せ物: 昔の推し曲<br>待人: 来年来る</div></div></div><h4>Omikuji fortune slip</h4><p>The shrine fortune slip you draw: 大吉 (great luck) down to 凶 (bad luck). <b>→ Your listening personality, and a 2026 prediction</b></p></div>
+</div>
+
+<div class="grp">Sports &amp; school</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="sumo" onclick="toggleSelect(this)"><div class="ph sumo"><div class="hd">令和七年 番付</div><div class="cols"><div class="y">横綱 健土陸</div><div>大関 SZA</div><div>関脇 Drake</div><div>小結 Tyler</div><div>前頭 Doja</div><div>前頭 Frank</div></div><div class="ft">your artist banzuke</div></div><h4>Sumo banzuke</h4><p>The vertical calligraphy ranking sheet. Your #1 is Yokozuna (grand champion). <b>→ Top artists, ranked like sumo wrestlers</b></p></div>
+  <div class="it" data-choice="koshien" onclick="toggleSelect(this)"><div class="ph kos"><div class="bd"><table><tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>RAP</td><td>3</td><td>1</td><td class="hl">9</td><td>2</td><td>0</td><td>4</td></tr><tr><td>R&amp;B</td><td>1</td><td>2</td><td>0</td><td>5</td><td class="hl">7</td><td>1</td></tr></table></div><div class="tt">甲子園 · YOUR SEASON</div><div class="sub">month-by-month innings: rap wins in the 3rd</div><div class="sp"></div><div style="font-family:'Dela Gothic One';font-size:28px;color:#ffe600">逆転優勝!</div></div><h4>Kōshien high-school baseball</h4><p>The giant green scoreboard and summer-tournament drama. <b>→ Month-by-month genre battle</b></p></div>
+  <div class="it" data-choice="school" onclick="toggleSelect(this)"><div class="ph hs"><div class="cv">通 知 表 · 令和7年度</div><table><tr><td>ヒップホップ</td><td>5</td></tr><tr><td>R&amp;B</td><td>4</td></tr><tr><td>J-POP</td><td>3</td></tr><tr><td>クラシック</td><td>1</td></tr><tr><td>出席日数</td><td>364</td></tr></table><div class="cm">担任より: 毎日よく聴きました。<br>新しいジャンルにも挑戦しよう。</div><div class="hanko">担任</div></div><h4>High-school report card</h4><p>The tsūshinbo report card, graded 1 to 5, with a teacher's hanko stamp and a comment. <b>→ Genre grades and days listened</b></p></div>
+</div>
+
+<div class="grp">Anime, manga &amp; games</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="anime" onclick="toggleSelect(this)"><div class="ph ani"><div class="ep"><small>第 12 話</small><div class="t">あの夏、<br>僕は同じ曲を<br>247回聴いた。</div></div><div class="nx">次回予告 ▶ 2026</div></div><h4>Anime episode title card</h4><p>Long, dramatic episode titles, eyecatch cards, and a "next episode" teaser. <b>→ Your on-repeat song, as an episode</b></p></div>
+  <div class="it" data-choice="manga" onclick="toggleSelect(this)"><div class="ph mg"><div class="pn p1"><span>247回!!</span><div class="fx">ドン</div></div><div class="p2"><div class="pn">読者アンケート<br>第1位<br>"HUMBLE."</div><div class="pn" style="display:flex;align-items:center"><div class="bub">まだ聴く<br>のか…!?</div></div></div></div><h4>Shōnen manga</h4><p>Panels, speed lines, the reader-poll ranking and ドン impact sound effects. <b>→ Top songs, as a weekly ranking</b></p></div>
+  <div class="it" data-choice="jrpg" onclick="toggleSelect(this)"><div class="ph rpg"><div class="win"><div class="row"><span>LISTENER</span><span>Lv 47</span></div><div class="row"><span>HP</span><span>14221 min</span></div><div class="row"><span>MP</span><span>327 art.</span></div></div><div class="win b">▶ <span class="cur">ちから</span>: HIP-HOP<br>&nbsp;&nbsp;すばやさ: R&amp;B<br>&nbsp;&nbsp;かしこさ: JAZZ</div><div class="win b" style="font-size:12px">* レベルが あがった!<br>* あたらしい ジャンルを おぼえた!</div></div><h4>JRPG status screen</h4><p>Classic blue menu windows, a level-up jingle and "learned a new skill!" messages. <b>→ Your listener level and new genres learned</b></p></div>
+  <div class="it" data-choice="gacha" onclick="toggleSelect(this)"><div class="ph gac"><div class="card"><div><div class="ssr">SSR</div>HUMBLE.<div class="st">★★★★★</div></div></div><div class="lb">✦ 確定演出 ✦</div></div><h4>Gacha pull</h4><p>The rainbow "guaranteed SSR" reveal from mobile gacha games. Peak suspense. <b>→ Your #1 song reveal</b></p></div>
+  <div class="it" data-choice="rhythm" onclick="toggleSelect(this)"><div class="ph rhy"><div class="fc">FULL COMBO!</div><div class="rk">S</div><div class="ln"><span>PERFECT streak</span><b>41 days</b></div><div class="ln"><span>MAX COMBO</span><b>87 songs</b></div><div class="ln"><span>SKIP (MISS)</span><b>12%</b></div><div class="ln"><span>NEW RECORD</span><b>▲ 23%</b></div></div><h4>Arcade rhythm game</h4><p>Arcade rhythm-game result screens: rank S, FULL COMBO and MISS counts. Made for music data. <b>→ Streaks, skip rate and personal bests</b></p></div>
+</div>
+
+</body></html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Round 2 - Subculture gallery</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected{outline:4px solid #1ed760}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Reggae+One&family=Zen+Maru+Gothic:wght@700;900&family=Noto+Serif+JP:wght@900&family=Yuji+Syuku&family=Kaisei+Decol:wght@700&family=Hachi+Maru+Pop&family=Zen+Kurenaido&family=Mochiy+Pop+One&family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
+<style>
+  .kept{border:1px solid #fff3;border-radius:12px;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.6}
+  .kept b{color:#1ed760}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .sp{flex:1}
+  .c{text-align:center}
+  .dg{font-family:'Dela Gothic One'}
+  .dot{font-family:'DotGothic16'}
+
+  /* decora */
+  .deco{background:#fff0fa;font-family:'Mochiy Pop One';color:#ff3d9a;background-image:radial-gradient(#ffd1ec 3px,transparent 3px);background-size:18px 18px}
+  .deco .clips{display:flex;flex-wrap:wrap;gap:4px}
+  .deco .clips i{width:22px;height:9px;border-radius:5px;transform:rotate(-20deg)}
+  .deco .big{font-size:30px;line-height:1.05;margin-top:24px;text-shadow:2px 2px 0 #7af0ff,4px 4px 0 #ffe94d}
+  .deco .bub{background:#7af0ff;color:#2a2a8a;border-radius:16px;padding:6px 10px;font-size:12px;margin-top:12px;align-self:flex-start}
+  /* lolita */
+  .loli{background:#1b0d14;color:#f5d7e4;font-family:'Kaisei Decol';text-align:center}
+  .loli .lace{height:16px;margin:-16px -16px 10px;background:radial-gradient(circle at 50% 0,#f5d7e4 7px,transparent 8px) 0 0/16px 16px}
+  .loli .fr{border:2px solid #f5d7e4;border-radius:50% 50% 8px 8px;padding:20px 8px 12px;margin-top:6px}
+  .loli .t{font-size:26px;line-height:1.1}
+  .loli .s{font-size:11px;letter-spacing:3px;margin-top:6px;opacity:.8}
+  /* yankii */
+  .yan{background:#111;color:#fff;font-family:'Yuji Syuku'}
+  .yan .tok{background:#fff;color:#111;writing-mode:vertical-rl;font-size:26px;padding:10px 6px;position:absolute;right:16px;top:16px;bottom:16px;text-align:center}
+  .yan .l{width:120px}
+  .yan .l .dg{font-size:13px;color:#ffd700}
+  .yan .l .n{font-family:'Dela Gothic One';font-size:42px;line-height:1;margin-top:6px}
+  /* purikura */
+  .pri{background:linear-gradient(#ffd6f2,#d7c8ff);align-items:center}
+  .pri .strip{background:#fff;padding:6px;display:grid;grid-template-columns:1fr 1fr;gap:5px;width:160px;box-shadow:0 6px 14px #0003}
+  .pri .strip div{height:72px;border-radius:4px;position:relative;font-family:'Hachi Maru Pop';font-size:10px;color:#fff;display:flex;align-items:flex-end;padding:3px;text-shadow:0 0 3px #f0c}
+  .pri .lb{font-family:'Hachi Maru Pop';color:#d0008a;margin-top:12px;font-size:14px}
+
+  /* city pop */
+  .cp{background:linear-gradient(#ff9a8b,#ff6a88 45%,#3a2b8f);color:#fff;font-family:'Zen Maru Gothic'}
+  .cp .rec{width:150px;height:150px;border-radius:50%;margin:8px auto 0;background:repeating-radial-gradient(#111 0 2px,#222 2px 4px);display:flex;align-items:center;justify-content:center}
+  .cp .rec i{width:50px;height:50px;border-radius:50%;background:#ffd36b}
+  .cp .obi{position:absolute;left:14px;top:12px;bottom:12px;width:26px;background:#fff;color:#c4002f;writing-mode:vertical-rl;font-family:'Noto Serif JP';font-size:13px;display:flex;align-items:center;justify-content:center}
+  .cp .t{margin-left:34px;margin-top:12px}
+  .cp .t .dg{font-size:24px}
+  /* pachinko */
+  .pa{background:radial-gradient(circle at 50% 40%,#ff004c,#5a0030 60%,#000);color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .pa .fever{font-family:'Rampart One';font-size:44px;color:#ffe600;text-shadow:0 0 12px #ff8a00,3px 3px 0 #000;transform:rotate(-6deg)}
+  .pa .reels{display:flex;gap:6px;justify-content:center;margin-top:16px}
+  .pa .reels div{width:46px;height:60px;background:#fff;color:#e6002e;font-size:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 3px #ffd700}
+  .pa .balls{margin-top:14px;font-size:13px}
+  /* tamagotchi */
+  .tam{background:#f7e9ff;align-items:center;justify-content:center}
+  .tam .egg{width:170px;height:210px;border-radius:50% 50% 46% 46%/58% 58% 42% 42%;background:linear-gradient(135deg,#7ad7ff,#c77dff);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:inset 0 -10px 20px #0002}
+  .tam .scr{width:100px;height:86px;background:#b8c99a;border:5px solid #333;border-radius:6px;font-family:'DotGothic16';font-size:10px;color:#222;padding:4px;box-sizing:border-box;text-align:center;line-height:1.3}
+  .tam .scr b{font-size:24px;display:block}
+  .tam .bt{display:flex;gap:10px;margin-top:10px}.tam .bt i{width:14px;height:14px;border-radius:50%;background:#333}
+  /* radio taiso card */
+  .rt{background:#fffbe6;color:#1d3d8f;font-family:'Zen Maru Gothic'}
+  .rt .hd{background:#1d3d8f;color:#fff;text-align:center;padding:6px;font-weight:900;font-size:13px;border-radius:6px}
+  .rt .g{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:10px}
+  .rt .g i{aspect-ratio:1;border:1px solid #1d3d8f55;border-radius:4px;position:relative}
+  .rt .g i.s:after{content:"♪";position:absolute;inset:2px;border-radius:50%;background:#e8352b;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-style:normal}
+  .rt .ft{margin-top:10px;font-size:12px;text-align:center;font-weight:900}
+
+  /* konbini receipt */
+  .kon{background:#2e8b57;align-items:center}
+  .kon .rc{background:#fff;width:170px;flex:1;font-family:'DotGothic16';font-size:11px;color:#222;padding:10px;line-height:1.5;-webkit-mask:radial-gradient(circle at 6px 100%,#0000 5px,#000 5.5px) -6px 0/12px 100%}
+  .kon .rc .h{text-align:center;font-size:13px;border-bottom:1px dashed #999;padding-bottom:4px}
+  .kon .rc .r{display:flex;justify-content:space-between}
+  .kon .rc .tot{border-top:1px dashed #999;margin-top:4px;padding-top:4px;font-size:14px}
+  /* vending machine */
+  .vm{background:#d8261c;color:#fff;font-family:'Zen Maru Gothic'}
+  .vm .win{background:#e8f4ff;border-radius:6px;padding:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .vm .win div{height:62px;border-radius:12px 12px 4px 4px;font-size:9px;color:#fff;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-weight:900}
+  .vm .pr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px}
+  .vm .pr span{background:#111;font-family:'DotGothic16';font-size:10px;text-align:center;color:#ff4040}
+  .vm .lb{margin-top:12px;font-family:'Dela Gothic One';font-size:18px;text-align:center}
+  /* bento */
+  .ben{background:#2b1a10;color:#fff;font-family:'Zen Maru Gothic'}
+  .ben .box{flex:1;margin-top:10px;background:#c0392b;border-radius:10px;padding:8px;display:grid;grid-template-columns:1.2fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:6px}
+  .ben .box div{border-radius:6px;font-size:11px;font-weight:900;padding:4px;color:#222}
+  .ben .box .rice{grid-row:span 3;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:13px}
+  .ben .box .rice i{width:16px;height:16px;border-radius:50%;background:#c4002f;margin-bottom:4px}
+  /* gashapon */
+  .gas{background:linear-gradient(#ffe066,#ff9f1c);align-items:center;font-family:'Mochiy Pop One';color:#5a2a00}
+  .gas .dome{width:150px;height:130px;border-radius:75px 75px 10px 10px;background:#ffffffaa;position:relative;overflow:hidden;border:4px solid #fff}
+  .gas .dome i{position:absolute;width:34px;height:34px;border-radius:50%;background:linear-gradient(#ff5d8f 50%,#fff 50%)}
+  .gas .base{width:150px;height:60px;background:#e63946;border-radius:0 0 10px 10px;display:flex;align-items:center;justify-content:center}
+  .gas .base b{width:30px;height:30px;border-radius:50%;background:#fff;border:4px solid #333}
+  .gas .t{font-size:20px;margin-top:12px;text-align:center;line-height:1.2}
+  /* eki stamp */
+  .eki{background:#f2efe6;color:#1a5fa8;font-family:'Zen Maru Gothic'}
+  .eki .stp{border:3px solid currentColor;border-radius:50%;width:96px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:900;transform:rotate(-8deg);opacity:.85;text-align:center}
+  .eki .stp b{font-family:'Shippori Mincho';font-size:18px}
+  .eki .row{display:flex;justify-content:space-around;margin-top:8px}
+  .eki .ft{margin-top:auto;font-family:'Dela Gothic One';font-size:20px;color:#222;text-align:center}
+
+  /* ukiyo-e */
+  .uki{background:#f1e4c3;color:#1b2a4a;font-family:'Shippori Mincho'}
+  .uki .wave{height:150px;margin:6px -16px 0;background:radial-gradient(circle at 30% 100%,transparent 50px,#1b3b6f 51px,#1b3b6f 60px,transparent 61px),radial-gradient(circle at 70% 100%,transparent 36px,#2c5a9a 37px,#2c5a9a 46px,transparent 47px),linear-gradient(transparent 70%,#1b3b6f 70%)}
+  .uki .cart{position:absolute;top:16px;right:16px;writing-mode:vertical-rl;background:#f8f2e2;border:1px solid #1b2a4a;padding:6px 3px;font-size:14px}
+  .uki .t{font-size:22px;margin-top:10px}
+  .uki .hk{position:absolute;bottom:16px;right:16px;background:#c4002f;color:#fff;font-size:11px;padding:4px;writing-mode:vertical-rl}
+  /* kintsugi */
+  .kin{background:#141414;color:#e8d08a;font-family:'Shippori Mincho';align-items:center;text-align:center}
+  .kin .bowl{width:150px;height:90px;border-radius:0 0 75px 75px;background:#2b2b2b;margin-top:16px;position:relative;overflow:hidden}
+  .kin .bowl:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 46%,#e8c45a 47%,#ffe9a0 48%,transparent 49%),linear-gradient(60deg,transparent 60%,#e8c45a 61%,transparent 62%)}
+  .kin .t{font-size:20px;margin-top:18px;line-height:1.3}
+  .kin .s{font-size:11px;margin-top:10px;color:#aaa}
+  /* ema */
+  .ema{background:#3a2a1a;align-items:center}
+  .ema .plq{width:170px;height:130px;margin-top:40px;background:#e3c08a;clip-path:polygon(50% 0,100% 30%,100% 100%,0 100%,0 30%);padding:42px 12px 10px;box-sizing:border-box;font-family:'Zen Kurenaido';color:#222;font-size:13px;text-align:center}
+  .ema .t{color:#e3c08a;font-family:'Yuji Syuku';font-size:22px;margin-top:20px}
+  /* kanji of the year */
+  .kj{background:#f5f0e6;color:#111;font-family:'Yuji Syuku';align-items:center;text-align:center}
+  .kj .hd{font-size:14px}
+  .kj .big{font-size:150px;line-height:1.1;margin-top:6px}
+  .kj .s{font-family:'Zen Maru Gothic';font-size:11px;font-weight:900}
+  .kj .hk{width:34px;height:34px;background:#c4002f;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:10px}
+  /* nengajo */
+  .nen{background:#fff;color:#c4002f;font-family:'Yuji Syuku';border:6px double #c4002f}
+  .nen .t{writing-mode:vertical-rl;font-size:38px;position:absolute;right:20px;top:20px}
+  .nen .ho{position:absolute;left:18px;bottom:20px;font-family:'Zen Maru Gothic';font-size:12px;color:#222;line-height:1.6}
+  .nen .ho b{font-size:16px;color:#c4002f}
+  .nen .sun{position:absolute;left:30px;top:40px;width:70px;height:70px;border-radius:50%;background:#c4002f}
+  /* matsuri */
+  .mat{background:linear-gradient(#0d1b3d,#2a1650);color:#fff;font-family:'Dela Gothic One'}
+  .mat .ch{display:flex;justify-content:space-between;margin:0 -6px}
+  .mat .ch i{width:26px;height:36px;border-radius:12px;background:#ff3b2f;box-shadow:0 0 14px #ff8a00;position:relative}
+  .mat .stalls{display:flex;gap:4px;margin-top:auto}
+  .mat .stalls div{flex:1;background:repeating-linear-gradient(90deg,#e8352b 0 8px,#fff 8px 16px);height:24px;border-radius:4px 4px 0 0}
+  .mat .t{font-size:24px;text-align:center;margin-top:30px;line-height:1.2}
+  .mat .s{font-family:'Zen Maru Gothic';font-size:12px;text-align:center;margin-top:6px}
+
+  /* variety telop */
+  .tel{background:#3b5ba5;color:#fff;font-family:'Dela Gothic One';justify-content:center}
+  .tel .cap{font-size:26px;line-height:1.15;-webkit-text-stroke:5px #000;paint-order:stroke fill;color:#ffe600;transform:rotate(-2deg)}
+  .tel .cap2{font-size:18px;-webkit-text-stroke:4px #d0006f;paint-order:stroke fill;color:#fff;margin-top:12px}
+  .tel .wipe{position:absolute;right:12px;bottom:12px;width:70px;height:54px;background:#ffd1a8;border:3px solid #fff;font-family:'Zen Maru Gothic';font-size:10px;color:#222;display:flex;align-items:flex-end;justify-content:center}
+  /* sentai */
+  .sen{background:#111;color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .sen .team{display:flex;gap:4px;justify-content:center;margin-top:20px}
+  .sen .team div{width:34px;height:120px;border-radius:16px 16px 4px 4px;position:relative;font-size:8px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
+  .sen .team div:before{content:"";position:absolute;top:10px;left:7px;right:7px;height:10px;background:#111;border-radius:4px}
+  .sen .t{font-size:22px;margin-top:20px;line-height:1.1}
+  .sen .boom{margin-top:auto;font-size:12px;color:#ffe600}
+  /* maid cafe */
+  .maid{background:#fff4f8;color:#b0005a;font-family:'Hachi Maru Pop';align-items:center;text-align:center}
+  .maid .plate{width:170px;height:170px;border-radius:50%;background:#fff;box-shadow:0 6px 18px #0002;display:flex;align-items:center;justify-content:center;margin-top:10px}
+  .maid .om{width:130px;height:84px;border-radius:50%;background:#ffd34d;display:flex;align-items:center;justify-content:center;color:#d0021b;font-size:15px;line-height:1.1}
+  .maid .t{margin-top:14px;font-size:13px}
+  /* fighting VS */
+  .vs{background:linear-gradient(105deg,#0047ff 50%,#ff1a1a 50%);color:#fff;font-family:'Dela Gothic One'}
+  .vs .a,.vs .b{font-size:20px;line-height:1.05}
+  .vs .b{text-align:right;margin-top:auto}
+  .vs .x{font-family:'Rampart One';font-size:70px;text-align:center;color:#ffe600;text-shadow:4px 4px 0 #000;transform:skew(-10deg)}
+  .vs .bar{height:10px;background:#ffe600;border:2px solid #000;margin-top:4px}
+  /* hanafuda */
+  .hana{background:#0d0d0d;color:#fff;font-family:'Yuji Syuku'}
+  .hana .cards{display:flex;gap:6px;justify-content:center;margin-top:10px}
+  .hana .cards div{width:54px;height:86px;background:#f6efe0;border:3px solid #c4002f;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .hana .t{font-size:24px;text-align:center;margin-top:18px}
+  .hana .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center;margin-top:6px;opacity:.8}
+</style>
+
+<h2>Round 2: 24 more subcultures</h2>
+<p class="subtitle">Same idea as round 1: each subculture is a slide style paired with the stat it fits. Click any you want to add to the picks.</p>
+<div class="kept">Round-1 picks I'm keeping: <b>ganguro · keitai deco-mail · dekotora/bosozoku · idol/oshi-katsu · Kōhaku · train · weather/sakura · omikuji · sumo banzuke · Kōshien · shōnen manga · JRPG status · gacha pull</b></div>
+
+<div class="grp">Harajuku &amp; street fashion</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="decora" onclick="toggleSelect(this)"><div class="ph deco"><div class="clips"><i style="background:#ff3d9a"></i><i style="background:#7af0ff"></i><i style="background:#ffe94d"></i><i style="background:#9b5cff"></i><i style="background:#5cff9b"></i><i style="background:#ff8a3d"></i><i style="background:#ff3d9a"></i></div><div class="big">327<br>ARTISTS<br>かわいい!!</div><div class="bub">new this year: 94 ✿</div><div class="sp"></div><div class="clips"><i style="background:#9b5cff"></i><i style="background:#ffe94d"></i><i style="background:#7af0ff"></i><i style="background:#ff3d9a"></i></div></div><h4>Decora kei (Harajuku)</h4><p>Hair clips piled on hair clips, pastel overload. <b>→ How many artists you played</b></p></div>
+  <div class="it" data-choice="lolita" onclick="toggleSelect(this)"><div class="ph loli"><div class="lace"></div><div class="fr"><div class="t">貴女の<br>午後の<br>お茶会</div><div class="s">TEA PARTY PLAYLIST</div></div><div class="sp"></div><div class="dg" style="font-size:30px">3 PM</div><div style="font-size:11px">your most elegant hour</div></div><h4>Gothic / sweet Lolita</h4><p>Lace, cameo frames and Victorian-doll poise. <b>→ Your calmest songs and afternoon listening</b></p></div>
+  <div class="it" data-choice="yankii" onclick="toggleSelect(this)"><div class="ph yan"><div class="tok">天上天下唯我独尊</div><div class="l"><div class="dg">喧嘩上等 · BIGGEST BEEF</div><div class="n">0.4%</div><div style="font-family:'Zen Maru Gothic';font-size:12px;margin-top:6px">your rarest artist: only 0.4% of listeners know them</div></div></div><h4>Yankii / Sukeban</h4><p>Delinquent long coats (tokkōfuku) with embroidered kanji slogans. <b>→ Obscurity score and underground taste</b></p></div>
+  <div class="it" data-choice="purikura" onclick="toggleSelect(this)"><div class="ph pri"><div class="strip"><div style="background:linear-gradient(#ff8fd0,#ffb36b)">JAN ♡</div><div style="background:linear-gradient(#8fd6ff,#b38fff)">APR ☆</div><div style="background:linear-gradient(#b3ff8f,#8fffe0)">JUL ✿</div><div style="background:linear-gradient(#ffd36b,#ff6b8f)">OCT ♪</div></div><div class="lb">4つの季節のNo.1曲♡</div></div><h4>Purikura photo strip</h4><p>A sticker-booth photo strip with handwritten doodles. <b>→ Your #1 song of each season, as 4 photos</b></p></div>
+</div>
+
+<div class="grp">Shōwa retro &amp; nostalgia</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="citypop" onclick="toggleSelect(this)"><div class="ph cp"><div class="obi">帯付き · 名盤</div><div class="t"><div class="dot" style="font-size:11px">OLDEST SONG YOU PLAYED</div><div class="dg">1984</div></div><div class="rec"><i></i></div><div class="sp"></div><div style="margin-left:34px;font-size:12px">your songs' average release year: <b>2014</b></div></div><h4>City-pop vinyl with obi strip</h4><p>An 80s Tokyo sunset LP with its paper obi strip. <b>→ Your oldest song and decades mix</b></p></div>
+  <div class="it" data-choice="pachinko" onclick="toggleSelect(this)"><div class="ph pa"><div class="fever">FEVER!!</div><div class="reels"><div>7</div><div>7</div><div>7</div></div><div class="balls">確変突入 · BIGGEST DAY</div><div style="font-size:30px;margin-top:6px">AUG 14</div><div style="font-size:14px">612 min in one day</div></div><h4>Pachinko fever</h4><p>Slot-reel jackpots and "FEVER" lights. <b>→ Your single biggest listening day</b></p></div>
+  <div class="it" data-choice="tamagotchi" onclick="toggleSelect(this)"><div class="ph tam"><div class="egg"><div class="scr">♪(ᐛ)♪<b>Lv.47</b>14,221 min fed</div><div class="bt"><i></i><i></i><i></i></div></div></div><h4>Virtual pet egg</h4><p>A pocket virtual pet that grows the more you listen. <b>→ Total minutes as a pet evolution</b></p></div>
+  <div class="it" data-choice="radiotaiso" onclick="toggleSelect(this)"><div class="ph rt"><div class="hd">ラジオ体操 · 出席カード</div><div class="g"><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i></div><div class="ft">皆勤賞まであと1日!<br>longest streak: 41 days</div></div><h4>Radio-taisō stamp card</h4><p>The summer exercise attendance card kids get stamped every morning. <b>→ Your daily listening streak</b></p></div>
+</div>
+
+<div class="grp">Konbini &amp; daily life</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="konbini" onclick="toggleSelect(this)"><div class="ph kon"><div class="rc"><div class="h">♪ YOUR YEAR MART ♪<br>2025/12/31 23:59</div><div class="r"><span>HUMBLE.</span><span>×247</span></div><div class="r"><span>Kill Bill</span><span>×198</span></div><div class="r"><span>Nights</span><span>×176</span></div><div class="r"><span>DtMF</span><span>×151</span></div><div class="r"><span>ポイント</span><span>14221P</span></div><div class="tot r"><span>合計</span><span>14,221分</span></div><div style="text-align:center;margin-top:6px">またのご来店を<br>||||| ||| |||| ||</div></div></div><h4>Konbini receipt</h4><p>A thermal convenience-store receipt for your year. Very screenshot-able. <b>→ Top songs with play counts</b></p></div>
+  <div class="it" data-choice="vending" onclick="toggleSelect(this)"><div class="ph vm"><div class="win"><div style="background:#2a7de1">RAP</div><div style="background:#e1a12a">R&amp;B</div><div style="background:#3fbf6a">POP</div><div style="background:#8a2ae1">LO-FI</div><div style="background:#e12a6a">K-POP</div><div style="background:#555">JAZZ</div></div><div class="pr"><span>42%</span><span>23%</span><span>15%</span></div><div class="lb">あったか〜い<br>HOT PICK: RAP</div></div><h4>Vending machine</h4><p>The vending machine on every corner, with "hot" and "cold" drinks. <b>→ Your genre mix as drinks</b></p></div>
+  <div class="it" data-choice="bento" onclick="toggleSelect(this)"><div class="ph ben"><div class="dg" style="font-size:18px">あなたの音楽弁当</div><div class="box"><div class="rice"><i></i>RAP 42%</div><div style="background:#f6c35a">R&amp;B 23%</div><div style="background:#7bd67b">POP 15%</div><div style="background:#ff9aa8">OTHER 20%</div></div></div><h4>Bento box</h4><p>Your genre mix packed into bento compartments, with an umeboshi on the rice. <b>→ Genre breakdown</b></p></div>
+  <div class="it" data-choice="gashapon" onclick="toggleSelect(this)"><div class="ph gas"><div class="dome"><i style="left:10px;top:60px"></i><i style="left:50px;top:80px;background:linear-gradient(#5dc8ff 50%,#fff 50%)"></i><i style="left:90px;top:56px;background:linear-gradient(#ffd23f 50%,#fff 50%)"></i><i style="left:30px;top:20px;background:linear-gradient(#9b5cff 50%,#fff 50%)"></i><i style="left:84px;top:14px"></i></div><div class="base"><b></b></div><div class="t">94 NEW<br>ARTISTS<br>GET!</div></div><h4>Gashapon capsule toys</h4><p>Turn the crank, get a random capsule. <b>→ New artists you discovered</b></p></div>
+  <div class="it" data-choice="ekistamp" onclick="toggleSelect(this)"><div class="ph eki"><div style="font-weight:900;font-size:12px">駅スタンプラリー 2025</div><div class="row"><div class="stp"><b>東京</b>HIP-HOP<br>JAN</div></div><div class="row"><div class="stp" style="color:#2e8b57;transform:rotate(6deg)"><b>大阪</b>R&amp;B<br>MAY</div><div class="stp" style="color:#c4002f"><b>札幌</b>LO-FI<br>DEC</div></div><div class="ft">12 genres collected</div></div><h4>Station stamp rally</h4><p>The ink stamps collectors gather at every train station. <b>→ Genres "collected" over the year</b></p></div>
+</div>
+
+<div class="grp">Traditional &amp; ritual</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="ukiyoe" onclick="toggleSelect(this)"><div class="ph uki"><div class="t">音の<br>大波</div><div style="font-size:12px;margin-top:4px">THE GREAT WAVE OF 2025</div><div class="cart">富嶽三十六曲</div><div class="wave"></div><div class="sp"></div><div class="dg" style="font-size:22px">14,221 min</div><div class="hk">印</div></div><h4>Ukiyo-e woodblock</h4><p>Edo-period print style: indigo waves, a cartouche title and a seal. <b>→ The big total-minutes reveal</b></p></div>
+  <div class="it" data-choice="kintsugi" onclick="toggleSelect(this)"><div class="ph kin"><div class="dot" style="font-size:11px">金継ぎ · THE COMEBACK</div><div class="bowl"></div><div class="t">You returned to<br>"Pink + White"<br>after 3 years</div><div class="s">broken, then made more beautiful</div></div><h4>Kintsugi</h4><p>Gold-repaired pottery: beauty in the repair. <b>→ A song you came back to after years</b></p></div>
+  <div class="it" data-choice="ema" onclick="toggleSelect(this)"><div class="ph ema"><div class="plq">2026は<br>ジャズを<br>聴けますように ♪</div><div class="t">絵馬 · 2026の願い</div><div style="color:#e3c08a;font-size:11px;font-family:'Zen Maru Gothic';margin-top:6px;text-align:center">your music wish for next year</div></div><h4>Ema wishing plaque</h4><p>The wooden wish plaques hung at shrines. <b>→ Next-year resolution and the genre you barely tried</b></p></div>
+  <div class="it" data-choice="kanji" onclick="toggleSelect(this)"><div class="ph kj"><div class="hd">今年の漢字 · 2025</div><div class="big">熱</div><div class="s">HEAT: 42% hype tracks, peak summer</div><div class="hk">印</div></div><h4>Kanji of the Year</h4><p>Japan announces one kanji each December, brushed at Kiyomizu-dera. <b>→ Your year in one kanji</b></p></div>
+  <div class="it" data-choice="nengajo" onclick="toggleSelect(this)"><div class="ph nen"><div class="sun"></div><div class="t">謹賀新年</div><div class="ho">今年もよろしく<br><b>2025 → 2026</b><br>14,221 min · 327 artists<br>#1 Kendrick Lamar</div></div><h4>Nengajō New Year card</h4><p>The New Year's postcard everyone mails. <b>→ The final shareable summary card</b></p></div>
+  <div class="it" data-choice="matsuri" onclick="toggleSelect(this)"><div class="ph mat"><div class="ch"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="t">夏祭り<br>SUMMER<br>ANTHEM</div><div class="s">your song of the summer · played 61×</div><div class="stalls"><div></div><div></div><div></div></div></div><h4>Summer matsuri</h4><p>Paper lanterns, yatai stalls and fireworks. <b>→ Your song of the summer</b></p></div>
+  <div class="it" data-choice="hanafuda" onclick="toggleSelect(this)"><div class="ph hana"><div class="cards"><div>松</div><div>桜</div><div>月</div></div><div class="t">三光 · 役</div><div class="s">your 3-artist combo: you played all three in one night 18 times</div></div><h4>Hanafuda cards</h4><p>Flower playing cards and scoring combos (yaku). <b>→ Artist combos you always play together</b></p></div>
+</div>
+
+<div class="grp">TV, otaku &amp; games</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="telop" onclick="toggleSelect(this)"><div class="ph tel"><div class="cap">えっ!?<br>同じ曲を<br>247回!?</div><div class="cap2">ありえない記録!!</div><div class="wipe">ワイプ 😲</div></div><h4>Variety-show telop</h4><p>Huge outlined TV captions with a reaction wipe in the corner. <b>→ Shocking stats and "wait, WHAT?" moments</b></p></div>
+  <div class="it" data-choice="sentai" onclick="toggleSelect(this)"><div class="ph sen"><div class="dot" style="font-size:11px">変身!! ARTIST SQUAD</div><div class="team"><div style="background:#e8352b">KDOT</div><div style="background:#2a7de1">SZA</div><div style="background:#ffd23f;color:#111">TYLER</div><div style="background:#3fbf6a">DRAKE</div><div style="background:#ff7ad5">DOJA</div></div><div class="t">戦隊<br>TOP 5 RANGERS</div><div class="boom">💥 合体!! combined: 9,812 min</div></div><h4>Sentai hero team</h4><p>Five color-coded tokusatsu rangers with a dramatic explosion behind them. <b>→ Top 5 artists as a squad</b></p></div>
+  <div class="it" data-choice="maid" onclick="toggleSelect(this)"><div class="ph maid"><div style="font-size:13px">おかえりなさいませ ご主人様♡</div><div class="plate"><div class="om">♡ No.1 ♡<br>Kendrick</div></div><div class="t">萌え萌えキュン♡ 4,812分</div></div><h4>Akihabara maid café</h4><p>The omurice with a ketchup message, and "moe moe kyun". <b>→ The #1 artist reveal, served cute</b></p></div>
+  <div class="it" data-choice="fighting" onclick="toggleSelect(this)"><div class="ph vs"><div class="a">2024<br>YOU<div class="bar"></div></div><div class="x">VS</div><div class="b"><div class="bar"></div>2025<br>YOU</div></div><h4>Fighting game VS screen</h4><p>The split-screen versus intro with health bars. <b>→ This year vs last year</b></p></div>
+</div>
+
+</body></html>
