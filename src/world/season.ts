@@ -3,10 +3,10 @@ import * as THREE from 'three';
 type Particle = 'sakura' | 'haze' | 'leaf' | 'snow';
 type Stop = { sky: [string, string]; fog: string; light: string; particle: Particle };
 
-// Spring departure → summer hype → autumn looking back → New Year's night (spec §7).
+// Spring departure → summer-night hype → autumn looking back → New Year's night (spec §7; art spec §7: act 2 is night).
 const STOPS: Stop[] = [
   { sky: ['#ffd6e8', '#ffeef5'], fog: '#f7d9e6', light: '#fff1f6', particle: 'sakura' },
-  { sky: ['#ff9a3d', '#ffe2a8'], fog: '#ffcf8f', light: '#fff3d6', particle: 'haze' },
+  { sky: ['#141a4a', '#ff7a8a'], fog: '#2a1f4a', light: '#ffd1e8', particle: 'haze' },
   { sky: ['#b8461f', '#f4a261'], fog: '#c9734a', light: '#ffd7b0', particle: 'leaf' },
   { sky: ['#0d1030', '#1a1f4a'], fog: '#141838', light: '#9fb4ff', particle: 'snow' },
 ];
@@ -29,7 +29,7 @@ export function seasonLook(dial: number): Stop {
 
 const PARTICLE_LOOK: Record<Particle, { color: string; size: number; fall: number; drift: number }> = {
   sakura: { color: '#ffb7d5', size: 0.35, fall: 1.2, drift: 0.8 },
-  haze: { color: '#fff4d8', size: 0.25, fall: -0.6, drift: 0.3 },
+  haze: { color: '#ffb3d9', size: 0.25, fall: -0.6, drift: 0.3 },
   leaf: { color: '#e8722b', size: 0.4, fall: 1.6, drift: 1.2 },
   snow: { color: '#ffffff', size: 0.3, fall: 1.0, drift: 0.4 },
 };

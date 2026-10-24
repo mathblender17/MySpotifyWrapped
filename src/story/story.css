@@ -160,7 +160,7 @@
 
 /* Seasons */
 .story.season-spring { background: linear-gradient(#ffd6e8, #2a1030); }
-.story.season-summer { background: linear-gradient(#ff9a3d, #2a0d00); }
+.story.season-summer { background: linear-gradient(#141a4a, #6a2a5a 70%, #ff7a8a); }
 .story.season-autumn { background: linear-gradient(#b8461f, #1c0a04); }
 .story.season-winter { background: linear-gradient(#1a1f4a, #05060f); }
 .story { transition: background 1.2s; }

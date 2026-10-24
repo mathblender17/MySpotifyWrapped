@@ -9,8 +9,21 @@ test('the ends of the dial are spring sakura and a New Year night', () => {
 });
 
 test('between seasons the colours blend', () => {
-  const expected = new THREE.Color('#f7d9e6').lerp(new THREE.Color('#ffcf8f'), 0.165 / (1 / 3)).getHexString();
+  const expected = new THREE.Color('#f7d9e6').lerp(new THREE.Color('#2a1f4a'), 0.165 / (1 / 3)).getHexString();
   expect(seasonLook(0.165).fog).toBe(`#${expected}`);
+});
+
+test('act 2 rides through a summer night (art spec §7)', () => {
+  expect(seasonLook(1 / 3)).toEqual({ sky: ['#141a4a', '#ff7a8a'], fog: '#2a1f4a', light: '#ffd1e8', particle: 'haze' });
+});
+
+test('summer-night haze glows pink', () => {
+  const scene = new THREE.Scene();
+  const fx = createSeasonFx(scene, { reduced: false, count: 10 });
+  fx.set(1 / 3);
+  let p: THREE.Points | undefined;
+  scene.traverse((o) => o instanceof THREE.Points && (p = o));
+  expect((p!.material as THREE.PointsMaterial).color.getHexString()).toBe('ffb3d9');
 });
 
 test('the particle type switches halfway between seasons', () => {
