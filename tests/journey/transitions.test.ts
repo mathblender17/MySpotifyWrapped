@@ -1,4 +1,4 @@
-import { beforeEach, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { runTransition } from '../../src/journey/transitions';
 import type { Transition } from '../../src/journey/stations';
 
@@ -57,4 +57,41 @@ test.each(TYPES)('reduced motion turns %s into a 0.2s crossfade', (type) => {
   stage.append(out);
   const tl = runTransition(type, out, slideEl('ben', '<div class="box"></div>'), { stage, hook, reduced: true, cut: { from: '.tor .g', to: '.ben .box' } });
   expect(tl.duration()).toBeCloseTo(0.2);
+});
+
+describe('pixel wipe into the gacha (morph pixelate)', () => {
+  const cut = { from: '.kon .bc', to: '.gac .card' };
+  const pair = () => {
+    const out = slideEl('kon', '<div class="bc"></div>');
+    stage.append(out);
+    return { out, inEl: slideEl('gac', '<div class="card"></div>') };
+  };
+
+  test('lasts 1.0 s and covers the stage with a 12×21 block grid at the midpoint', () => {
+    const { out, inEl } = pair();
+    const tl = runTransition('baton', out, inEl, { stage, cut, morph: 'pixelate' });
+    expect(tl.duration()).toBeCloseTo(1.0);
+    tl.progress(0.5);
+    expect(stage.querySelectorAll('.pix')).toHaveLength(252);
+  });
+
+  test('leaves only the incoming slide', () => {
+    const { out, inEl } = pair();
+    const tl = runTransition('baton', out, inEl, { stage, cut, morph: 'pixelate' });
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+    expect(inEl.style.opacity).toBe('1');
+  });
+
+  test('without the receipt stub it falls back to a ride', () => {
+    const ride = runTransition('ride', slideEl('a'), slideEl('b'), { stage }).duration();
+    const out = slideEl('tor');
+    stage.append(out);
+    expect(runTransition('baton', out, slideEl('gac'), { stage, cut, morph: 'pixelate' }).duration()).toBe(ride);
+  });
+
+  test('reduced motion is the 0.2 s crossfade', () => {
+    const { out, inEl } = pair();
+    expect(runTransition('baton', out, inEl, { stage, cut, morph: 'pixelate', reduced: true }).duration()).toBeCloseTo(0.2);
+  });
 });

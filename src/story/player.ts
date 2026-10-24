@@ -133,6 +133,7 @@ export function createStory(
     const trans = runTransition(s.transitionIn, current, el, {
       stage: frame.stage,
       cut: s.cut,
+      morph: s.morph,
       hook: HOOKS[s.id],
       reduced,
       world: world ?? undefined,

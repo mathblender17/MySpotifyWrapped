@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { expect, test, vi } from 'vitest';
 import { departure } from '../../src/slides/departure';
 import { sumo } from '../../src/slides/sumo';
+import { gacha } from '../../src/slides/gacha';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -53,4 +54,20 @@ test('D sumo: a long name in the splash is set to fit', () => {
 test('D sumo: the top panel is screentone even if the scan fails to load', () => {
   expect(sumo(ctx()).querySelector('.p1')!.classList.contains('tone')).toBe(true);
   expect(css('d')).toMatch(/\.tone\s*{[^}]*radial-gradient/);
+});
+
+test('K gacha: a JRPG window with the #1 song, CRT scanlines and the flash', () => {
+  const el = gacha(ctx());
+  const t = el.textContent!;
+  expect(t).toContain(STATS.topTracks[0].name);
+  expect(t).toContain(STATS.topTracks[0].artist!);
+  expect(t).toContain('SSR GET!');
+  expect(el.querySelectorAll('.k-win').length).toBeGreaterThanOrEqual(2);
+  expect(el.querySelector('.k-scan')).not.toBeNull();
+  expect(el.querySelector('[data-fx~="flash"]')).not.toBeNull();
+  expect(el.classList.contains('dark')).toBe(true);
+});
+
+test('K gacha: a long song name wraps inside the window', () => {
+  expect(css('k')).toMatch(/\.k-song\s*{[^}]*overflow-wrap:\s*anywhere/);
 });

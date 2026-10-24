@@ -60,14 +60,6 @@
 .kon .bc { text-align: center; margin-top: 8px; }
 
 /* 8 gacha (round 1) */
-.gac { background: radial-gradient(circle at 50% 45%, #fff 0, #ffe7a0 12%, #b06bff 40%, #14002e 80%); align-items: center; justify-content: center; color: #fff; font-family: 'Dela Gothic One', sans-serif; text-align: center; }
-.gac .card { width: 140px; height: 190px; border-radius: 10px; background: linear-gradient(135deg, #ff2d95, #ffd700, #6af0ff, #ff2d95); padding: 3px; box-shadow: 0 0 30px #fff; margin: 14px 0; }
-.gac .card > div { height: 100%; border-radius: 8px; background: linear-gradient(#2a0f5a, #120530); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; box-sizing: border-box; }
-.gac .ssr { font-size: 34px; background: linear-gradient(90deg, #ff2d95, #ffd700, #6af0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.gac .nm { font-size: 16px; line-height: 1.15; margin-top: 4px; overflow-wrap: anywhere; }
-.gac .ar { font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; opacity: 0.8; margin-top: 4px; }
-.gac .st { color: #ffd700; margin-top: 6px; }
-.gac .lb { font-size: 11px; letter-spacing: 2px; }
 
 /* 9 TV weather / sakura forecast (round 1) */
 .wx { background: linear-gradient(#0b62c4, #0a3f87); color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
@@ -118,8 +110,6 @@
 .kj .hk { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: #c4002f; color: #fff; font-size: 9px; line-height: 1.1; display: flex; align-items: center; justify-content: center; }
 
 /* Phase 2a: beat helpers */
-.gac .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-.gac .st i { font-style: normal; }
 .kon .rows { display: flex; flex-direction: column; }
 .fuji .peak { position: absolute; top: 157px; width: 8px; height: 8px; border-radius: 50%; background: #ff2d95; box-shadow: 0 0 0 3px #fff8; }
 .shk .train { position: absolute; inset: 0; pointer-events: none; }
