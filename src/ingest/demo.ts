@@ -33,7 +33,7 @@ export function makeDemoPlays(): Play[] {
   const rng = mulberry32(20251231);
   const artists: string[] = [];
   for (let i = 0; artists.length < 119; i++) {
-    const name = `${GIVEN[i % GIVEN.length]} ${FAMILY[Math.floor(i / GIVEN.length) % FAMILY.length]}`;
+    const name = `${GIVEN[i % GIVEN.length]} ${FAMILY[(i * 3 + Math.floor(i / GIVEN.length)) % FAMILY.length]}`;
     if (name !== RISER && !artists.includes(name)) artists.push(name);
   }
   artists.push(RISER);
@@ -52,8 +52,9 @@ export function makeDemoPlays(): Play[] {
       const count = Math.round(perDay * (0.5 + rng()) * (hotWeek ? 2.2 : 1));
       const daysSinceRiser = (d.getTime() - riserStart.getTime()) / 86_400_000;
       const weights = zipf.map((w, i) => {
-        if (i === riserIdx) return daysSinceRiser >= 0 ? Math.min(0.6, 0.03 * (daysSinceRiser + 1)) : 0;
-        return i < 20 && favSeason[i] === season ? w * 2.5 : w;
+        if (i === riserIdx) return daysSinceRiser >= 0 ? Math.min(1.2, 0.04 * (daysSinceRiser + 1)) : 0;
+        // Mid-table artists get a strong seasonal crush so each season has its own favourite.
+        return i >= 2 && i < 20 && favSeason[i] === season ? w * 7 : w;
       });
       for (let n = 0; n < count; n++) {
         const a = pickWeighted(rng, weights);
@@ -65,7 +66,8 @@ export function makeDemoPlays(): Play[] {
           ts,
           track: tracks[a][t],
           artist: artists[a],
-          msPlayed: skipped ? 5000 + Math.floor(rng() * 24_000) : 150_000 + Math.floor(rng() * 110_000),
+          // Most skips are early, some come mid-song (those still count as streams).
+          msPlayed: skipped ? 5000 + Math.floor(rng() * (rng() < 0.7 ? 24_000 : 80_000)) : 150_000 + Math.floor(rng() * 110_000),
           skipped,
           trackKey: `demo:${a}:${t}`,
         });

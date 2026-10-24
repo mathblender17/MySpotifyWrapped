@@ -1,10 +1,11 @@
 import type { Fortune, KanjiReading, Personality, PersonalityId, Play, Season, Traits } from '../types';
 import { valueOf } from './basics';
 
-export function traits(yearPlays: Play[], firstSeen: Map<string, Date>, coversPriorYears: boolean, topArtistShare: number): Traits {
+/** `rawYearPlays` (before the 30s filter) feeds skipRate: most skips are short, so the filter would hide them. */
+export function traits(yearPlays: Play[], firstSeen: Map<string, Date>, coversPriorYears: boolean, topArtistShare: number, rawYearPlays: Play[] = yearPlays): Traits {
   const n = yearPlays.length;
   const year = yearPlays[0]?.ts.getFullYear();
-  const withSkip = yearPlays.filter((p) => p.skipped !== undefined);
+  const withSkip = rawYearPlays.filter((p) => p.skipped !== undefined);
   return {
     variety: new Set(yearPlays.map((p) => p.artist)).size / n,
     loyalty: topArtistShare,
