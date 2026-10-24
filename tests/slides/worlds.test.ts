@@ -3,6 +3,7 @@ import { expect, test, vi } from 'vitest';
 import { departure } from '../../src/slides/departure';
 import { sumo } from '../../src/slides/sumo';
 import { gacha } from '../../src/slides/gacha';
+import { fuji } from '../../src/slides/fuji';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -70,4 +71,21 @@ test('K gacha: a JRPG window with the #1 song, CRT scanlines and the flash', () 
 
 test('K gacha: a long song name wraps inside the window', () => {
   expect(css('k')).toMatch(/\.k-song\s*{[^}]*overflow-wrap:\s*anywhere/);
+});
+
+test('I fuji: the weekly graph is a brushed ink mountain with a red seal on the peak', () => {
+  const el = fuji(ctx());
+  expect(el.textContent).toContain('Mar 10');
+  expect(el.textContent).toContain('1,411');
+  expect(el.textContent).toContain('富士');
+  const ridge = el.querySelector('svg polygon.ink')!;
+  expect(ridge.getAttribute('filter')).toMatch(/^url\(#brush-/);
+  expect(el.querySelector('svg polygon.wash')).not.toBeNull();
+  expect(el.querySelector('.seal')!.textContent).toBe('頂');
+  expect(el.querySelector('.hero')!.textContent).toContain('1,411');
+});
+
+test('I fuji: two renders never share a filter id', () => {
+  const id = (el: HTMLElement) => el.querySelector('filter')!.id;
+  expect(id(fuji(ctx()))).not.toBe(id(fuji(ctx())));
 });
