@@ -1,5 +1,7 @@
 import { gsap } from 'gsap';
 import { createSoundtrack } from './audio/soundtrack';
+import { prefersReducedMotion } from './journey/beats';
+import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
@@ -80,15 +82,34 @@ function start(plays: Play[], problems: string[], lifetime: boolean, at?: { stat
   ride(ds, firstYear, at?.station ? at.station - 1 : 0, problemsNote(problems));
 }
 
-function ride(ds: Dataset, year: number, startAt: number, note?: string) {
+/** The 3D world (three.js) is only fetched once a ride starts, so the landing page stays light. */
+async function makeWorld(container: HTMLElement, onLost: () => void) {
+  try {
+    const { createWorld } = await import('./world/world');
+    return createWorld(container, { reduced: prefersReducedMotion(), stationIds: STATIONS.map((s) => s.id), onLost });
+  } catch {
+    return null; // chunk failed to load: ride the flat journey
+  }
+}
+
+let rideToken = 0;
+async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
+  const token = ++rideToken;
   current?.destroy();
+  current = undefined;
   app.replaceChildren();
+  const backdrop = document.createElement('div');
+  backdrop.className = 'world';
   const root = document.createElement('div');
-  app.append(root);
-  const story = createStory(root, {
+  app.append(backdrop, root);
+  let story: ReturnType<typeof createStory> | undefined;
+  const world = await makeWorld(backdrop, () => story?.dropWorld());
+  if (token !== rideToken) return void world?.destroy(); // a newer ride started while three.js loaded
+  story = createStory(root, {
     slides,
     startAt,
     soundtrack,
+    world,
     ctx: {
       stats: ds.stats.get(year),
       years: ds.years,

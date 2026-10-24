@@ -7,7 +7,14 @@ export type TransitionOpts = {
   cut?: { from: string; to: string };
   hook?: { jp: string; en: string };
   reduced?: boolean;
+  /** The 3D world behind the story, and the stations we're moving between. */
+  world?: { travel(from: number, to: number, seconds: number): gsap.core.Timeline };
+  from?: number;
+  to?: number;
 };
+
+const WORLD_RIDE = 1.6;
+const WORLD_BREATHER = 2.6;
 
 const overlay = (stage: HTMLElement, cls: string, html = '') => {
   const el = Object.assign(document.createElement('div'), { className: `tx-overlay ${cls}`, innerHTML: html });
@@ -21,6 +28,15 @@ function boxIn(stage: HTMLElement, el: Element) {
   const r = el.getBoundingClientRect();
   const k = s.width / DESIGN_W || 1;
   return { left: (r.left - s.left) / k, top: (r.top - s.top) / k, width: r.width / k, height: r.height / k };
+}
+
+/** With a world, a ride hands the screen over: the card flies off, the train travels, the next card drops in. */
+function worldRide(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement, travel: gsap.core.Timeline) {
+  if (out) tl.to(out, { scale: 0.7, yPercent: -120, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0);
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.add(travel, 0.4);
+  tl.fromTo(inEl, { yPercent: -60, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.4)' }, 0.4 + travel.duration());
+  return [];
 }
 
 function ride(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement, stage: HTMLElement) {
@@ -38,6 +54,10 @@ function ride(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement
 export function runTransition(type: Transition, out: HTMLElement | null, inEl: HTMLElement, o: TransitionOpts): gsap.core.Timeline {
   const { stage } = o;
   const tl = gsap.timeline({ paused: true });
+  const moving = !!o.world && o.from !== undefined && o.to !== undefined && o.from !== o.to;
+  const travel = (s: number) => o.world!.travel(o.from!, o.to!, s).paused(false);
+  const anyRide = () => (moving ? worldRide(tl, out, inEl, travel(WORLD_RIDE)) : ride(tl, out, inEl, stage));
+  let parallel = moving; // most types glide the camera alongside; world rides and breathers own the travel
   stage.append(inEl);
   tl.set(inEl, { opacity: 1 }, 0);
   let extras: Element[] = [];
@@ -45,6 +65,8 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
   if (o.reduced) {
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0);
     if (out) tl.to(out, { opacity: 0, duration: 0.2 }, 0);
+    if (moving) tl.add(travel(0.2), 0);
+    parallel = false;
   } else if (type === 'title') {
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
   } else if (type === 'cut' || type === 'baton') {
@@ -52,7 +74,8 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     const to = o.cut ? inEl.querySelector(o.cut.to) : null;
     if (!from || !to) {
       // The station before this one may have been passed through: no shape to carry over, so just ride.
-      extras = ride(tl, out, inEl, stage);
+      extras = anyRide();
+      parallel = false;
     } else {
       const a = boxIn(stage, from);
       const b = boxIn(stage, to);
@@ -84,6 +107,12 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     if (out) tl.set(out, { opacity: 0 }, 0.3);
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.9);
     tl.to(card, { opacity: 0, duration: 0.5 }, 0.9);
+  } else if (type === 'breather' && moving) {
+    if (out) tl.to(out, { opacity: 0, duration: 0.3 }, 0);
+    tl.set(inEl, { opacity: 0 }, 0);
+    tl.add(travel(WORLD_BREATHER), 0.3);
+    tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.3 + WORLD_BREATHER);
+    parallel = false;
   } else if (type === 'breather') {
     const win = overlay(stage, 'window', '<div class="horizon"></div>');
     extras = [win];
@@ -93,8 +122,11 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.5);
     tl.to(win, { opacity: 0, duration: 0.3 }, 2.5);
   } else {
-    extras = ride(tl, out, inEl, stage);
+    extras = anyRide();
+    parallel = false;
   }
+
+  if (parallel) tl.add(travel(Math.max(0.4, tl.duration())), 0);
 
   tl.call(() => {
     out?.remove();

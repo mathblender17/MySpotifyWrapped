@@ -16,6 +16,16 @@ import './story.css';
 export type SlideContext = { stats?: YearStats; years: YearSummary[]; onPickYear: (y: number) => void };
 export type Slide = (ctx: SlideContext) => HTMLElement;
 
+/** What the story needs from the 3D world (src/world): kept minimal so the story runs fine without one. */
+export type StoryWorld = {
+  travel(from: number, to: number, seconds: number): gsap.core.Timeline;
+  jump(i: number): void;
+  setSeason(dial: number): void;
+  pause(): void;
+  resume(): void;
+  destroy(): void;
+};
+
 const HOLD_PRESS_MS = 200;
 const INTERACTIVE = 'button, a, input, label';
 
@@ -29,6 +39,7 @@ export function createStory(
     reduced?: boolean;
     soundtrack?: Soundtrack;
     findPreview?: (artist: string, track: string) => Promise<string | undefined>;
+    world?: StoryWorld | null;
   },
 ) {
   const holdMs = opts.holdMs ?? 2500;
@@ -47,6 +58,7 @@ export function createStory(
   let held = false;
   let downX: number | undefined;
   let alive = true;
+  let world = opts.world ?? null;
   const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
 
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
@@ -62,6 +74,7 @@ export function createStory(
 
   root.classList.add('story');
   root.classList.toggle('reduced', reduced);
+  root.classList.toggle('world-on', !!world);
   // Guide, ticket (and the app's mute button) share one dock in the band reserved below the frame: nothing covers a slide.
   const dock = document.createElement('div');
   dock.className = 'dock';
@@ -85,8 +98,12 @@ export function createStory(
   const show = (i: number, animate: boolean) => {
     finish();
     clearTimeout(holdTimer);
+    const from = index;
     index = i;
     const s = STATIONS[i];
+    world?.setSeason((s.act - 1) / 3);
+    // First stop or going back: the camera is simply there.
+    if (from < 0 || !animate) world?.jump(i);
     const el = opts.slides[s.id](opts.ctx);
     route.set(i);
     season.set(s.act);
@@ -108,7 +125,15 @@ export function createStory(
     else guide.clear();
     // Build the transition first: beats render their start state at once (scaled, offset), and a match cut must
     // measure its target where it will come to rest.
-    const trans = runTransition(s.transitionIn, current, el, { stage: frame.el, cut: s.cut, hook: HOOKS[s.id], reduced }).paused(false);
+    const trans = runTransition(s.transitionIn, current, el, {
+      stage: frame.el,
+      cut: s.cut,
+      hook: HOOKS[s.id],
+      reduced,
+      world: world ?? undefined,
+      from: from < 0 ? undefined : from,
+      to: i,
+    }).paused(false);
     const beats = playBeats(el, { reduced });
     tl.add(trans, 0);
     tl.add(ticket.stamp(i).paused(false), trans.duration());
@@ -174,16 +199,20 @@ export function createStory(
       master?.pause();
       clearTimeout(holdTimer);
       opts.soundtrack?.pause();
+      world?.pause();
     },
     resume: () => {
       paused = false;
       opts.soundtrack?.resume();
+      world?.resume();
       if (animating()) master!.play();
       else armHold();
     },
     destroy: () => {
       alive = false;
       opts.soundtrack?.stop();
+      world?.destroy();
+      world = null;
       master?.kill();
       clearTimeout(holdTimer);
       clearTimeout(pressTimer);
@@ -194,6 +223,12 @@ export function createStory(
       root.removeEventListener('pointercancel', onCancel);
       root.removeEventListener('pointerleave', onCancel);
       document.removeEventListener('keydown', onKey);
+    },
+    /** The 3D world is gone (e.g. WebGL context lost): finish the ride without it. */
+    dropWorld() {
+      world?.destroy();
+      world = null;
+      root.classList.remove('world-on');
     },
     get index() {
       return index;
