@@ -4,6 +4,7 @@ import { withTimeout } from './timeout';
 import { prefersReducedMotion } from './journey/beats';
 import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
+import { withDemoSoundtrack } from './ingest/demoSoundtrack';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
 import { esc, plays as nPlays } from './slides/fmt';
@@ -35,7 +36,7 @@ function landing(note?: string) {
       <div class="status" role="status"></div>
       ${note ? `<div class="note">${note}<button type="button" class="x" aria-label="Dismiss">×</button></div>` : ''}
     </main>`;
-  app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true));
+  app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true, undefined, true));
   app.querySelector('.note .x')?.addEventListener('click', (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
   const drop = app.querySelector<HTMLElement>('.drop')!;
   const input = drop.querySelector('input')!;
@@ -72,8 +73,9 @@ function problemsNote(problems: string[]) {
   return problems.length ? `Skipped some files:<ul>${problems.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>` : undefined;
 }
 
-function start(plays: Play[], problems: string[], lifetime: boolean, at?: { station?: number; year?: number }) {
-  const ds = computeAllYears(plays, { lifetime });
+function start(plays: Play[], problems: string[], lifetime: boolean, at?: { station?: number; year?: number }, demo = false) {
+  const computed = computeAllYears(plays, { lifetime });
+  const ds = demo ? withDemoSoundtrack(computed) : computed;
   if (!ds.stats.size) {
     const counts = ds.years.map((y) => `${y.year}: ${nPlays(y.plays)}`).join(', ') || 'no songs found';
     const why = `No year has enough listening yet (needs 50+ plays of 30 seconds or more). Found ${esc(counts)}.`;
@@ -154,7 +156,7 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
 
 const route = parseRoute(location.search);
 if (route.world && import.meta.env.DEV) previewWorld(route.station ?? 1); // dev-only district preview
-else if (route.data === 'demo') start(makeDemoPlays(), [], true, route);
+else if (route.data === 'demo') start(makeDemoPlays(), [], true, route, true);
 else landing();
 
 /** Dev: one district in the 3D world, no slides — for looking at and measuring the art. */
