@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Art direction - round 3</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected .ph{outline:5px solid #1ed760;outline-offset:5px}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Yuji+Syuku&family=Hachi+Maru+Pop&family=Anton&family=Zen+Maru+Gothic:wght@900&family=Zen+Kaku+Gothic+New:wght@500;900&family=Archivo+Black&family=Shippori+Mincho:wght@800&family=Rampart+One&family=Reggae+One&family=Mochiy+Pop+One&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  .phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px 26px;margin:22px 0}
+  .pk{cursor:pointer;width:300px}
+  .pk.selected .ph{outline:5px solid #1ed760;outline-offset:5px}
+  .ph{width:300px;height:533px;position:relative;overflow:hidden;border-radius:26px;box-shadow:0 24px 60px #0009;color:#111}
+  .pk h3{margin:14px 0 4px}
+  .pk p{margin:0 0 6px;font-size:13px;line-height:1.5;opacity:.85}
+  .pk p b{color:#1ed760}
+  .grain::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.5;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .25 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+  /* L — Shōwa kaiju poster */
+  .L{background:#e9dcbf}
+  .L .sky{position:absolute;inset:0 0 auto 0;height:330px;background:linear-gradient(180deg,#c8102e 0%,#ff7a2b 60%,#f6c26b 100%)}
+  .L .beast{position:absolute;left:40px;top:40px;width:240px;height:300px}
+  .L .city{position:absolute;left:0;right:0;top:250px;height:90px;background:#1a1410;clip-path:polygon(0 100%,0 40%,8% 40%,8% 20%,16% 20%,16% 55%,24% 55%,24% 10%,30% 10%,30% 45%,40% 45%,40% 30%,48% 30%,48% 60%,58% 60%,58% 15%,64% 15%,64% 50%,74% 50%,74% 35%,82% 35%,82% 65%,90% 65%,90% 25%,100% 25%,100% 100%)}
+  .L .title{position:absolute;left:12px;top:340px;transform:rotate(-6deg);font-family:'Reggae One';font-size:56px;line-height:.95;color:#c8102e;-webkit-text-stroke:3px #1a1410;paint-order:stroke fill;letter-spacing:-1px}
+  .L .sub{position:absolute;left:16px;top:455px;font-family:'Zen Kaku Gothic New';font-weight:900;font-size:14px;line-height:1.35}
+  .L .sub b{font-family:'Dela Gothic One';font-size:24px;color:#c8102e}
+  .L .credits{position:absolute;left:0;right:0;bottom:0;background:#1a1410;color:#e9dcbf;font:900 9px 'Zen Kaku Gothic New';padding:6px 14px;letter-spacing:1px}
+
+  /* M — Hanafuda */
+  .M{background:#151515}
+  .M .card{position:absolute;width:120px;height:196px;background:#f2ead8;border:4px solid #c8102e;border-radius:6px;box-shadow:0 10px 20px #000a;overflow:hidden}
+  .M .c1{left:22px;top:60px;transform:rotate(-10deg)}
+  .M .c2{left:150px;top:46px;transform:rotate(8deg)}
+  .M .moon{position:absolute;left:18px;top:30px;width:80px;height:80px;border-radius:50%;background:#c8102e}
+  .M .hill{position:absolute;left:-10px;right:-10px;bottom:-10px;height:90px;background:#111;border-radius:50% 50% 0 0}
+  .M .plum{position:absolute;inset:0;background:radial-gradient(circle at 30% 35%,#c8102e 0 9px,transparent 10px),radial-gradient(circle at 62% 55%,#c8102e 0 11px,transparent 12px),radial-gradient(circle at 44% 75%,#c8102e 0 8px,transparent 9px),radial-gradient(circle at 75% 28%,#c8102e 0 7px,transparent 8px)}
+  .M .branch{position:absolute;left:10px;top:20px;width:100px;height:150px;border-left:9px solid #111;border-radius:60% 0 0 0;transform:rotate(18deg)}
+  .M .tan{position:absolute;right:8px;top:12px;width:22px;height:120px;background:#c8102e;color:#f2ead8;writing-mode:vertical-rl;font-family:'Yuji Syuku';font-size:13px;display:flex;align-items:center;justify-content:center}
+  .M .yaku{position:absolute;left:0;right:0;top:300px;text-align:center;font-family:'Shippori Mincho';color:#e3b23c;font-size:16px;letter-spacing:6px}
+  .M .nm{position:absolute;left:0;right:0;top:330px;text-align:center;font-family:'Shippori Mincho';color:#f2ead8;font-size:46px;line-height:1}
+  .M .num{position:absolute;left:0;right:0;top:400px;text-align:center;font-family:'Shippori Mincho';color:#c8102e;font-size:42px}
+  .M .num small{font-size:18px;color:#f2ead8}
+  .M .foot{position:absolute;left:0;right:0;bottom:22px;text-align:center;font:900 11px 'Zen Kaku Gothic New';color:#8a8a8a;letter-spacing:2px}
+
+  /* N — Konbini package */
+  .N{background:#ffd400}
+  .N .stripe{position:absolute;left:0;right:0;top:0;height:120px;background:repeating-linear-gradient(-45deg,#e60012 0 22px,#ffd400 22px 44px)}
+  .N .burst{position:absolute;right:14px;top:84px;width:110px;height:110px;background:#e60012;clip-path:polygon(50% 0,61% 18%,82% 8%,80% 30%,100% 38%,86% 54%,98% 74%,76% 76%,72% 98%,54% 86%,36% 100%,30% 78%,8% 80%,16% 58%,0 42%,20% 32%,14% 10%,36% 18%);color:#fff;font-family:'Dela Gothic One';font-size:20px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1;transform:rotate(12deg)}
+  .N .brand{position:absolute;left:16px;top:136px;font-family:'Mochiy Pop One';font-size:15px;color:#e60012}
+  .N .nm{position:absolute;left:12px;top:160px;font-family:'Dela Gothic One';font-size:72px;line-height:.86;color:#111;letter-spacing:-3px}
+  .N .flavor{position:absolute;left:16px;top:300px;background:#111;color:#ffd400;font-family:'Mochiy Pop One';font-size:15px;padding:4px 12px;border-radius:20px}
+  .N .label{position:absolute;left:14px;right:14px;bottom:16px;background:#fff;border:3px solid #111;padding:8px 10px;font-family:'Zen Kaku Gothic New';font-weight:900;font-size:11px}
+  .N .label .r{display:flex;justify-content:space-between;border-bottom:1px solid #111;padding:2px 0}
+  .N .label .big{font-family:'Archivo Black';font-size:30px}
+  .N .bar{position:absolute;right:24px;bottom:96px;width:70px;height:34px;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 4px,#111 4px 5px,#fff 5px 8px)}
+
+  /* O — Kamekura modernist */
+  .O{background:#f4efe6}
+  .O .disc{position:absolute;left:50%;top:70px;width:220px;height:220px;margin-left:-110px;border-radius:50%;background:#c8102e}
+  .O .rule{display:none}
+  .O .yr{position:absolute;left:0;right:0;top:300px;text-align:center;font-family:'Bebas Neue';font-size:30px;letter-spacing:12px;color:#b08a2e}
+  .O .nm{position:absolute;left:0;right:0;top:330px;text-align:center;font-family:'Bebas Neue';font-size:72px;line-height:.85;letter-spacing:2px;color:#111}
+  .O .num{position:absolute;left:0;right:0;bottom:40px;text-align:center;font-family:'Bebas Neue';font-size:34px;letter-spacing:6px;color:#c8102e}
+  .O .jp{position:absolute;left:0;right:0;bottom:22px;text-align:center;font:900 11px 'Zen Kaku Gothic New';letter-spacing:6px;color:#111}
+
+  /* P — Great Wave mega crop */
+  .P{background:#efe6cf}
+  .P .wave{position:absolute;left:-40px;right:-40px;top:0;height:360px;background:url(img/wave.jpg) 18% 30%/auto 165% no-repeat}
+  .P .nm{position:absolute;left:18px;top:368px;font-family:'Archivo Black';font-size:58px;line-height:.9;letter-spacing:-2px;color:#1b2a4a}
+  .P .num{position:absolute;left:20px;bottom:18px;font-family:'Archivo Black';font-size:20px;color:#1b2a4a}
+  .P .num b{font-size:34px}
+  .P .kan{position:absolute;right:16px;bottom:22px;writing-mode:vertical-rl;font-family:'Yuji Syuku';font-size:26px;color:#1b2a4a;letter-spacing:4px}
+  .P .tag{position:absolute;left:18px;top:18px;background:#1b2a4a;color:#efe6cf;font:900 11px 'Zen Kaku Gothic New';padding:4px 10px;letter-spacing:2px}
+
+  /* Q — Gyaru magazine cover */
+  .Q{background:#111}
+  .Q .photo{position:absolute;inset:0;background:url(img/kabukicho.jpg) 50% 60%/auto 150% no-repeat;filter:saturate(1.4) contrast(1.1)}
+  .Q .mast{position:absolute;left:10px;right:10px;top:12px;font-family:'Rampart One';font-size:94px;line-height:.8;color:#ff2d95;-webkit-text-stroke:3px #fff;paint-order:stroke fill;letter-spacing:-4px;text-align:center}
+  .Q .issue{position:absolute;right:14px;top:96px;background:#fff200;color:#111;font-family:'Dela Gothic One';font-size:12px;padding:2px 8px}
+  .Q .cl{position:absolute;font-family:'Dela Gothic One';color:#fff;-webkit-text-stroke:3px #111;paint-order:stroke fill;line-height:1}
+  .Q .cl1{left:14px;top:150px;font-size:30px;color:#fff200;transform:rotate(-4deg)}
+  .Q .cl2{right:14px;top:220px;font-size:20px;text-align:right;color:#3cf6ff}
+  .Q .cl3{left:14px;top:300px;font-size:54px;color:#fff}
+  .Q .cl4{left:14px;top:418px;font-family:'Hachi Maru Pop';font-size:16px;color:#ff2d95;-webkit-text-stroke:4px #fff;transform:rotate(3deg)}
+  .Q .price{position:absolute;right:14px;bottom:14px;background:#fff;color:#111;font:900 10px 'Zen Kaku Gothic New';padding:4px 8px;text-align:right}
+
+  /* R — Matsuri lanterns */
+  .R{background:#0b1430}
+  .R .photo{position:absolute;inset:0;background:url(img/lanterns.jpg) 30% 40%/auto 125% no-repeat}
+  .R .dim{position:absolute;inset:0;background:linear-gradient(180deg,#0b143000 40%,#0b1430e6 72%)}
+  .R .lantern{position:absolute;left:22px;top:30px;width:110px;height:170px;border-radius:50px;background:#c8102e;box-shadow:0 0 40px #ff7a2b;display:flex;align-items:center;justify-content:center;font-family:'Yuji Syuku';font-size:70px;color:#111;border-top:10px solid #111;border-bottom:10px solid #111}
+  .R .nm{position:absolute;left:18px;top:326px;font-family:'Dela Gothic One';font-size:46px;line-height:.95;color:#fff}
+  .R .num{position:absolute;left:18px;bottom:26px;font-family:'Dela Gothic One';font-size:26px;color:#ffb347}
+  .R .num small{font-family:'Zen Kaku Gothic New';font-size:13px;color:#fff;margin-left:6px}
+
+  /* S — Urushi & kintsugi */
+  .S{background:radial-gradient(circle at 40% 30%,#2a1414,#0a0606 70%)}
+  .S .bowl{position:absolute;left:30px;top:60px;width:240px;height:240px}
+  .S .gold{background:linear-gradient(180deg,#fff2b8 0%,#e3b23c 40%,#9a6b14 65%,#f6d77a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .S .nm{position:absolute;left:0;right:0;top:330px;text-align:center;font-family:'Shippori Mincho';font-size:44px}
+  .S .line{position:absolute;left:60px;right:60px;top:392px;height:2px;background:linear-gradient(90deg,#0000,#e3b23c,#0000)}
+  .S .num{position:absolute;left:0;right:0;top:408px;text-align:center;font-family:'Shippori Mincho';font-size:20px;color:#c8102e}
+  .S .num b{font-size:34px}
+  .S .jp{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-family:'Shippori Mincho';font-size:13px;color:#a68b52;letter-spacing:5px}
+</style>
+
+<h2>Round 3: eight more directions</h2>
+<p class="subtitle">The same slide again, eight more ways: Japan's film posters, cards, packaging, modernism, prints, magazines, festivals and craft. Click any you like; all eleven earlier ones are still in play.</p>
+
+<div class="phones">
+  <div class="pk" data-choice="kaiju-poster" onclick="toggleSelect(this)">
+    <div class="ph L grain">
+      <div class="sky"></div>
+      <svg class="beast" viewBox="0 0 120 150"><path d="M60 8c14 0 24 10 24 24 0 6-2 10-4 14 10 4 18 14 20 28l8-4-2 12 10 2-10 8c-2 18-10 34-20 46H34C24 126 18 110 18 92l-10-6 10-4c0-14 6-26 16-32-2-4-4-8-4-14C30 20 44 8 60 8z" fill="#1a1410"/><circle cx="70" cy="28" r="4" fill="#fff200"/><path d="M40 6l6 10 4-12 6 10 4-12 6 12 6-10 2 12" stroke="#1a1410" stroke-width="5" fill="none"/></svg>
+      <div class="city"></div>
+      <div class="title">推し<br>大襲来!!</div>
+      <div class="sub">AOI KAZE が街を制圧<br><b>3,826分</b> の大進撃</div>
+      <div class="credits">音楽電車映画 · 2025 · 総天然色 · 推し特撮</div>
+    </div>
+    <h3>L · Shōwa kaiju poster</h3>
+    <p>1950s monster-movie posters: a painted sky, a giant silhouette over the city, a slanted brush title and a credits strip. Every #1 is a monster that conquered your year.</p>
+    <p><b>Motion:</b> the city shakes, the title crashes in, the film grain flickers. <b>3D:</b> a giant shadow stomps past the train.</p>
+  </div>
+
+  <div class="pk" data-choice="hanafuda" onclick="toggleSelect(this)">
+    <div class="ph M">
+      <div class="card c1"><div class="moon"></div><div class="hill"></div></div>
+      <div class="card c2"><div class="branch"></div><div class="plum"></div><div class="tan">推し之札</div></div>
+      <div class="yaku">役 · 月見で一杯</div>
+      <div class="nm">Aoi Kaze</div>
+      <div class="num">3,826<small> 分</small></div>
+      <div class="foot">YOUR WINNING HAND · 2025</div>
+    </div>
+    <h3>M · Hanafuda cards</h3>
+    <p>Japan's flower playing cards (the ones Nintendo started out making): flat red, black and cream, moons, plums and poem ribbons. Your top artists are your winning hand.</p>
+    <p><b>Motion:</b> cards are dealt, flipped and fanned; a combo flashes. <b>3D:</b> a card-table world, cards as scenery.</p>
+  </div>
+
+  <div class="pk" data-choice="konbini-pack" onclick="toggleSelect(this)">
+    <div class="ph N">
+      <div class="stripe"></div>
+      <div class="burst">新発売!!<br>No.1</div>
+      <div class="brand">ONGAKU DENSHA · 推しスナック</div>
+      <div class="nm">AOI<br>KAZE</div>
+      <div class="flavor">♪ 推し味 · 濃厚</div>
+      <div class="bar"></div>
+      <div class="label"><div class="r"><span>内容量 (listened)</span><span class="big">3,826分</span></div><div class="r"><span>推し度</span><span>100%</span></div><div class="r" style="border:0"><span>原材料</span><span>夜, 電車, ヘッドホン</span></div></div>
+    </div>
+    <h3>N · Konbini snack pack</h3>
+    <p>Japanese snack packaging: warning stripes, a 新発売 starburst, a giant product name and a nutrition label that is your stats. Loud, funny and very shareable.</p>
+    <p><b>Motion:</b> packs tear open, starbursts pop, the label scans with a beep. <b>3D:</b> a 2 AM konbini aisle world.</p>
+  </div>
+
+  <div class="pk" data-choice="kamekura" onclick="toggleSelect(this)">
+    <div class="ph O">
+      <div class="disc"></div>
+      <div class="yr">TOKYO · 2025</div>
+      <div class="nm">AOI<br>KAZE</div>
+      <div class="num">3,826 MINUTES</div>
+      <div class="jp">今年の第一位</div>
+    </div>
+    <h3>O · 1960s Japanese modernism</h3>
+    <p>The red-sun posters of the 1960s Tokyo golden age of graphic design: one perfect red disc, gold and black, strict condensed type and lots of air. Iconic and classy.</p>
+    <p><b>Motion:</b> the sun rises; type slides in on a grid. <b>3D:</b> a clean, sunlit city with one huge sun.</p>
+  </div>
+
+  <div class="pk" data-choice="great-wave" onclick="toggleSelect(this)">
+    <div class="ph P grain">
+      <div class="wave"></div>
+      <div class="tag">推し · No.1</div>
+      <div class="nm">AOI<br>KAZE</div>
+      <div class="num"><b>3,826</b> min</div>
+      <div class="kan">大波</div>
+    </div>
+    <h3>P · Great Wave mega-crop</h3>
+    <p>Hokusai's <i>Great Wave</i> (1831, CC0), cropped enormous so the claws of foam fill the screen, with sharp modern type. A wave for each artist that swept your year.</p>
+    <p><b>Motion:</b> the wave crests and rolls; type surfs in. <b>3D:</b> a stylised ocean the train crosses on a sea bridge.</p>
+  </div>
+
+  <div class="pk" data-choice="gyaru-mag" onclick="toggleSelect(this)">
+    <div class="ph Q">
+      <div class="photo"></div>
+      <div class="mast">ぎゃる</div>
+      <div class="issue">2025 年末号</div>
+      <div class="cl cl1">今年の推し<br>完全攻略!!</div>
+      <div class="cl cl2">3,826分も<br>聴いた女子続出</div>
+      <div class="cl cl3">AOI<br>KAZE</div>
+      <div class="cl cl4">ぉ前も推しなょ♡</div>
+      <div class="price">特別付録 · 推しシール<br>定価 0円</div>
+    </div>
+    <h3>Q · Gyaru magazine cover</h3>
+    <p>2000s Shibuya gyaru magazines: a huge bubbly masthead, cover lines in every colour fighting for space, and a "free sticker sheet" price box. Pure gyaru, as a magazine.</p>
+    <p><b>Motion:</b> cover lines pop on one by one, like flipping a magazine. <b>3D:</b> billboards and screens around Shibuya.</p>
+  </div>
+
+  <div class="pk" data-choice="matsuri" onclick="toggleSelect(this)">
+    <div class="ph R">
+      <div class="photo"></div><div class="dim"></div>
+      <div class="lantern">推</div>
+      <div class="nm">AOI KAZE<br>祭り</div>
+      <div class="num">3,826分<small>a whole festival of you</small></div>
+    </div>
+    <h3>R · Matsuri lantern night</h3>
+    <p>A real festival photo (Kuki Chōchin Matsuri, CC0): towers of glowing paper lanterns at dusk, with huge lantern kanji as type. Warm, celebratory and summery.</p>
+    <p><b>Motion:</b> lanterns light up one by one, taiko-timed. <b>3D:</b> a festival street of lantern towers and fireworks.</p>
+  </div>
+
+  <div class="pk" data-choice="kintsugi" onclick="toggleSelect(this)">
+    <div class="ph S">
+      <svg class="bowl" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff2b8"/><stop offset=".5" stop-color="#e3b23c"/><stop offset="1" stop-color="#9a6b14"/></linearGradient></defs><path d="M20 80 Q100 70 180 80 Q170 170 100 178 Q30 170 20 80z" fill="#4a1a1a" stroke="#e3b23c55" stroke-width="2"/><path d="M40 96 Q100 104 160 96" stroke="#ffffff22" stroke-width="6" fill="none" stroke-linecap="round"/><ellipse cx="100" cy="80" rx="80" ry="14" fill="#7a1010"/><path d="M60 90 L75 120 L68 150 M75 120 L105 128 L120 170 M105 128 L140 110 L152 96" stroke="url(#g)" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>
+      <div class="nm gold">Aoi Kaze</div>
+      <div class="line"></div>
+      <div class="num"><b>3,826</b> 分</div>
+      <div class="jp">漆 · 金継ぎ · 二〇二五</div>
+    </div>
+    <h3>S · Urushi & kintsugi</h3>
+    <p>Black and vermilion lacquer, with gold seams of repaired pottery. Hushed, luxurious, made by hand: your year as an heirloom.</p>
+    <p><b>Motion:</b> gold runs through the cracks; lacquer gleams. <b>3D:</b> a dark lacquered world with gold light.</p>
+  </div>
+</div>
+<p class="subtitle">Image credits: "Under the Wave off Kanagawa" by Katsushika Hokusai (CC0); "Kuki Chōchin Matsuri 04" (CC0); "Kabukicho red gate…" by Basile Morin (CC BY-SA 4.0).</p>
+
+</body></html>
