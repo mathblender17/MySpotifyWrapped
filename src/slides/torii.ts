@@ -3,9 +3,9 @@ import { amountCnt, cnt, slide } from './fmt';
 
 export const torii: Slide = ({ stats }) => {
   const s = stats!;
-  // Nearest (biggest) gate last, so the tunnel builds towards you.
+  // Nearest (biggest) gate last, so the tunnel builds towards you. Centred with left, not a CSS transform: beats animate transform.
   const gates = [0, 1, 2, 3, 4]
-    .map((i) => `<div class="g" data-beat="${5 - i}" style="top:${26 + i * 34}px;width:${190 - i * 34}px;height:${330 - i * 58}px;opacity:${1 - i * 0.15}"></div>`)
+    .map((i) => `<div class="g" data-beat="${5 - i}" style="top:${26 + i * 34}px;left:${(210 - (190 - i * 34)) / 2}px;width:${190 - i * 34}px;height:${330 - i * 58}px;opacity:${1 - i * 0.15}"></div>`)
     .join('');
   return slide('tor', `${gates}
     <div class="tx">

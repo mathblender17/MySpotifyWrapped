@@ -1,3 +1,4 @@
+import { gsap } from 'gsap';
 import { createSoundtrack } from './audio/soundtrack';
 import { makeDemoPlays } from './ingest/demo';
 import { loadInWorker } from './ingest/loadInWorker';
@@ -13,6 +14,9 @@ const app = document.querySelector<HTMLElement>('#app')!;
 let current: { destroy(): void } | undefined;
 let loadToken = 0;
 const soundtrack = createSoundtrack();
+// Keep animation on real time: on a slow or throttled device GSAP would otherwise play in slow motion
+// and drift out of sync with the music.
+gsap.ticker.lagSmoothing(0);
 
 function landing(note?: string) {
   app.innerHTML = `
