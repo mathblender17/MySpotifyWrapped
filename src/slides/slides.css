@@ -46,3 +46,43 @@
 .gan .big { font-size: 20px; line-height: 1.05; text-shadow: 3px 3px 0 #ff2d95; }
 .gan .big span { font-size: 30px; overflow-wrap: anywhere; }
 .gan .lips { width: 70px; height: 16px; border-radius: 0 0 40px 40px; background: #fff; margin-top: 8px; }
+
+/* 5 sumo banzuke (round 1) */
+.sumo { background: #efe3c4; color: #111; font-family: 'Yuji Syuku', serif; }
+.sumo .hd { text-align: center; font-size: 20px; border-bottom: 2px solid #111; padding-bottom: 4px; }
+.sumo .cols { display: flex; flex-direction: row-reverse; justify-content: space-around; margin-top: 10px; flex: 1; min-height: 0; }
+.sumo .cols div { writing-mode: vertical-rl; font-size: 16px; border-left: 1px solid #1115; padding: 0 3px; overflow: hidden; }
+.sumo .cols .y { font-size: 24px; color: #a00; }
+.sumo .rk { color: #ff2d95; }
+.sumo .ft { font-size: 10px; text-align: center; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; }
+
+/* 6 idol / oshi (round 1) */
+.idol { background: linear-gradient(#ffe9f6, #fff); color: #d4007a; font-family: 'Hachi Maru Pop', sans-serif; text-align: center; }
+.idol .c { font-size: 13px; }
+.idol .ch { background: #fff; padding: 8px 8px 22px; box-shadow: 0 6px 16px #0003; transform: rotate(-4deg); width: 130px; margin: 6px auto 0; }
+.idol .ch .pic { height: 100px; background: linear-gradient(135deg, #ff2d95, #9ad6ff); }
+.idol .ch .sig { font-size: 12px; margin-top: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.idol .oshi { font-family: 'Dela Gothic One', sans-serif; font-size: 20px; margin-top: 12px; line-height: 1.1; }
+.idol .st { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 11px; color: #333; margin-top: 4px; }
+.idol .pen { display: flex; justify-content: center; gap: 5px; margin-top: auto; }
+.idol .pen i { width: 8px; height: 40px; border-radius: 4px; box-shadow: 0 0 10px currentColor; }
+
+/* 7 konbini receipt (round 2) */
+.kon { background: #2e8b57; align-items: center; }
+.kon .rc { background: #fff; width: 178px; flex: 1; font-family: 'DotGothic16', monospace; font-size: 11px; color: #222; padding: 10px; line-height: 1.5; box-sizing: border-box; }
+.kon .h { text-align: center; font-size: 12px; border-bottom: 1px dashed #999; padding-bottom: 4px; margin-bottom: 4px; }
+.kon .r { display: flex; justify-content: space-between; gap: 6px; }
+.kon .r span:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.kon .tot { border-top: 1px dashed #999; margin-top: 4px; padding-top: 4px; font-size: 13px; color: #ff2d95; }
+.kon .by { text-align: center; font-size: 10px; color: #777; margin-top: 4px; }
+.kon .bc { text-align: center; margin-top: 8px; }
+
+/* 8 gacha (round 1) */
+.gac { background: radial-gradient(circle at 50% 45%, #fff 0, #ffe7a0 12%, #b06bff 40%, #14002e 80%); align-items: center; justify-content: center; color: #fff; font-family: 'Dela Gothic One', sans-serif; text-align: center; }
+.gac .card { width: 140px; height: 190px; border-radius: 10px; background: linear-gradient(135deg, #ff2d95, #ffd700, #6af0ff, #ff2d95); padding: 3px; box-shadow: 0 0 30px #fff; margin: 14px 0; }
+.gac .card > div { height: 100%; border-radius: 8px; background: linear-gradient(#2a0f5a, #120530); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; box-sizing: border-box; }
+.gac .ssr { font-size: 34px; background: linear-gradient(90deg, #ff2d95, #ffd700, #6af0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gac .nm { font-size: 16px; line-height: 1.15; margin-top: 4px; overflow-wrap: anywhere; }
+.gac .ar { font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; opacity: 0.8; margin-top: 4px; }
+.gac .st { color: #ffd700; margin-top: 6px; }
+.gac .lb { font-size: 11px; letter-spacing: 2px; }
