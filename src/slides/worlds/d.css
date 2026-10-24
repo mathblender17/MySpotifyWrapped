@@ -1,0 +1,23 @@
+/* World D: shōnen manga (art spec §5, mockup D). One spot red: #e60033. */
+.sumo { background: #fff; color: #111; padding: 8px; display: grid; gap: 5px;
+  grid-template: "p1 p1" 112px "pb pa" 1fr "y y" 128px "ft ft" auto / 1fr 1fr; }
+.sumo .pnl { position: relative; border: 3px solid #111; overflow: hidden; background-color: #fff; min-height: 0; }
+.sumo .tone { background-image: radial-gradient(#111 .8px, transparent 1.1px); background-size: 5px 5px; }
+.sumo .p1 { grid-area: p1; background-image: url(/art/manga.webp), radial-gradient(#111 .8px, transparent 1.1px); background-size: 440px auto, 5px 5px; background-position: 22% 10%, 0 0; filter: contrast(1.4); }
+.sumo .pa { grid-area: pa; background-image: url(/art/manga.webp), radial-gradient(#111 .8px, transparent 1.1px); background-size: 520px auto, 5px 5px; background-position: 62% 72%, 0 0; }
+.sumo .pb { grid-area: pb; }
+.sumo .pa, .sumo .pb { display: flex; flex-direction: column; justify-content: space-between; padding: 5px; filter: contrast(1.2); }
+.sumo .bub { position: absolute; left: 30px; top: 14px; background: #fff; border: 2.5px solid #111; border-radius: 50%; padding: 9px 13px; font: 900 11px/1.25 var(--face-text); text-align: center; }
+.sumo .bub::after { content: ''; position: absolute; left: 22px; bottom: -9px; border: 6px solid transparent; border-top: 9px solid #111; border-bottom: 0; }
+.sumo .cap { background: #fff; border: 2px solid #111; padding: 3px 5px; box-shadow: 2px 2px 0 #111; }
+.sumo .cap .rk { display: block; font: 900 8px/1 var(--face-text); color: #ff2d95; letter-spacing: 1px; }
+.sumo .cap .an { display: block; font: 900 11px/1.1 var(--face-text); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.sumo .splash { grid-area: y; display: flex; align-items: center; justify-content: center; padding: 10px 12px;
+  background: repeating-conic-gradient(from 0deg at 50% 55%, #111 0 3deg, #fff 3deg 9deg); }
+.sumo .splash .nm { position: relative; z-index: 1; font: 32px/.95 var(--face-num); color: #fff; -webkit-text-stroke: 5px #111; paint-order: stroke fill; letter-spacing: -1px; text-align: center; }
+.sumo .fit { overflow-wrap: anywhere; max-width: 100%; }
+.sumo .fit.l2 { font-size: 24px; }
+.sumo .fit.l3 { font-size: 16px; -webkit-text-stroke-width: 3px; }
+.sumo .badge { position: absolute; left: 6px; top: 6px; z-index: 2; background: #e60033; color: #fff; border: 2.5px solid #111; font: 900 13px/1 var(--face-text); padding: 3px 6px; transform: rotate(-5deg); }
+.sumo .don { position: absolute; right: 4px; bottom: 0; z-index: 2; font: 34px/1 'Reggae One', sans-serif; color: #e60033; -webkit-text-stroke: 3px #111; paint-order: stroke fill; transform: rotate(10deg); }
+.sumo .ft { grid-area: ft; text-align: center; font: 900 9px var(--face-text); }
