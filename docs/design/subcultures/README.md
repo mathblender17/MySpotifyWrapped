@@ -7,6 +7,7 @@ Brainstorm log for the Japan theme. Each subculture is a slide style paired with
 | [round-0-first-directions.html](round-0-first-directions.html) | First 3 directions (Gyaru Deco, Shibuya Neon, Tabloid Manga). Rejected as not unique enough. |
 | [round-1-gallery.html](round-1-gallery.html) | 20 subcultures across street, nightlife, everyday, sports/school, anime/games |
 | [round-2-gallery.html](round-2-gallery.html) | 24 more: Harajuku, Shōwa retro, konbini/daily life, traditional, TV/otaku |
+| [round-3-classic-japan.html](round-3-classic-japan.html) | 24 classic stereotypes: warriors/legends, postcard Japan, food, modern Tokyo |
 
 ## Core concept
 
@@ -32,7 +33,35 @@ Round 1, picked 2026-10-24:
 | JRPG status screen | Listener level and genres learned |
 | Gacha pull | #1 song reveal |
 
-Round 2: not picked yet.
+Round 2, picked 2026-10-24:
+
+| Subculture | Stat it carries |
+|---|---|
+| Super Sentai hero team | Top 5 artists as a squad (user note: "IFF", meaning unclear, to confirm) |
+| Akihabara maid café | #1 artist reveal (omurice message) |
+| Fighting game VS screen | This year vs last year |
+| Kanji of the Year | Your year in one kanji |
+| Kintsugi | A song you came back to after years. **Note: needs more organic, natural-looking cracks** |
+| Summer matsuri | Song of the summer |
+| Gashapon capsule toys | New artists discovered |
+| Bento box | Genre breakdown |
+| Vending machine | Genre mix as drinks |
+| Konbini receipt | Top songs with play counts |
+| Station stamp rally | Genres collected over the year |
+| City-pop vinyl + obi | Oldest song / decades mix |
+| Yankii / Sukeban | Obscurity score |
+| Purikura photo strip | #1 song per season |
+
+Round 3: not picked yet.
+
+## Data caveats (to settle in the spec)
+
+Some mockup stats aren't in the user's own data. Before a slide relies on one, the spec must name its source or drop it:
+
+- **Tempo/BPM, "bass-heavy", energy** (taiko, ramen): Spotify's audio-features API is closed to new apps. Needs another source (e.g. a third-party API) or the slide gets cut.
+- **"X million others had the same #1"** (Shibuya scramble), **"0.4% of listeners know them"** (yankii): needs global data. Artist popularity/follower counts from the Web API are a possible proxy.
+- **Saved/liked songs** (ninja, 1,000 cranes): in the account-data export (`YourLibrary.json`), not the streaming history.
+- **Genres**: not in streaming history. Fetch per artist from the Web API.
 
 ## Open questions
 

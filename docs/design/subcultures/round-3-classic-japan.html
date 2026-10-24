@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Round 3 - Classic Japan gallery</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected{outline:4px solid #1ed760}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Reggae+One&family=Zen+Maru+Gothic:wght@700;900&family=Yuji+Syuku&family=Hachi+Maru+Pop&family=Zen+Kurenaido&family=Mochiy+Pop+One&family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
+<style>
+  .kept{border:1px solid #fff3;border-radius:12px;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.6}
+  .kept b{color:#1ed760}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .sp{flex:1}.c{text-align:center;align-items:center}
+  .dg{font-family:'Dela Gothic One'}.dot{font-family:'DotGothic16'}.yu{font-family:'Yuji Syuku'}.mi{font-family:'Shippori Mincho'}.zm{font-family:'Zen Maru Gothic'}
+
+  /* samurai scroll */
+  .sam{background:#e9dcc0;color:#111}
+  .sam .rod{height:12px;background:linear-gradient(#5a2e0e,#2a1404);margin:-16px -16px 10px;border-radius:0 0 6px 6px}
+  .sam .ko{display:flex;flex-direction:row-reverse;gap:10px;flex:1;justify-content:center}
+  .sam .ko div{writing-mode:vertical-rl;font-size:30px}
+  .sam .ft{font-size:11px;text-align:center}
+  .sam .hk{position:absolute;left:18px;bottom:40px;width:30px;height:30px;background:#b5121b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+  /* ninja */
+  .nin{background:radial-gradient(circle at 70% 25%,#f4f0dc 0 34px,transparent 35px),linear-gradient(#0e1424,#05070d);color:#fff}
+  .nin .shu{font-size:40px;transform:rotate(20deg);margin-top:90px;color:#c8ccd6}
+  .nin .t{font-size:20px;line-height:1.15;margin-top:10px}
+  .nin .s{font-size:11px;opacity:.75;margin-top:6px}
+  .nin .roof{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(170deg,transparent 40%,#000 41%)}
+  /* kaiju */
+  .kai{background:linear-gradient(#ff5a1f,#3a0a00 70%);color:#fff;font-family:'Dela Gothic One'}
+  .kai .city{position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(90deg,#111 0 20px,transparent 20px 26px,#111 26px 60px,transparent 60px 66px,#111 66px 90px,transparent 90px 98px,#111 98px 140px,transparent 140px 146px,#111 146px);clip-path:polygon(0 30%,10% 30%,10% 10%,25% 10%,25% 40%,40% 40%,40% 0,55% 0,55% 35%,70% 35%,70% 15%,85% 15%,85% 45%,100% 45%,100% 100%,0 100%)}
+  .kai .mon{position:absolute;right:-10px;bottom:60px;width:110px;height:180px;background:#1f3a1a;border-radius:50% 50% 20% 20%;clip-path:polygon(30% 0,45% 10%,55% 2%,65% 14%,80% 8%,100% 100%,0 100%)}
+  .kai .t{font-size:24px;line-height:1.05;position:relative;z-index:2}
+  .kai .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:6px;position:relative;z-index:2;width:120px}
+  /* mecha HUD */
+  .mec{background:#001a12;color:#3dff9a;font-family:'DotGothic16';font-size:11px}
+  .mec .ring{width:150px;height:150px;border:2px solid #3dff9a;border-radius:50%;margin:16px auto;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 12px #3dff9a55}
+  .mec .ring:before{content:"";position:absolute;inset:14px;border:1px dashed #3dff9a88;border-radius:50%}
+  .mec .ring b{font-family:'Dela Gothic One';font-size:30px;color:#fff}
+  .mec .ln{display:flex;justify-content:space-between;border-bottom:1px solid #3dff9a44;padding:2px 0}
+  .mec .warn{background:#ff2b2b;color:#fff;text-align:center;margin-top:8px;padding:2px}
+  /* kabuki */
+  .kab{background:#f7f2e8;color:#111}
+  .kab .face{width:150px;height:180px;margin:6px auto 0;background:#fff;border-radius:46% 46% 50% 50%;position:relative;box-shadow:0 0 0 2px #ddd}
+  .kab .face i{position:absolute;background:#d0021b;border-radius:50%}
+  .kab .t{font-size:26px;text-align:center;margin-top:12px}
+  .kab .s{text-align:center;font-size:11px}
+  .kab .curt{position:absolute;inset:0 0 auto 0;height:14px;background:repeating-linear-gradient(90deg,#111 0 24px,#c47a1b 24px 48px,#2e6b3a 48px 72px)}
+  /* daruma */
+  .dar{background:#fff3e6;align-items:center}
+  .dar .body{width:150px;height:170px;background:radial-gradient(circle at 50% 38%,#fff 0 46px,transparent 47px),#d0021b;border-radius:50% 50% 46% 46%;position:relative;margin-top:14px}
+  .dar .eye{position:absolute;top:48px;width:22px;height:22px;border-radius:50%;border:3px solid #111;background:#fff}
+  .dar .eye.f{background:#111}
+  .dar .t{font-family:'Yuji Syuku';font-size:22px;margin-top:14px;color:#d0021b}
+  .dar .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center;color:#333}
+
+  /* fuji postcard */
+  .fuji{background:linear-gradient(#7ec8ff,#ffd6e8);color:#fff}
+  .fuji .mt{position:absolute;left:-10px;right:-10px;bottom:70px;height:150px;background:linear-gradient(#fff 0 26%,#3a5a9a 27%);clip-path:polygon(50% 0,62% 18%,100% 100%,0 100%,38% 18%)}
+  .fuji .gr{position:absolute;left:0;right:0;bottom:0;height:72px;background:#3a5a9a}
+  .fuji .sak{position:absolute;font-size:18px}
+  .fuji .t{font-family:'Dela Gothic One';font-size:20px;position:relative;text-shadow:0 2px 6px #0005}
+  .fuji .bt{position:absolute;bottom:16px;left:16px;right:16px;font-family:'Zen Maru Gothic';font-size:12px;font-weight:900}
+  /* torii tunnel */
+  .tor{background:#1a0a04;color:#fff;align-items:center;justify-content:flex-end}
+  .tor .g{position:absolute;left:50%;transform:translateX(-50%);border:10px solid #e8461c;border-bottom:none;border-top-width:14px}
+  .tor .t{position:relative;font-family:'Dela Gothic One';font-size:24px;text-align:center;text-shadow:0 2px 8px #000}
+  .tor .s{position:relative;font-family:'Zen Maru Gothic';font-size:12px;text-align:center}
+  /* zen garden */
+  .zen{background:repeating-radial-gradient(circle at 70% 60%,#e8e2d2 0 6px,#d7cfbb 6px 8px),#e8e2d2;color:#333}
+  .zen .rock{position:absolute;right:46px;top:186px;width:56px;height:40px;background:#5b5b55;border-radius:50% 50% 40% 40%}
+  .zen .t{font-family:'Shippori Mincho';font-size:22px;background:#e8e2d2;padding:4px;align-self:flex-start}
+  .zen .s{font-family:'Zen Maru Gothic';font-size:12px;background:#e8e2d2;padding:4px;margin-top:auto;align-self:flex-start}
+  /* maiko kyoto */
+  .mai{background:#2a0e1a;color:#ffd6e0;font-family:'Shippori Mincho';align-items:center;text-align:center}
+  .mai .um{width:170px;height:85px;border-radius:85px 85px 0 0;background:repeating-conic-gradient(from -90deg at 50% 100%,#d6224a 0 15deg,#f7c3d0 15deg 30deg);margin-top:16px}
+  .mai .h{width:2px;height:60px;background:#a07040}
+  .mai .t{font-size:22px;margin-top:10px}
+  .mai .s{font-size:11px;font-family:'Zen Maru Gothic';margin-top:6px}
+  /* maneki neko */
+  .neko{background:#ffe9b8;align-items:center;color:#5a2a00}
+  .neko .cat{width:130px;height:170px;background:#fff;border-radius:60px 60px 30px 30px;position:relative;margin-top:14px;box-shadow:0 6px 14px #0002}
+  .neko .paw{position:absolute;right:-14px;top:30px;width:34px;height:60px;background:#fff;border-radius:16px;box-shadow:0 2px 6px #0002}
+  .neko .coin{position:absolute;left:30px;bottom:24px;width:70px;height:46px;background:linear-gradient(#ffd75a,#c99500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One';font-size:18px}
+  .neko .bell{position:absolute;left:55px;top:66px;width:20px;height:20px;border-radius:50%;background:#ffc400;border:2px solid #d0021b}
+  .neko .t{font-family:'Mochiy Pop One';font-size:15px;margin-top:12px;text-align:center}
+  /* cranes */
+  .cra{background:#f6f3ec;color:#222;font-family:'Zen Maru Gothic'}
+  .cra .str{display:flex;justify-content:space-around;flex:1;margin-top:6px}
+  .cra .str div{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .cra .str i{width:16px;height:12px;clip-path:polygon(0 50%,50% 0,100% 50%,50% 70%)}
+  .cra .t{font-family:'Dela Gothic One';font-size:22px;text-align:center}
+  .cra .s{font-size:11px;text-align:center}
+
+  /* kaiten sushi */
+  .sus{background:#f3e3c7;color:#2a1a0a;font-family:'Zen Maru Gothic'}
+  .sus .belt{margin:10px -16px 0;background:#9aa0a6;padding:8px 6px;display:flex;gap:6px;overflow:hidden}
+  .sus .pl{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#222;text-align:center;box-shadow:inset 0 0 0 4px #fff8}
+  .sus .stack{display:flex;flex-direction:column-reverse;align-items:center;margin-top:auto}
+  .sus .stack i{width:90px;height:10px;border-radius:50%;margin-top:-3px;border:1px solid #0003}
+  .sus .t{font-family:'Dela Gothic One';font-size:20px;text-align:center;margin-top:10px}
+  /* ramen */
+  .ram{background:#1c0f08;color:#ffe2b0;align-items:center;text-align:center}
+  .ram .bowl{width:170px;height:100px;background:#b5121b;border-radius:0 0 85px 85px;margin-top:70px;position:relative}
+  .ram .bowl:before{content:"";position:absolute;left:0;right:0;top:-10px;height:22px;border-radius:50%;background:#e8b56a}
+  .ram .steam{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:28px;opacity:.6;letter-spacing:6px}
+  .ram .t{font-family:'Dela Gothic One';font-size:22px;margin-top:20px}
+  .ram .s{font-family:'Zen Maru Gothic';font-size:12px}
+  /* izakaya */
+  .iza{background:#2b1408;color:#fff}
+  .iza .noren{display:flex;gap:3px;margin:-16px -16px 0}
+  .iza .noren div{flex:1;height:70px;background:#1d3a6e;color:#fff;font-family:'Yuji Syuku';font-size:20px;display:flex;align-items:center;justify-content:center}
+  .iza .lan{width:56px;height:76px;border-radius:24px;background:#e8461c;margin:16px auto 0;box-shadow:0 0 20px #ff8a00;font-family:'Yuji Syuku';writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .iza .t{font-family:'Dela Gothic One';font-size:20px;text-align:center;margin-top:14px}
+  .iza .s{font-family:'Zen Maru Gothic';font-size:12px;text-align:center}
+  /* tea ceremony */
+  .tea{background:#3f4a2a;color:#eef0dc;align-items:center;text-align:center}
+  .tea .cup{width:110px;height:70px;background:#2b2b2b;border-radius:0 0 50px 50px;margin-top:80px;position:relative}
+  .tea .cup:before{content:"";position:absolute;left:4px;right:4px;top:-8px;height:18px;border-radius:50%;background:#7fae3a}
+  .tea .t{font-family:'Shippori Mincho';font-size:26px;margin-top:24px}
+  .tea .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:6px}
+
+  /* shibuya scramble */
+  .scr{background:#222;color:#fff}
+  .scr .x{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 14px,#ffffff22 14px 20px),repeating-linear-gradient(-45deg,transparent 0 14px,#ffffff22 14px 20px)}
+  .scr .ppl{position:absolute;inset:0;background-image:radial-gradient(#ffd23f 2px,transparent 2.5px),radial-gradient(#ff5d8f 2px,transparent 2.5px),radial-gradient(#5dc8ff 2px,transparent 2.5px);background-size:23px 19px,31px 27px,17px 29px}
+  .scr .bb{position:relative;background:#000c;padding:8px;border:2px solid #ffd23f;margin-top:auto}
+  .scr .bb .dg{font-size:22px;color:#ffd23f}
+  .scr .bb div{font-family:'Zen Maru Gothic';font-size:12px}
+  /* shinkansen */
+  .shk{background:linear-gradient(#cfe8ff,#fff);color:#0b3d91}
+  .shk .nose{position:absolute;left:-40px;right:-10px;top:150px;height:70px;background:#fff;border-radius:120px 0 0 30px;box-shadow:0 6px 14px #0002;border-bottom:8px solid #0b3d91}
+  .shk .win{position:absolute;left:30px;top:162px;width:60px;height:18px;background:#123;border-radius:20px 4px 4px 4px}
+  .shk .t{font-family:'Dela Gothic One';font-size:22px;line-height:1.1}
+  .shk .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:auto}
+  .shk .sp2{font-family:'DotGothic16';font-size:28px;margin-top:auto}
+  /* salaryman */
+  .sal{background:#e9eef2;color:#1b2a3a;font-family:'Zen Maru Gothic'}
+  .sal .card{background:#fff;border:1px solid #ccd;padding:12px;margin-top:10px;box-shadow:0 4px 10px #0001}
+  .sal .card .n{font-family:'Shippori Mincho';font-size:22px}
+  .sal .card .r{font-size:11px;opacity:.7}
+  .sal .bar{display:flex;align-items:flex-end;gap:3px;height:80px;margin-top:14px}
+  .sal .bar i{flex:1;background:#1b2a3a}
+  .sal .t{font-family:'Dela Gothic One';font-size:18px;margin-top:8px}
+  /* capsule hotel */
+  .cap{background:#0d0d10;color:#fff;font-family:'DotGothic16'}
+  .cap .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+  .cap .grid div{border-radius:30px 30px 6px 6px;background:#1c1c24;border:2px solid #2c2c3a;display:flex;align-items:center;justify-content:center;font-size:10px;color:#666}
+  .cap .grid div.on{background:radial-gradient(#ffe7a8,#c98a2a);color:#222;font-size:12px}
+  .cap .t{font-family:'Dela Gothic One';font-size:18px;margin-top:10px;text-align:center}
+  /* tech toilet */
+  .toi{background:#f2f4f7;color:#1b2a3a;font-family:'Zen Maru Gothic'}
+  .toi .pan{background:#fff;border-radius:16px;padding:10px;box-shadow:0 4px 12px #0002;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .toi .pan div{border-radius:10px;background:#e7edf5;font-size:10px;font-weight:900;text-align:center;padding:8px 2px}
+  .toi .pan div b{display:block;font-size:16px;color:#2a7de1}
+  .toi .pan .stop{background:#ff5a5a;color:#fff;grid-column:span 2}
+  .toi .t{font-family:'Dela Gothic One';font-size:18px;margin-top:auto;text-align:center}
+  /* yuru-chara */
+  .yur{background:#bdf0c8;align-items:center;color:#1a5a2a}
+  .yur .m{width:150px;height:170px;background:#ffd23f;border-radius:50% 50% 44% 44%;margin-top:10px;position:relative;box-shadow:inset 0 -12px 0 #e8b21f}
+  .yur .m:before,.yur .m:after{content:"";position:absolute;top:60px;width:16px;height:16px;border-radius:50%;background:#222}
+  .yur .m:before{left:40px}.yur .m:after{right:40px}
+  .yur .m i{position:absolute;top:84px;left:50%;transform:translateX(-50%);width:30px;height:12px;border-radius:0 0 20px 20px;background:#d0021b}
+  .yur .m b{position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-size:34px}
+  .yur .t{font-family:'Mochiy Pop One';font-size:18px;margin-top:12px}
+  .yur .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center}
+  /* haiku */
+  .hai{background:#faf7ef;color:#222;font-family:'Shippori Mincho'}
+  .hai .lines{display:flex;flex-direction:row-reverse;gap:14px;justify-content:center;flex:1;margin-top:10px}
+  .hai .lines div{writing-mode:vertical-rl;font-size:18px}
+  .hai .en{font-family:'Zen Kurenaido';font-size:12px;text-align:center;line-height:1.5}
+  /* taiko */
+  .tai{background:radial-gradient(circle at 50% 50%,#3a0d00,#0a0300);color:#fff;align-items:center;text-align:center}
+  .tai .drum{width:160px;height:160px;border-radius:50%;background:radial-gradient(#f0dfbf 0 58%,#2b1a0a 59% 64%,#9a4a1a 65%);margin-top:30px;display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One';font-size:40px;color:#b5121b;box-shadow:0 0 30px #ff6a0055}
+  .tai .t{font-family:'Reggae One';font-size:34px;color:#ffd23f;margin-top:12px}
+  .tai .s{font-family:'Zen Maru Gothic';font-size:12px}
+</style>
+
+<h2>Round 3: classic Japan, the icons the world knows</h2>
+<p class="subtitle">These are the stereotypes Japan is famous for, each paired with a stat. Click the ones you want.</p>
+<div class="kept">Picked so far, <b>round 1:</b> ganguro · keitai · dekotora · idol · Kōhaku · train · weather · omikuji · sumo · Kōshien · shōnen manga · JRPG · gacha. <b>Round 2:</b> sentai · maid café · fighting VS · Kanji of the Year · kintsugi · matsuri · gashapon · bento · vending machine · konbini receipt · eki stamp rally · city pop · yankii · purikura</div>
+
+<div class="grp">Warriors, monsters &amp; legends</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="samurai" onclick="toggleSelect(this)"><div class="ph sam"><div class="rod"></div><div class="ko yu"><div>一曲入魂</div><div style="font-size:18px">二四七回</div></div><div class="ft yu">武士道 · 2025</div><div class="hk yu">印</div></div><h4>Samurai scroll</h4><p>A hanging calligraphy scroll. "一曲入魂" means one song, whole soul. <b>→ Your most-devoted song</b></p></div>
+  <div class="it" data-choice="ninja" onclick="toggleSelect(this)"><div class="ph nin"><div class="shu">✦</div><div class="t dg">SECRET<br>LISTENING</div><div class="s zm">38 songs you played but never saved. Ninja mode 🥷</div><div class="roof"></div></div><h4>Ninja</h4><p>Moonlit rooftops and shuriken. <b>→ Hidden habits: guilty pleasures, songs played but never saved</b></p></div>
+  <div class="it" data-choice="kaiju" onclick="toggleSelect(this)"><div class="ph kai"><div class="t">怪獣<br>警報!!</div><div class="s">"HUMBLE." stomped your city: 247 plays</div><div class="mon"></div><div class="city"></div></div><h4>Kaiju attack</h4><p>A giant monster flattening Tokyo, B-movie style. <b>→ The song that took over your year</b></p></div>
+  <div class="it" data-choice="mecha" onclick="toggleSelect(this)"><div class="ph mec"><div>SYNC RATE · 同調率</div><div class="ring"><b>98.2%</b>ARTIST SYNC</div><div class="ln"><span>PILOT</span><span>YOU</span></div><div class="ln"><span>UNIT</span><span>KENDRICK</span></div><div class="ln"><span>HOURS</span><span>80.2h</span></div><div class="warn">⚠ OVERLOAD</div></div><h4>Mecha cockpit HUD</h4><p>Giant-robot pilot readouts and sync percentage. <b>→ How closely you're "in sync" with your #1 artist</b></p></div>
+  <div class="it" data-choice="kabuki" onclick="toggleSelect(this)"><div class="ph kab"><div class="curt"></div><div class="face"><i style="left:22px;top:40px;width:40px;height:10px;transform:rotate(-25deg)"></i><i style="right:22px;top:40px;width:40px;height:10px;transform:rotate(25deg)"></i><i style="left:58px;bottom:34px;width:34px;height:12px"></i><i style="left:12px;top:80px;width:30px;height:6px;transform:rotate(30deg)"></i><i style="right:12px;top:80px;width:30px;height:6px;transform:rotate(-30deg)"></i></div><div class="t yu">大見得</div><div class="s zm">your most dramatic switch: lo-fi → drill in 1 song</div></div><h4>Kabuki</h4><p>Kumadori face paint, the theatre curtain, and the frozen "mie" pose. <b>→ Your wildest genre whiplash</b></p></div>
+  <div class="it" data-choice="daruma" onclick="toggleSelect(this)"><div class="ph dar"><div class="body"><div class="eye f" style="left:44px"></div><div class="eye" style="right:44px"></div></div><div class="t">達磨 · 目標</div><div class="s">goal: 10,000 min ✔ hit on Sept 3, so paint the second eye</div></div><h4>Daruma doll</h4><p>You paint one eye when you set a goal and the other when you reach it. <b>→ Milestones (the day you hit 10k minutes)</b></p></div>
+</div>
+
+<div class="grp">Postcard Japan</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="fuji" onclick="toggleSelect(this)"><div class="ph fuji"><div class="t">PEAK<br>LISTENING</div><div class="mt"></div><div class="gr"></div><div class="sak" style="top:30px;right:20px">🌸</div><div class="sak" style="top:70px;right:60px">🌸</div><div class="bt">頂上 · your all-time peak week: Mar 10–16, 1,204 min</div></div><h4>Mt. Fuji postcard</h4><p>Snowcapped Fuji with cherry blossoms, the classic tourist postcard. <b>→ Your peak week</b></p></div>
+  <div class="it" data-choice="torii" onclick="toggleSelect(this)"><div class="ph tor"><div class="g" style="top:30px;width:190px;height:330px"></div><div class="g" style="top:70px;width:150px;height:270px;opacity:.85"></div><div class="g" style="top:105px;width:115px;height:215px;opacity:.7"></div><div class="g" style="top:135px;width:85px;height:165px;opacity:.55"></div><div class="t">千本鳥居</div><div class="s">1,000 gates = 1,000 days you listened</div></div><h4>Torii gate tunnel</h4><p>Endless vermilion gates, like Fushimi Inari in Kyoto. <b>→ Total days you listened, walked through gate by gate</b></p></div>
+  <div class="it" data-choice="zen" onclick="toggleSelect(this)"><div class="ph zen"><div class="t">静寂</div><div class="rock"></div><div class="s">your calmest hour: Sun 7 AM · 62% ambient</div></div><h4>Zen rock garden</h4><p>Raked sand and a single stone. <b>→ Your calmest listening moments</b></p></div>
+  <div class="it" data-choice="maiko" onclick="toggleSelect(this)"><div class="ph mai"><div class="um"></div><div class="h"></div><div class="t">京の雅</div><div class="s">your most refined taste: 14 jazz albums finished front to back</div></div><h4>Kyoto maiko / geisha</h4><p>Paper umbrellas, lanterns and Gion elegance. <b>→ Albums you played all the way through</b></p></div>
+  <div class="it" data-choice="neko" onclick="toggleSelect(this)"><div class="ph neko"><div class="cat"><div class="paw"></div><div class="bell"></div><div class="coin">千万</div></div><div class="t">招き猫が呼んだ<br>LUCKY FIND</div><div style="font-size:11px;font-family:'Zen Maru Gothic';text-align:center">the random song that became a top 10</div></div><h4>Maneki-neko lucky cat</h4><p>The waving gold-coin cat in every shop window. <b>→ The lucky discovery that blew up for you</b></p></div>
+  <div class="it" data-choice="cranes" onclick="toggleSelect(this)"><div class="ph cra"><div class="str"><div><i style="background:#e8461c"></i><i style="background:#ffd23f"></i><i style="background:#2a7de1"></i><i style="background:#3fbf6a"></i><i style="background:#ff7ad5"></i><i style="background:#9b5cff"></i></div><div><i style="background:#2a7de1"></i><i style="background:#e8461c"></i><i style="background:#3fbf6a"></i><i style="background:#ffd23f"></i><i style="background:#9b5cff"></i></div><div><i style="background:#ff7ad5"></i><i style="background:#3fbf6a"></i><i style="background:#e8461c"></i><i style="background:#2a7de1"></i><i style="background:#ffd23f"></i><i style="background:#ff7ad5"></i></div><div><i style="background:#9b5cff"></i><i style="background:#ffd23f"></i><i style="background:#2a7de1"></i><i style="background:#e8461c"></i></div></div><div class="t">千羽鶴 · 1,000</div><div class="s">you've saved 1,000 songs. Make a wish.</div></div><h4>Senbazuru (1,000 cranes)</h4><p>Strings of origami cranes. Fold a thousand and you get a wish. <b>→ Your liked-songs milestone</b></p></div>
+</div>
+
+<div class="grp">Food Japan</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="sushi" onclick="toggleSelect(this)"><div class="ph sus"><div class="dg" style="font-size:16px">回転寿司 · ON ROTATION</div><div class="belt"><div class="pl" style="background:#ff8a65">HUMBLE.</div><div class="pl" style="background:#ffd54f">Kill Bill</div><div class="pl" style="background:#e57373">Nights</div><div class="pl" style="background:#81c784">DtMF</div></div><div class="t">1,412 皿</div><div class="stack"><i style="background:#ffd54f"></i><i style="background:#e57373"></i><i style="background:#81c784"></i><i style="background:#ff8a65"></i><i style="background:#ffd54f"></i><i style="background:#e57373"></i></div></div><h4>Kaiten conveyor sushi</h4><p>Songs roll by on the belt and the plates stack up. <b>→ Your heavy-rotation songs and total tracks</b></p></div>
+  <div class="it" data-choice="ramen" onclick="toggleSelect(this)"><div class="ph ram"><div class="steam">∿ ∿ ∿</div><div class="bowl"></div><div class="t">こってり 濃厚</div><div class="s">your taste: rich and heavy. 71% bass-heavy tracks</div></div><h4>Ramen shop</h4><p>A steaming bowl and the "kotteri vs assari" (rich vs light) debate. <b>→ Your taste profile, heavy vs light</b></p></div>
+  <div class="it" data-choice="izakaya" onclick="toggleSelect(this)"><div class="ph iza"><div class="noren"><div>居</div><div>酒</div><div>屋</div></div><div class="lan">乾杯</div><div class="t">FRIDAY NIGHT<br>乾杯 MIX</div><div class="s">your Friday 9 PM sound: 84% party</div></div><h4>Izakaya</h4><p>Noren curtains, red lanterns and after-work kanpai. <b>→ Your Friday-night / weekend sound</b></p></div>
+  <div class="it" data-choice="tea" onclick="toggleSelect(this)"><div class="ph tea"><div class="cup"></div><div class="t">一期一会</div><div class="s">"one time, one meeting": the song you played exactly once and loved</div></div><h4>Tea ceremony</h4><p>Matcha and the idea of ichi-go ichi-e. <b>→ One-play wonders</b></p></div>
+</div>
+
+<div class="grp">Modern Tokyo stereotypes</div>
+<div class="gal" data-multiselect>
+  <div class="it" data-choice="scramble" onclick="toggleSelect(this)"><div class="ph scr"><div class="x"></div><div class="ppl"></div><div class="bb"><div class="dg">2.4M</div><div>other people also had Kendrick #1. You're in the crowd.</div></div></div><h4>Shibuya scramble crossing</h4><p>The world's busiest crossing seen from above. <b>→ How common or rare your taste is</b></p></div>
+  <div class="it" data-choice="shinkansen" onclick="toggleSelect(this)"><div class="ph shk"><div class="t">FASTEST<br>RISING</div><div class="nose"></div><div class="win"></div><div class="sp2">320 km/h</div><div class="s">Doechii: 0 → top 5 in 6 weeks</div></div><h4>Shinkansen bullet train</h4><p>The bullet train's nose and its sheer speed. <b>→ Your fastest-rising artist</b></p></div>
+  <div class="it" data-choice="salaryman" onclick="toggleSelect(this)"><div class="ph sal"><div class="card"><div class="n">通勤 部長</div><div class="r">COMMUTE DIVISION · 名刺</div></div><div class="bar"><i style="height:20%"></i><i style="height:90%"></i><i style="height:60%"></i><i style="height:30%"></i><i style="height:25%"></i><i style="height:40%"></i><i style="height:95%"></i><i style="height:50%"></i></div><div class="t">8:12 AM · 毎朝</div><div style="font-size:11px">peak commute listening: 212 hrs/yr on the train</div></div><h4>Salaryman commute</h4><p>A meishi business card and the packed rush-hour train. <b>→ Your commute listening</b></p></div>
+  <div class="it" data-choice="capsule" onclick="toggleSelect(this)"><div class="ph cap"><div class="grid"><div>01</div><div class="on">ZZZ</div><div>03</div><div>04</div><div>05</div><div>06</div></div><div class="t">2 AM CAPSULE</div><div style="text-align:center;font-size:11px">your sleep playlist ran 98 nights</div></div><h4>Capsule hotel</h4><p>Stacked sleeping pods, one glowing. <b>→ Sleep and late-night listening</b></p></div>
+  <div class="it" data-choice="toilet" onclick="toggleSelect(this)"><div class="ph toi"><div style="font-weight:900;font-size:12px">ウォシュレット CONTROL</div><div class="pan"><div><b>⏭</b>SKIP 12%</div><div><b>🔁</b>REPEAT 31%</div><div><b>🔀</b>SHUFFLE 44%</div><div><b>🔥</b>WARM 37°</div><div class="stop">■ 止 STOP</div></div><div class="t">YOUR CONTROLS</div></div><h4>High-tech toilet panel</h4><p>The famously overcomplicated bidet button panel. Funny and very shareable. <b>→ Skip, repeat and shuffle habits</b></p></div>
+  <div class="it" data-choice="yurukyara" onclick="toggleSelect(this)"><div class="ph yur"><div class="m"><b>🎧</b><i></i></div><div class="t">ビートくん</div><div class="s">your 2025 mascot, generated from your top genre and mood</div></div><h4>Yuru-chara mascot</h4><p>Every town in Japan has a goofy mascot. <b>→ A personal mascot generated from your stats</b></p></div>
+  <div class="it" data-choice="haiku" onclick="toggleSelect(this)"><div class="ph hai"><div class="lines"><div>夜の街</div><div>同じ歌また</div><div>春が来る</div></div><div class="en">night city glowing<br>the same song plays once again<br>spring comes anyway</div></div><h4>Haiku</h4><p>5-7-5 verse written from your year. <b>→ Your year as a haiku, built from your top song titles and moods</b></p></div>
+  <div class="it" data-choice="taiko" onclick="toggleSelect(this)"><div class="ph tai"><div class="drum">ドン</div><div class="t">128 BPM</div><div class="s">your average tempo: you live fast</div></div><h4>Taiko drums</h4><p>Thundering festival drums: ドン and カッ. <b>→ Your average tempo and energy</b></p></div>
+</div>
+
+</body></html>
