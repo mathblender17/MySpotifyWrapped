@@ -66,6 +66,16 @@ test('the ticket is stamped at every station you stop at, and passed stations re
   expect(slots[3].textContent).toContain('通過');
 });
 
+test('each ticket stamp takes the accent colour of its station', () => {
+  const s = story({ startAt: 1 });
+  s.next(); // finish torii
+  s.next(); // ride to sumo
+  s.next(); // finish sumo
+  const slots = [...root.querySelectorAll<HTMLElement>('.ticket .slot')];
+  expect(slots[4].style.color).toBe('rgb(230, 0, 51)');
+  expect(slots[1].style.color).toBe('rgb(255, 59, 31)');
+});
+
 test('the train marker sits at the current stop', () => {
   const s = story({ startAt: 1 });
   const marker = () => (root.querySelector('.train-marker') as HTMLElement).style.left;

@@ -118,7 +118,7 @@ export function createStory(
       sign.dock().progress(1);
       playBeats(el, { reduced }).progress(1);
       guide.say(s.id).progress(1);
-      ticket.stamp(i).progress(1);
+      ticket.stamp(i, s.accent).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
       return armHold();
@@ -145,7 +145,7 @@ export function createStory(
     const signDock = sign.dock();
     tl.add(trans, 0);
     tl.add(signIn.paused(false), trans.duration());
-    tl.add(ticket.stamp(i).paused(false), trans.duration());
+    tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());
     tl.add(beats.paused(false), trans.duration() + signIn.duration() + signDock.duration());
     if (s.id === 'kanji') tl.add(ticket.finale().paused(false));
@@ -247,7 +247,7 @@ export function createStory(
 
   const start = opts.startAt ?? 0;
   // Stations before the starting stop were already ridden through (e.g. the departure board before a year pick).
-  for (let i = 0; i < start; i++) ticket.stamp(i).progress(1);
+  for (let i = 0; i < start; i++) ticket.stamp(i, STATIONS[i].accent).progress(1);
   if (playable[start]) show(start, true);
   else {
     index = start;
