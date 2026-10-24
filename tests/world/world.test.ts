@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { createWorld } from '../../src/world/world';
 import { stationT, trackFrame } from '../../src/world/track';
+import { STATIONS } from '../../src/journey/stations';
 
 const fakeRenderer = () => ({
   calls: [] as string[],
@@ -90,4 +91,13 @@ test('pause and resume switch the render loop', () => {
   w.resume();
   expect(r.calls.at(-1)).toBe('loop on');
   w.destroy();
+});
+
+test('travel builds the destination district before the camera gets there', () => {
+  const w = createWorld(container, { reduced: false, stationIds: STATIONS.map((s) => s.id), makeRenderer: () => fakeRenderer() as never })!;
+  w.travel(1, 4, 1.6);
+  const built = w.scene.children.filter((c) => c.userData.district !== undefined).map((c) => c.userData.district);
+  expect(built.sort()).toEqual([3, 4, 5]);
+  w.destroy();
+  expect(w.scene.children.filter((c) => c.userData.district !== undefined)).toHaveLength(0);
 });

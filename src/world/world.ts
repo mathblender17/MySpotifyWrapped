@@ -1,5 +1,7 @@
 import { gsap } from 'gsap';
 import * as THREE from 'three';
+import { createDistrictWindow } from './districts';
+import { disposeKit } from './kit';
 import { createSeasonFx } from './season';
 import { stationT, trackFrame } from './track';
 
@@ -18,6 +20,7 @@ export type World = {
 
 export type WorldOpts = {
   reduced: boolean;
+  stationIds?: string[];
   onLost?: () => void;
   makeRenderer?: (canvas: HTMLCanvasElement) => THREE.WebGLRenderer;
 };
@@ -44,6 +47,7 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   const state = { t: 0 };
   const season = createSeasonFx(scene, { reduced: opts.reduced, count: 600 });
   season.set(0);
+  const districts = opts.stationIds ? createDistrictWindow(scene, opts.stationIds) : undefined;
   const clock = new THREE.Clock();
   let running = false;
   let lost = false;
@@ -95,6 +99,7 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
 
   return {
     travel(from, to, seconds) {
+      districts?.focus(to);
       const tl = gsap.timeline({ paused: true });
       if (opts.reduced) {
         state.t = stationT(to);
@@ -105,6 +110,7 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       return tl;
     },
     jump(i) {
+      districts?.focus(i);
       state.t = stationT(i);
       place();
     },
@@ -117,7 +123,9 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       window.removeEventListener('resize', size);
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('webglcontextlost', onLost);
+      districts?.dispose();
       season.dispose();
+      disposeKit();
       renderer.dispose();
       canvas.remove();
     },
