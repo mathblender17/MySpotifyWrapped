@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
 import { findPreview as itunes } from '../audio/previews';
+import { createSfx, type Sfx } from '../audio/sfx';
 import type { Soundtrack } from '../audio/soundtrack';
-import { playBeats, prefersReducedMotion } from '../journey/beats';
+import { beatTime, playBeats, prefersReducedMotion } from '../journey/beats';
 import { HOOKS } from '../journey/hooks';
 import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
@@ -41,6 +42,8 @@ export function createStory(
     soundtrack?: Soundtrack;
     findPreview?: (artist: string, track: string) => Promise<string | undefined>;
     world?: StoryWorld | null;
+    /** Test seam: build the sound accents. */
+    makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
   },
 ) {
   const holdMs = opts.holdMs ?? 2500;
@@ -63,6 +66,11 @@ export function createStory(
   let alive = true;
   let world = opts.world ?? null;
   const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
+  // Accents only once sound is unlocked, never muted, never with reduced motion (art spec §8).
+  const canPlay = () => !!opts.soundtrack?.unlocked && !opts.soundtrack.muted && !reduced;
+  const sfx = (opts.makeSfx ?? createSfx)({ canPlay });
+  /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
+  const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
 
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
   const cue = (i: number) => {
@@ -125,6 +133,7 @@ export function createStory(
     }
 
     const tl = gsap.timeline({ paused: true, onComplete: armHold });
+    const at = (t: number, fn: () => void) => tl.call(fn, undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
     else guide.clear();
@@ -148,7 +157,14 @@ export function createStory(
     tl.add(signIn.paused(false), trans.duration());
     tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());
-    tl.add(beats.paused(false), trans.duration() + signIn.duration() + signDock.duration());
+    const beatsAt = trans.duration() + signIn.duration() + signDock.duration();
+    tl.add(beats.paused(false), beatsAt);
+    at(trans.duration(), () => arrivalSound(s.id));
+    // Beat-bound accents (ドン, pixel blips) are marked in the slide with data-sfx.
+    for (const b of el.querySelectorAll<HTMLElement>('[data-sfx]')) {
+      const name = b.dataset.sfx as 'don' | 'blip';
+      at(beatsAt + beatTime(el, b, reduced), () => sfx[name]?.());
+    }
     if (s.id === 'kanji') tl.add(ticket.finale().paused(false));
     current = el;
     master = tl;
@@ -222,6 +238,7 @@ export function createStory(
     destroy: () => {
       alive = false;
       opts.soundtrack?.stop();
+      sfx.dispose();
       world?.destroy();
       world = null;
       master?.kill();

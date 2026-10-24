@@ -97,7 +97,7 @@ test('with motion: a particle layer', () => {
 
 test('the soundtrack follows the stations and stops when the story is left', async () => {
   const calls: (string | undefined)[] = [];
-  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false };
+  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false, unlocked: false };
   const findPreview = vi.fn(async (artist: string, track: string) => `https://x/${artist}/${track}.m4a`);
   const s = story({ startAt: 1, soundtrack, findPreview });
   await Promise.resolve();
@@ -108,7 +108,7 @@ test('the soundtrack follows the stations and stops when the story is left', asy
 });
 
 test('the first tap or key anywhere in the story unlocks sound (not only the year pick)', () => {
-  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false });
+  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false, unlocked: false });
   const a = make();
   story({ startAt: 0, soundtrack: a });
   root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
@@ -127,4 +127,30 @@ test('reduced motion: ticket stamps land without spinning, and the story is flag
   expect(t.stamp(1).duration()).toBe(0);
   story({ startAt: 1, reduced: true });
   expect(root.classList.contains('reduced')).toBe(true);
+});
+
+test('each arrival rings the station chime; muted or reduced, sound accents are not allowed', () => {
+  let canPlay = () => true;
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn() };
+  const makeSfx = (o: { canPlay: () => boolean }) => ((canPlay = o.canPlay), sfx);
+  const soundtrack = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, muted: true, unlocked: true };
+  const s = story({ startAt: 1, soundtrack, makeSfx });
+  s.next(); // finish torii's arrival
+  expect(sfx.chime).toHaveBeenCalledTimes(1);
+  expect(canPlay()).toBe(false); // muted
+  soundtrack.muted = false;
+  expect(canPlay()).toBe(true);
+  soundtrack.unlocked = false;
+  expect(canPlay()).toBe(false); // not unlocked yet
+  s.destroy();
+  expect(sfx.dispose).toHaveBeenCalled();
+});
+
+test('the sumo Yokozuna lands with a ドン', () => {
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn() };
+  const sumoSlide = () => Object.assign(document.createElement('div'), { className: 'ph', innerHTML: '<b data-beat="1">a</b><b data-beat="2" data-sfx="don">y</b>' });
+  const s = story({ startAt: 4, makeSfx: () => sfx, slides: { ...slides, sumo: sumoSlide } });
+  expect(sfx.don).not.toHaveBeenCalled();
+  s.next(); // finish
+  expect(sfx.don).toHaveBeenCalledTimes(1);
 });

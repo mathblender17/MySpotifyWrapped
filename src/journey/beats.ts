@@ -36,6 +36,13 @@ function enter(tl: gsap.core.Timeline, el: HTMLElement, at: number) {
   else tl.fromTo(el, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, at);
 }
 
+/** When `el`'s beat group starts in playBeats(root)'s timeline, in seconds (everything is at 0 when reduced). */
+export function beatTime(root: HTMLElement, el: HTMLElement, reduced = false): number {
+  if (reduced) return 0;
+  const order = [...new Set([...root.querySelectorAll<HTMLElement>('[data-beat]')].map((b) => Number(b.dataset.beat)))].sort((a, b) => a - b);
+  return Math.max(0, order.indexOf(Number(el.dataset.beat))) * GAP;
+}
+
 /** Turn a slide's data-beat / data-fx marks into a paused timeline: groups play in numeric order, GAP seconds apart. */
 export function playBeats(root: HTMLElement, opts: { reduced?: boolean } = {}): gsap.core.Timeline {
   const tl = gsap.timeline({ paused: true });

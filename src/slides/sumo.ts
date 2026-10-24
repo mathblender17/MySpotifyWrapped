@@ -22,7 +22,7 @@ export const sumo: Slide = ({ stats }) => {
   const y = list[0];
   return slide('sumo', `
     <div class="pnl p1 tone" data-beat="1"><div class="bub">${era(stats!.year)} 番付<br>発表〜!!</div></div>
-    <div class="pnl splash" data-beat="${n + 1}" data-fx="hide stamp">
+    <div class="pnl splash" data-beat="${n + 1}" data-fx="hide stamp" data-sfx="don">
       <span class="badge">横綱</span><span class="nm fit${size(y.name)}">${esc(y.name)}</span><span class="don">ドン</span>
     </div>
     ${panel('pa tone', 1)}${panel('pb tone', 3)}

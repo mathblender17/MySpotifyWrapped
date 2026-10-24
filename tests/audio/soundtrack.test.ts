@@ -142,3 +142,10 @@ test('mute uses muted, which works where volume is read-only', () => {
   s.mute(false);
   expect(made.some((a) => (a as IosAudio).muted)).toBe(false);
 });
+
+test('reports whether sound has been unlocked', () => {
+  const s = createSoundtrack(make);
+  expect(s.unlocked).toBe(false);
+  s.unlock();
+  expect(s.unlocked).toBe(true);
+});
