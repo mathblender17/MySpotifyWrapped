@@ -31,6 +31,7 @@ function enter(tl: gsap.core.Timeline, el: HTMLElement, at: number) {
     return;
   }
   if (fx.includes('stamp')) tl.fromTo(el, { opacity: 0, scale: 2.2, rotation: -12 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.35, ease: 'back.out(2)' }, at);
+  else if (fx.includes('zoom')) tl.fromTo(el, { opacity: 0, x: 200 }, { opacity: 1, x: 0, duration: 0.7, ease: 'power4.out' }, at);
   else if (fx.includes('drop')) tl.fromTo(el, { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.5, ease: 'bounce.out' }, at);
   else tl.fromTo(el, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, at);
 }

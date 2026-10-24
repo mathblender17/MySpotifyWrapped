@@ -15,6 +15,16 @@ export const amount = (s: Pick<YearStats, 'minutes' | 'plays'>, n?: { minutes?: 
   return src.minutes !== undefined ? `${fmt(src.minutes)} min` : plays(src.plays ?? 0);
 };
 
+/** A number that counts up on its beat; its resting text is the final value, so it reads right with or without animation. */
+export const cnt = (beat: number, n: number, suffix = ''): string =>
+  `<span data-beat="${beat}" data-fx="count" data-count="${n}" data-suffix="${esc(suffix)}">${fmt(n)}${esc(suffix)}</span>`;
+
+/** `amount()` as a counting span: minutes when known, otherwise plays. */
+export const amountCnt = (beat: number, s: Pick<YearStats, 'minutes' | 'plays'>, n?: { minutes?: number; plays?: number }): string => {
+  const src = n ?? s;
+  return src.minutes !== undefined ? cnt(beat, src.minutes, ' min') : cnt(beat, src.plays ?? 0, src.plays === 1 ? ' play' : ' plays');
+};
+
 export function slide(cls: string, html: string): HTMLElement {
   const el = document.createElement('div');
   el.className = `ph ${cls}`;

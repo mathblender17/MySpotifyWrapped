@@ -3,9 +3,9 @@ import { esc, plays, slide } from './fmt';
 
 export const departure: Slide = (ctx) => {
   const el = slide('dep', `
-    <div class="hd"><span>発車案内</span><span>DEPARTURES</span></div>
-    <div class="board"></div>
-    <div class="ft">Pick your year's train ▶<br><span>乗る年を選んでね ☆</span></div>`);
+    <div class="hd" data-beat="1"><span>発車案内</span><span>DEPARTURES</span></div>
+    <div class="board" data-beat="2" data-fx="type"></div>
+    <div class="ft" data-beat="3">Pick your year's train ▶<br><span>乗る年を選んでね ☆</span></div>`);
   const board = el.querySelector('.board')!;
   for (const y of ctx.years) {
     const row = document.createElement(y.eligible ? 'button' : 'div');
