@@ -125,5 +125,18 @@ function ride(ds: Dataset, year: number, startAt: number, note?: string) {
 }
 
 const route = parseRoute(location.search);
-if (route.data === 'demo') start(makeDemoPlays(), [], true, route);
+if (route.world) previewWorld(route.station ?? 1);
+else if (route.data === 'demo') start(makeDemoPlays(), [], true, route);
 else landing();
+
+/** Dev: one district in the 3D world, no slides — for looking at and measuring the art. */
+async function previewWorld(station: number) {
+  const { createWorld } = await import('./world/world');
+  const { STATIONS } = await import('./journey/stations');
+  app.innerHTML = '<div class="world" style="position:fixed;inset:0"></div>';
+  const w = createWorld(app.firstElementChild as HTMLElement, { reduced: false, stationIds: STATIONS.map((s) => s.id) });
+  if (!w) return void (app.textContent = 'WebGL unavailable');
+  w.jump(station - 1);
+  w.setSeason((STATIONS[station - 1].act - 1) / 3);
+  Object.assign(window, { __world: w });
+}

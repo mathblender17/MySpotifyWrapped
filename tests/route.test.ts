@@ -13,3 +13,7 @@ test('ignores stations outside 1–13 and unknown data sources', () => {
   expect(parseRoute('?data=evil&station=99&year=abc')).toEqual({});
   expect(parseRoute('?station=0')).toEqual({});
 });
+
+test('world preview: ?world=1&station=N opens the 3D district alone', () => {
+  expect(parseRoute('?world=1&station=10')).toEqual({ world: true, station: 10 });
+});
