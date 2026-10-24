@@ -1,6 +1,6 @@
 :root {
   --pink: #ff2d95;
-  --ink: #fff;
+  --fg: #fff;
   --bg: #0b0b10;
   color-scheme: dark;
 }
@@ -10,7 +10,7 @@
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--fg);
   font-family: 'Zen Maru Gothic', system-ui, sans-serif;
 }
 
