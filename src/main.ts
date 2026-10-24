@@ -111,7 +111,9 @@ function ride(ds: Dataset, year: number, startAt: number, note?: string) {
     soundtrack.mute(!soundtrack.muted);
     label();
   });
-  root.append(mute);
+  const dock = root.querySelector('.dock');
+  if (dock) dock.insertBefore(mute, dock.lastElementChild);
+  else root.append(mute);
   if (note) {
     const n = document.createElement('div');
     n.className = 'note floating';

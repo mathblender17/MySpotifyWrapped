@@ -174,3 +174,14 @@
 .ticket .slot { aspect-ratio: 1; border: 1px dashed #bbb; border-radius: 50%; font-size: 6px; display: flex; align-items: center; justify-content: center; color: #999; }
 .ticket .slot.on { border: 1.5px solid #d0021b; color: #d0021b; font-family: 'Yuji Syuku', serif; font-size: 9px; }
 .ticket.final { top: auto; bottom: 100px; right: 50%; transform: translateX(50%) scale(1.8); transform-origin: bottom center; }
+
+/* Reduced motion (media query or ?reduced=1): fades only, no gliding, no particles. */
+.story.reduced, .story.reduced * { transition: none !important; animation: none !important; }
+
+/* Bottom dock: guide phone, mute, ticket — inside the 84px band the frame leaves free. */
+.dock { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); width: min(calc(100% - 20px), 520px); display: flex; align-items: flex-end; gap: 8px; z-index: 3; }
+.dock .guide { position: static; transform: none; width: auto; flex: 1; min-width: 0; }
+.dock .guide .jp { font-size: 13px; }
+.dock .ticket { position: static; flex: none; width: 84px; }
+.dock .ticket .slots { gap: 1px; }
+.dock .ticket.final { transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }

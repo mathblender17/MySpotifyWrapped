@@ -20,10 +20,12 @@ async function lookup(artist: string, track: string, fetcher: typeof fetch): Pro
     if (!res.ok) return undefined;
     const data = (await res.json()) as { results?: { artistName?: string; previewUrl?: string }[] };
     const want = artist.toLowerCase();
-    const match = data.results?.find((r) => {
-      const name = r.artistName?.toLowerCase() ?? '';
-      return r.previewUrl && (name === want || name.includes(want));
-    });
+    // Exact name first; otherwise the artist must appear as a whole word (a featured credit), never as a substring:
+    // "Ye" must not match "Yeah Yeah Yeahs".
+    const whole = new RegExp(`(^|[^\\p{L}\\p{N}])${want.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^\\p{L}\\p{N}])`, 'u');
+    const results = (data.results ?? []).filter((r) => r.previewUrl);
+    const match =
+      results.find((r) => r.artistName?.toLowerCase() === want) ?? results.find((r) => whole.test(r.artistName?.toLowerCase() ?? ''));
     return match?.previewUrl;
   } catch {
     return undefined;

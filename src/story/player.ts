@@ -37,7 +37,7 @@ export function createStory(
   const frame = createFrame();
   const guide = createGuide();
   const route = createRouteMap(STATIONS, playable);
-  const ticket = createTicket(STATIONS, playable);
+  const ticket = createTicket(STATIONS, playable, reduced);
   let index = -1;
   let current: HTMLElement | null = null;
   let master: gsap.core.Timeline | undefined;
@@ -61,7 +61,12 @@ export function createStory(
   };
 
   root.classList.add('story');
-  root.replaceChildren(route.el, frame.el, ticket.el, guide.el);
+  root.classList.toggle('reduced', reduced);
+  // Guide, ticket (and the app's mute button) share one dock in the band reserved below the frame: nothing covers a slide.
+  const dock = document.createElement('div');
+  dock.className = 'dock';
+  dock.append(guide.el, ticket.el);
+  root.replaceChildren(route.el, frame.el, dock);
   const season = createSeason(root, reduced);
 
   const animating = () => !!master && master.progress() < 1;
@@ -86,12 +91,10 @@ export function createStory(
     route.set(i);
     season.set(s.act);
     cue(i);
-    const beats = playBeats(el, { reduced });
-
     if (!animate) {
       current?.remove();
       frame.el.replaceChildren(el);
-      beats.progress(1);
+      playBeats(el, { reduced }).progress(1);
       guide.say(s.id).progress(1);
       ticket.stamp(i).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
@@ -103,7 +106,10 @@ export function createStory(
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
     else guide.clear();
+    // Build the transition first: beats render their start state at once (scaled, offset), and a match cut must
+    // measure its target where it will come to rest.
     const trans = runTransition(s.transitionIn, current, el, { stage: frame.el, cut: s.cut, hook: HOOKS[s.id], reduced }).paused(false);
+    const beats = playBeats(el, { reduced });
     tl.add(trans, 0);
     tl.add(ticket.stamp(i).paused(false), trans.duration());
     tl.add(beats.paused(false), trans.duration());
@@ -130,6 +136,7 @@ export function createStory(
     }, HOLD_PRESS_MS);
   };
   const onUp = (e: MouseEvent) => {
+    opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     const x = downX;
@@ -147,6 +154,7 @@ export function createStory(
     if (held) api.resume();
   };
   const onKey = (e: KeyboardEvent) => {
+    opts.soundtrack?.unlock();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
     else if (e.key === ' ') (paused ? api.resume() : api.pause());

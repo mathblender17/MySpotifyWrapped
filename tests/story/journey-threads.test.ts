@@ -96,3 +96,25 @@ test('the soundtrack follows the stations and stops when the story is left', asy
   s.destroy();
   expect(soundtrack.stop).toHaveBeenCalled();
 });
+
+test('the first tap or key anywhere in the story unlocks sound (not only the year pick)', () => {
+  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false });
+  const a = make();
+  story({ startAt: 0, soundtrack: a });
+  root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
+  root.dispatchEvent(new MouseEvent('pointerup', { clientX: 900, bubbles: true }));
+  expect(a.unlock).toHaveBeenCalled();
+  stories.pop()!.destroy();
+  const b = make();
+  story({ startAt: 0, soundtrack: b });
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+  expect(b.unlock).toHaveBeenCalled();
+});
+
+test('reduced motion: ticket stamps land without spinning, and the story is flagged for CSS', async () => {
+  const { createTicket } = await import('../../src/story/ticket');
+  const t = createTicket(STATIONS, STATIONS.map(() => true), true);
+  expect(t.stamp(1).duration()).toBe(0);
+  story({ startAt: 1, reduced: true });
+  expect(root.classList.contains('reduced')).toBe(true);
+});

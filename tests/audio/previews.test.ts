@@ -29,3 +29,15 @@ test('the same song is looked up once', async () => {
   expect(await findPreview('Cached Artist', 'Song', fetcher)).toBe('https://x/c.m4a');
   expect(fetcher).toHaveBeenCalledTimes(1);
 });
+
+test('a short artist name never matches a different artist that merely contains it', async () => {
+  expect(await findPreview('Ye', 'Carnival', respond([{ artistName: 'Yeah Yeah Yeahs', previewUrl: 'https://x/wrong.m4a' }]))).toBeUndefined();
+  expect(await findPreview('Ye', 'Carnival 2', respond([
+    { artistName: 'Yeah Yeah Yeahs', previewUrl: 'https://x/wrong.m4a' },
+    { artistName: 'Ye', previewUrl: 'https://x/right.m4a' },
+  ]))).toBe('https://x/right.m4a');
+});
+
+test('a featured credit still counts as the same artist', async () => {
+  expect(await findPreview('SZA', 'luther', respond([{ artistName: 'Kendrick Lamar & SZA', previewUrl: 'https://x/luther.m4a' }]))).toBe('https://x/luther.m4a');
+});

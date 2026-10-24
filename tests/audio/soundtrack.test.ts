@@ -4,6 +4,7 @@ import { createSoundtrack } from '../../src/audio/soundtrack';
 class FakeAudio {
   src = '';
   volume = 1;
+  muted = false;
   paused = true;
   play() {
     this.paused = false;
@@ -83,12 +84,61 @@ test('stop silences everything at once', () => {
   expect(made.every((x) => x.paused)).toBe(true);
 });
 
-test('mute zeroes the volume and is remembered next time', () => {
+test('mute silences the players and is remembered next time', () => {
   const s = createSoundtrack(make);
   s.unlock();
   s.play('https://x/a.m4a');
   vi.advanceTimersByTime(1000);
   s.mute(true);
-  expect(made.every((x) => x.volume === 0)).toBe(true);
+  expect(made.every((x) => x.muted)).toBe(true);
   expect(createSoundtrack(make).muted).toBe(true);
+});
+
+class IosAudio extends FakeAudio {
+  plays = 0;
+  constructor() {
+    super();
+    // WebKit on iOS: volume is read-only and always 1 (an own property, so the base class field can't shadow it).
+    Object.defineProperty(this, 'volume', { get: () => 1, set: () => {} });
+  }
+  play() {
+    this.plays++;
+    return super.play();
+  }
+}
+const makeIos = () => {
+  const a = new IosAudio();
+  made.push(a);
+  return a as unknown as HTMLAudioElement;
+};
+
+test('unlock plays both players inside the tap, and every later song reuses them', () => {
+  const s = createSoundtrack(makeIos);
+  s.unlock();
+  expect(made).toHaveLength(2);
+  expect(made.every((a) => (a as IosAudio).plays >= 1)).toBe(true);
+  s.play('https://x/a.m4a');
+  s.play('https://x/b.m4a');
+  s.play('https://x/c.m4a');
+  expect(made).toHaveLength(2);
+});
+
+test('where volume is read-only, a new song swaps in at once instead of both playing at full volume', () => {
+  const s = createSoundtrack(makeIos);
+  s.unlock();
+  s.play('https://x/a.m4a');
+  s.play('https://x/b.m4a');
+  const playingNow = made.filter((a) => !a.paused);
+  expect(playingNow).toHaveLength(1);
+  expect(playingNow[0].src).toBe('https://x/b.m4a');
+});
+
+test('mute uses muted, which works where volume is read-only', () => {
+  const s = createSoundtrack(makeIos);
+  s.unlock();
+  s.play('https://x/a.m4a');
+  s.mute(true);
+  expect(made.every((a) => (a as IosAudio).muted)).toBe(true);
+  s.mute(false);
+  expect(made.some((a) => (a as IosAudio).muted)).toBe(false);
 });
