@@ -147,3 +147,30 @@
 .window .horizon { position: absolute; left: 0; right: 0; bottom: 0; height: 60%; background:
   radial-gradient(ellipse 40px 26px at 30px 100%, #4f8a5b 98%, #0000) 0 0 / 90px 100% repeat-x,
   linear-gradient(transparent 70%, #6aa86f 70%); }
+
+/* Route-map train */
+.routewrap { position: absolute; top: 0; left: 0; right: 0; height: 56px; z-index: 2; }
+.train-marker { position: absolute; top: 2px; margin-left: 8px; transform: translateX(-50%); font-size: 14px; transition: left 0.9s cubic-bezier(.6,0,.3,1); }
+.routewrap .routemap { position: absolute; }
+
+/* Seasons */
+.story.season-spring { background: linear-gradient(#ffd6e8, #2a1030); }
+.story.season-summer { background: linear-gradient(#ff9a3d, #2a0d00); }
+.story.season-autumn { background: linear-gradient(#b8461f, #1c0a04); }
+.story.season-winter { background: linear-gradient(#1a1f4a, #05060f); }
+.story { transition: background 1.2s; }
+.season-fx { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.season-fx i { position: absolute; top: -20px; font-style: normal; font-size: 16px; opacity: 0.7; animation: fall linear infinite; }
+.season-summer .season-fx i { font-size: 30px; color: #fff6; animation-name: haze; top: auto; bottom: -20px; }
+.season-autumn .season-fx i { animation-name: fallspin; }
+@keyframes fall { to { transform: translate(30px, 110vh); } }
+@keyframes fallspin { to { transform: translate(-40px, 110vh) rotate(540deg); } }
+@keyframes haze { to { transform: translate(10px, -110vh); opacity: 0; } }
+
+/* Ticket (kippu) */
+.ticket { position: absolute; top: 60px; right: 10px; z-index: 3; width: 92px; padding: 5px 6px; background: #f6efd9; color: #333; border-radius: 4px; box-shadow: 0 4px 10px #0006; font-family: 'Zen Maru Gothic', sans-serif; transition: all 0.8s cubic-bezier(.6,0,.3,1); pointer-events: none; }
+.ticket .tt { font-size: 7px; font-weight: 900; border-bottom: 1px dashed #9998; margin-bottom: 3px; }
+.ticket .slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+.ticket .slot { aspect-ratio: 1; border: 1px dashed #bbb; border-radius: 50%; font-size: 6px; display: flex; align-items: center; justify-content: center; color: #999; }
+.ticket .slot.on { border: 1.5px solid #d0021b; color: #d0021b; font-family: 'Yuji Syuku', serif; font-size: 9px; }
+.ticket.final { top: auto; bottom: 100px; right: 50%; transform: translateX(50%) scale(1.8); transform-origin: bottom center; }

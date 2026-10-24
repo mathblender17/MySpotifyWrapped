@@ -6,7 +6,9 @@ import { runTransition } from '../journey/transitions';
 import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
 import { createGuide } from './guide';
-import { routeMap } from './routemap';
+import { createRouteMap } from './routemap';
+import { createSeason } from './season';
+import { createTicket } from './ticket';
 import './story.css';
 
 export type SlideContext = { stats?: YearStats; years: YearSummary[]; onPickYear: (y: number) => void };
@@ -24,7 +26,8 @@ export function createStory(
   const playable = STATIONS.map((s) => isPlayable(s, opts.ctx.stats));
   const frame = createFrame();
   const guide = createGuide();
-  const mapSlot = document.createElement('div');
+  const route = createRouteMap(STATIONS, playable);
+  const ticket = createTicket(STATIONS, playable);
   let index = -1;
   let current: HTMLElement | null = null;
   let master: gsap.core.Timeline | undefined;
@@ -35,7 +38,8 @@ export function createStory(
   let downX: number | undefined;
 
   root.classList.add('story');
-  root.replaceChildren(mapSlot, frame.el, guide.el);
+  root.replaceChildren(route.el, frame.el, ticket.el, guide.el);
+  const season = createSeason(root, reduced);
 
   const animating = () => !!master && master.progress() < 1;
 
@@ -56,7 +60,8 @@ export function createStory(
     index = i;
     const s = STATIONS[i];
     const el = opts.slides[s.id](opts.ctx);
-    mapSlot.replaceChildren(routeMap(STATIONS, i, playable));
+    route.set(i);
+    season.set(s.act);
     const beats = playBeats(el, { reduced });
 
     if (!animate) {
@@ -64,6 +69,8 @@ export function createStory(
       frame.el.replaceChildren(el);
       beats.progress(1);
       guide.say(s.id).progress(1);
+      ticket.stamp(i).progress(1);
+      if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
       return armHold();
     }
@@ -74,7 +81,9 @@ export function createStory(
     else guide.clear();
     const trans = runTransition(s.transitionIn, current, el, { stage: frame.el, cut: s.cut, hook: HOOKS[s.id], reduced }).paused(false);
     tl.add(trans, 0);
+    tl.add(ticket.stamp(i).paused(false), trans.duration());
     tl.add(beats.paused(false), trans.duration());
+    if (s.id === 'kanji') tl.add(ticket.finale().paused(false));
     current = el;
     master = tl;
     if (!paused) tl.play();
@@ -143,6 +152,7 @@ export function createStory(
       clearTimeout(holdTimer);
       clearTimeout(pressTimer);
       frame.destroy();
+      season.destroy();
       root.removeEventListener('pointerdown', onDown);
       root.removeEventListener('pointerup', onUp);
       root.removeEventListener('pointercancel', onCancel);
@@ -155,6 +165,8 @@ export function createStory(
   };
 
   const start = opts.startAt ?? 0;
+  // Stations before the starting stop were already ridden through (e.g. the departure board before a year pick).
+  for (let i = 0; i < start; i++) ticket.stamp(i).progress(1);
   if (playable[start]) show(start, true);
   else {
     index = start;
