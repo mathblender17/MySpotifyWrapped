@@ -101,6 +101,10 @@ Round 3, picked 2026-10-24:
 - **All Years story anchors:** fighting-game VS, kintsugi, city pop, daruma, senbazuru.
 - **Extras:** the other picks become optional "Tour more of Japan" bonus slides.
 
+## Journey system (approved 2026-10-24)
+
+See [../journey-storyboard.html](../journey-storyboard.html). It's one train ride through one year in Japan (spring → New Year's midnight), across 4 acts and 13 stations. It has 5 connecting threads (train line, seasons, gyaru guide, your soundtrack, stamped ticket) and 5 transition types (ride, match cut, phone interrupt, tease→reveal, breather).
+
 ## Data caveats (to settle in the spec)
 
 Some mockup stats aren't in the user's own data. Before a slide relies on one, the spec must name its source or drop it:
