@@ -1,0 +1,8 @@
+[
+  {"ts":"2024-12-31T16:00:00Z","ms_played":185000,"master_metadata_track_name":"Neon Rain","master_metadata_album_artist_name":"Aoi Kaze","master_metadata_album_album_name":"Shibuya","spotify_track_uri":"spotify:track:aaa","skipped":false},
+  {"ts":"2025-01-02T03:10:00Z","ms_played":12000,"master_metadata_track_name":"Neon Rain","master_metadata_album_artist_name":"Aoi Kaze","master_metadata_album_album_name":"Shibuya","spotify_track_uri":"spotify:track:aaa","skipped":true},
+  {"ts":"2025-01-02T04:00:00Z","ms_played":200000,"master_metadata_track_name":"Paper Crane","master_metadata_album_artist_name":"Mori Taiko","master_metadata_album_album_name":"Fold","spotify_track_uri":"spotify:track:bbb","skipped":null},
+  {"ts":"2025-01-03T05:00:00Z","ms_played":1800000,"master_metadata_track_name":null,"master_metadata_album_artist_name":null,"master_metadata_album_album_name":null,"spotify_track_uri":null,"episode_name":"Some Podcast","skipped":false},
+  {"ts":"2025-02-14T12:00:00Z","ms_played":210000,"master_metadata_track_name":"Last Train","master_metadata_album_artist_name":"Hoshino Rei","master_metadata_album_album_name":"Terminal","spotify_track_uri":"spotify:track:ccc","skipped":false},
+  {"ts":"2025-03-01T22:30:00Z","ms_played":190000,"master_metadata_track_name":"Paper Crane","master_metadata_album_artist_name":"Mori Taiko","master_metadata_album_album_name":"Fold","spotify_track_uri":"spotify:track:bbb","skipped":false}
+]
