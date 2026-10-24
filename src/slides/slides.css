@@ -1,0 +1,48 @@
+/* Ported from the approved mockups in docs/design/subcultures/*.html (design size 210×373). */
+.ph { width: 210px; height: 373px; overflow: hidden; position: relative; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; }
+.ph .sp { flex: 1; }
+.ph button { font: inherit; color: inherit; cursor: pointer; }
+
+/* 1 departure board (train mockup, round 1) */
+.dep { background: #f4f4f0; color: #111; font-family: 'Zen Maru Gothic', sans-serif; }
+.dep .hd { display: flex; justify-content: space-between; font-weight: 900; font-size: 12px; border-bottom: 4px solid #ff2d95; padding-bottom: 4px; }
+.dep .board { background: #111; border-radius: 6px; padding: 6px; margin-top: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: auto; }
+.dep .row { display: grid; grid-template-columns: 30px 40px 1fr 12px; align-items: center; gap: 4px; background: #1c1c1c; border: 0; border-radius: 3px; padding: 6px; font-family: 'DotGothic16', monospace; font-size: 11px; color: #ff9a1f; text-shadow: 0 0 4px #ff9a1f; text-align: left; }
+.dep button.row:hover, .dep button.row:focus-visible { background: #2a1a24; outline: 2px solid #ff2d95; }
+.dep .row .ty { color: #58ff7a; }
+.dep .row .yr { font-size: 14px; }
+.dep .row.off { color: #666; text-shadow: none; grid-template-columns: 30px 40px 1fr; }
+.dep .row.off .ty { color: #a33; }
+.dep .ft { margin-top: 10px; font-size: 12px; font-weight: 900; text-align: center; }
+.dep .ft span { font-family: 'Hachi Maru Pop', sans-serif; color: #ff2d95; font-size: 11px; }
+
+/* 2 torii tunnel (round 3) */
+.tor { background: #1a0a04; color: #fff; align-items: center; justify-content: flex-end; }
+.tor .g { position: absolute; left: 50%; transform: translateX(-50%); border: 10px solid #e8461c; border-bottom: none; border-top-width: 14px; }
+.tor .tx { position: relative; text-align: center; text-shadow: 0 2px 8px #000; }
+.tor .k { font-family: 'Yuji Syuku', serif; font-size: 16px; }
+.tor .big { font-family: 'Dela Gothic One', sans-serif; font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }
+.tor .s { font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; }
+.tor .amt { margin-top: 8px; display: inline-block; background: #ff2d95; color: #fff; font-family: 'Dela Gothic One', sans-serif; font-size: 16px; padding: 3px 10px; border-radius: 4px; }
+
+/* 3 bento (round 2) */
+.ben { background: #2b1a10; color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
+.ben .hd { font-family: 'Dela Gothic One', sans-serif; font-size: 18px; }
+.ben .box { flex: 1; margin-top: 10px; background: #c0392b; border-radius: 10px; padding: 8px; display: grid; grid-template-columns: 1.2fr 1fr; grid-auto-rows: 1fr; gap: 6px; }
+.ben .c { border-radius: 6px; font-size: 10px; font-weight: 900; padding: 4px; color: #222; display: flex; flex-direction: column; justify-content: center; }
+.ben .c b { font-family: 'Dela Gothic One', sans-serif; font-size: 16px; }
+.ben .c.rice { grid-row: span 4; align-items: center; font-size: 12px; text-align: center; }
+.ben .c.rice i { width: 16px; height: 16px; border-radius: 50%; background: #c4002f; margin-bottom: 4px; }
+.ben .ft { margin-top: 8px; font-size: 11px; color: #ff2d95; text-align: center; }
+
+/* 4 ganguro (round 1) */
+.gan { background: linear-gradient(160deg, #6b3a1d, #3a1c0b); color: #fff; font-family: 'Dela Gothic One', sans-serif; }
+.gan::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #ff8a0018 0 10px, transparent 10px 20px); }
+.gan > * { position: relative; }
+.gan .hair { position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#ff2d95, #ffe600, #00e1ff, #fff, #ff2d95); filter: blur(1px); opacity: 0.9; }
+.gan .eye { display: flex; gap: 6px; margin: 6px 0; }
+.gan .eye i { display: block; width: 44px; height: 10px; background: #fff; border-radius: 10px; }
+.gan .t { font-size: 11px; color: #ffe600; font-family: 'DotGothic16', monospace; }
+.gan .big { font-size: 20px; line-height: 1.05; text-shadow: 3px 3px 0 #ff2d95; }
+.gan .big span { font-size: 30px; overflow-wrap: anywhere; }
+.gan .lips { width: 70px; height: 16px; border-radius: 0 0 40px 40px; background: #fff; margin-top: 8px; }
