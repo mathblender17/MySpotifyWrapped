@@ -105,6 +105,7 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
   let story: ReturnType<typeof createStory> | undefined;
   const world = await makeWorld(backdrop, () => story?.dropWorld());
   if (token !== rideToken) return void world?.destroy(); // a newer ride started while three.js loaded
+  if (import.meta.env.DEV) Object.assign(window, { __world: world }); // for in-page checks; stripped from builds
   story = createStory(root, {
     slides,
     startAt,
@@ -146,7 +147,7 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
 }
 
 const route = parseRoute(location.search);
-if (route.world) previewWorld(route.station ?? 1);
+if (route.world && import.meta.env.DEV) previewWorld(route.station ?? 1); // dev-only district preview
 else if (route.data === 'demo') start(makeDemoPlays(), [], true, route);
 else landing();
 

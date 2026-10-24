@@ -101,3 +101,12 @@ test('travel builds the destination district before the camera gets there', () =
   w.destroy();
   expect(w.scene.children.filter((c) => c.userData.district !== undefined)).toHaveLength(0);
 });
+
+test('destroy hands the WebGL context back (browsers cap live contexts at ~16)', () => {
+  const r = { ...fakeRenderer(), forceContextLoss: vi.fn() };
+  const onLost = vi.fn();
+  const w = createWorld(container, { reduced: false, onLost, makeRenderer: () => r as never })!;
+  w.destroy();
+  expect(r.forceContextLoss).toHaveBeenCalled();
+  expect(onLost).not.toHaveBeenCalled(); // our own release is not a "lost" world
+});

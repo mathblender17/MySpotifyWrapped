@@ -136,6 +136,9 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       season.dispose();
       disposeKit();
       renderer.dispose();
+      // dispose() frees GPU objects but not the context itself; browsers cap live contexts (~16), and every year
+      // pick builds a new world.
+      renderer.forceContextLoss?.();
       canvas.remove();
     },
     canvas,
