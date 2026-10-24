@@ -15,7 +15,7 @@ export async function loadInWorker(files: File[], onProgress?: (done: number, to
       if (msg.type === 'progress') return onProgress?.(msg.done, msg.total);
       worker.terminate();
       const plays: Play[] = msg.plays.map((p: Play & { ts: number }) => ({ ...p, ts: new Date(p.ts) }));
-      resolve({ plays, problems: msg.problems });
+      resolve({ plays, problems: msg.problems, lifetime: msg.lifetime });
     };
     worker.postMessage(payload);
   });

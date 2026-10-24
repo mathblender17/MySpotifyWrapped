@@ -31,7 +31,11 @@ function yearStats(year: number, ps: Play[], raw: Play[], firstSeen: Map<string,
   };
 }
 
-export function computeAllYears(plays: Play[]): Dataset {
+/**
+ * `lifetime`: the plays are the account's whole history (extended export), so its first play really is where
+ * listening began. Otherwise (account export, Last.fm) only a full earlier year of data can tell "new this year".
+ */
+export function computeAllYears(plays: Play[], opts: { lifetime?: boolean } = {}): Dataset {
   const q = qualifying(plays);
   const byYear = new Map<number, Play[]>();
   const firstSeen = new Map<string, Date>();
@@ -52,8 +56,8 @@ export function computeAllYears(plays: Play[]): Dataset {
   const stats = new Map<number, YearStats>();
   for (const { year, eligible } of years) {
     if (!eligible) continue;
-    // Data that starts inside this year can't tell "new this year" from "new to the export".
-    const coversPriorYears = earliest! < new Date(year, 0, 1);
+    // Data that starts inside this year (or only a few months before it) can't tell "new this year" from "new to the export".
+    const coversPriorYears = earliest! < new Date(year, 0, 1) && (opts.lifetime || earliest! <= new Date(year - 1, 0, 1));
     const raw = plays.filter((p) => localYear(p.ts) === year);
     stats.set(year, yearStats(year, byYear.get(year)!, raw, firstSeen, coversPriorYears));
   }

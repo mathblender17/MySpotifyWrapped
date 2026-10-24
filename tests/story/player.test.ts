@@ -4,7 +4,7 @@ import { STATIONS } from '../../src/journey/stations';
 import { makeDemoPlays } from '../../src/ingest/demo';
 import { computeAllYears } from '../../src/stats';
 
-const ds = computeAllYears(makeDemoPlays());
+const ds = computeAllYears(makeDemoPlays(), { lifetime: true });
 const ctx: SlideContext = { stats: ds.stats.get(2025), years: ds.years, onPickYear: () => {} };
 const slides: Record<string, Slide> = Object.fromEntries(
   STATIONS.map((s) => [s.id, () => {
@@ -90,4 +90,19 @@ test('keyboard: arrows move, space toggles pause', () => {
   vi.advanceTimersByTime(9000);
   expect(s.index).toBe(1);
   s.destroy();
+});
+
+test('a cancelled hold (touch pan, release outside) resumes instead of staying paused', () => {
+  const s = createStory(root, { slides, ctx, startAt: 1 });
+  fire(root, 'pointerdown');
+  vi.advanceTimersByTime(300);
+  fire(root, 'pointercancel');
+  vi.advanceTimersByTime(8000);
+  expect(s.index).toBe(4);
+});
+
+test('genre stations explain they are coming, not that an export would unlock them', () => {
+  createStory(root, { slides, ctx, startAt: 1 });
+  const bento = root.querySelectorAll('.stop')[2] as HTMLElement;
+  expect(bento.title).toBe('Genres arrive in a later update');
 });

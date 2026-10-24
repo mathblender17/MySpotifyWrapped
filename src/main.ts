@@ -9,6 +9,8 @@ import type { Dataset, Play } from './types';
 import './app.css';
 
 const app = document.querySelector<HTMLElement>('#app')!;
+let current: { destroy(): void } | undefined;
+let loadToken = 0;
 
 function landing(note?: string) {
   app.innerHTML = `
@@ -24,7 +26,7 @@ function landing(note?: string) {
       <div class="status" role="status"></div>
       ${note ? `<div class="note">${note}<button type="button" class="x" aria-label="Dismiss">×</button></div>` : ''}
     </main>`;
-  app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), []));
+  app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true));
   app.querySelector('.note .x')?.addEventListener('click', (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
   const drop = app.querySelector<HTMLElement>('.drop')!;
   const input = drop.querySelector('input')!;
@@ -42,15 +44,18 @@ function landing(note?: string) {
 }
 
 async function load(files: File[]) {
+  const token = ++loadToken;
   const status = app.querySelector<HTMLElement>('.status')!;
   status.innerHTML = '<progress max="1" value="0"></progress> Reading your files…';
   try {
-    const { plays, problems } = await loadInWorker(files, (done, total) => {
-      status.querySelector('progress')!.value = done / total;
+    const { plays, problems, lifetime } = await loadInWorker(files, (done, total) => {
+      const bar = status.querySelector('progress');
+      if (bar) bar.value = done / total;
     });
-    start(plays, problems);
+    // The rider may have started the demo while the files were parsing; don't hijack that ride.
+    if (token === loadToken && !current) start(plays, problems, lifetime);
   } catch (err) {
-    landing(`Couldn't read those files: ${esc((err as Error).message)}`);
+    if (token === loadToken && !current) landing(`Couldn't read those files: ${esc((err as Error).message)}`);
   }
 }
 
@@ -58,8 +63,8 @@ function problemsNote(problems: string[]) {
   return problems.length ? `Skipped some files:<ul>${problems.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>` : undefined;
 }
 
-function start(plays: Play[], problems: string[], at?: { station?: number; year?: number }) {
-  const ds = computeAllYears(plays);
+function start(plays: Play[], problems: string[], lifetime: boolean, at?: { station?: number; year?: number }) {
+  const ds = computeAllYears(plays, { lifetime });
   if (!ds.stats.size) {
     const counts = ds.years.map((y) => `${y.year}: ${nPlays(y.plays)}`).join(', ') || 'no songs found';
     const why = `No year has enough listening yet (needs 50+ plays of 30 seconds or more). Found ${esc(counts)}.`;
@@ -70,6 +75,7 @@ function start(plays: Play[], problems: string[], at?: { station?: number; year?
 }
 
 function ride(ds: Dataset, year: number, startAt: number, note?: string) {
+  current?.destroy();
   app.replaceChildren();
   const root = document.createElement('div');
   app.append(root);
@@ -79,12 +85,10 @@ function ride(ds: Dataset, year: number, startAt: number, note?: string) {
     ctx: {
       stats: ds.stats.get(year),
       years: ds.years,
-      onPickYear: (y) => {
-        story.destroy();
-        ride(ds, y, 1);
-      },
+      onPickYear: (y) => ride(ds, y, 1),
     },
   });
+  current = story;
   if (note) {
     const n = document.createElement('div');
     n.className = 'note floating';
@@ -96,5 +100,5 @@ function ride(ds: Dataset, year: number, startAt: number, note?: string) {
 }
 
 const route = parseRoute(location.search);
-if (route.data === 'demo') start(makeDemoPlays(), [], route);
+if (route.data === 'demo') start(makeDemoPlays(), [], true, route);
 else landing();

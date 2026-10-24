@@ -12,14 +12,18 @@ export type Station = {
   needs: (keyof YearStats)[];
   transitionIn: Transition;
   waitForInput?: boolean;
+  /** Why the station is passed through, when it isn't "your data doesn't cover it". */
+  lockedHint?: string;
 };
+
+const GENRES_LATER = 'Genres arrive in a later update';
 
 // The approved storyboard (docs/design/journey-storyboard.html), spec §6.
 export const STATIONS: Station[] = [
   { id: 'departure', n: 1, act: 1, nameJp: '出発', nameEn: 'Departure', needs: [], transitionIn: 'title', waitForInput: true },
   { id: 'torii', n: 2, act: 1, nameJp: '鳥居', nameEn: 'Torii Gates', needs: ['plays', 'daysListened'], transitionIn: 'ride' },
-  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut' },
-  { id: 'ganguro', n: 4, act: 1, nameJp: 'ガングロ', nameEn: 'Ganguro', needs: ['topGenre'], transitionIn: 'phone' },
+  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut', lockedHint: GENRES_LATER },
+  { id: 'ganguro', n: 4, act: 1, nameJp: 'ガングロ', nameEn: 'Ganguro', needs: ['topGenre'], transitionIn: 'phone', lockedHint: GENRES_LATER },
   { id: 'sumo', n: 5, act: 2, nameJp: '番付', nameEn: 'Banzuke', needs: ['topArtists'], transitionIn: 'ride' },
   { id: 'idol', n: 6, act: 2, nameJp: '推し', nameEn: 'Oshi', needs: ['topArtists'], transitionIn: 'tease' },
   { id: 'konbini', n: 7, act: 2, nameJp: 'コンビニ', nameEn: 'Konbini', needs: ['topTracks'], transitionIn: 'cut' },

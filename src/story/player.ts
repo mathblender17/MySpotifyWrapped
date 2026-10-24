@@ -69,8 +69,18 @@ export function createStory(
     else if (e.key === ' ') (paused ? api.resume() : api.pause());
   };
 
+  // A touch pan or a release outside the page cancels the gesture: never leave the story stuck on pause.
+  const onCancel = () => {
+    if (downX === undefined) return;
+    clearTimeout(holdTimer);
+    downX = undefined;
+    if (held) api.resume();
+  };
+
   root.addEventListener('pointerdown', onDown);
   root.addEventListener('pointerup', onUp);
+  root.addEventListener('pointercancel', onCancel);
+  root.addEventListener('pointerleave', onCancel);
   document.addEventListener('keydown', onKey);
 
   const api = {
@@ -90,6 +100,8 @@ export function createStory(
       frame.destroy();
       root.removeEventListener('pointerdown', onDown);
       root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointercancel', onCancel);
+      root.removeEventListener('pointerleave', onCancel);
       document.removeEventListener('keydown', onKey);
     },
     get index() {

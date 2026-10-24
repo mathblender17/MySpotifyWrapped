@@ -39,3 +39,11 @@ test('nothing qualifies → undefined', () => {
   const year = [...many(5, '2025-01-01T12:00', 'A'), ...many(5, '2025-08-01T12:00', 'B')];
   expect(fastestRiser(year, firstSeenOf(year), false)).toBeUndefined();
 });
+
+test('a newcomer from the first days of the year does not "race" in 0 days', () => {
+  const year = [
+    ...established.flatMap((a) => many(30, '2025-02-01T12:00', a)),
+    ...many(60, '2025-01-02T12:00', 'Jan'),
+  ];
+  expect(fastestRiser(year, firstSeenOf(year, prior), true)?.via).not.toBe('race');
+});

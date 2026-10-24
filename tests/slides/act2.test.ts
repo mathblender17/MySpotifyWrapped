@@ -51,3 +51,9 @@ test('a hostile artist name renders as text, not markup', () => {
 test('every act-2 slide carries gyaru pink', () => {
   for (const s of [sumo, idol, konbini, gacha]) expect(hasPink(s(ctx()))).toBe(true);
 });
+
+test.each([
+  [2025, '令和7年'], [2019, '令和元年'], [2018, '平成30年'], [2015, '平成27年'],
+])('sumo: %i is written as %s', (year, era) => {
+  expect(sumo(ctx({ stats: { ...STATS, year } })).textContent).toContain(era);
+});

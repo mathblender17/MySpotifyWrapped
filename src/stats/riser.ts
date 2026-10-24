@@ -10,7 +10,12 @@ const dayNumber = (d: Date) => {
 function race(plays: Play[], firstSeen: Map<string, Date>): YearStats['fastestRiser'] {
   const year = plays[0].ts.getFullYear();
   const top10 = topN(plays, 'artist', 10).map((r) => r.name);
-  const candidates = new Set(top10.filter((a) => firstSeen.get(a)?.getFullYear() === year));
+  // Skip a two-week warm-up: on Jan 2 almost nobody has plays yet, so any newcomer would "enter the top 5" in 0 days.
+  const warmUpEnd = new Date(year, 0, 15);
+  const candidates = new Set(top10.filter((a) => {
+    const f = firstSeen.get(a);
+    return f?.getFullYear() === year && f >= warmUpEnd;
+  }));
   if (!candidates.size) return undefined;
 
   const withDur = hasDurations(plays);

@@ -27,7 +27,7 @@ test('acts follow the storyboard', () => {
 });
 
 test('with demo data, only the genre stations pass through in Phase 1', () => {
-  const stats = computeAllYears(makeDemoPlays()).stats.get(2025)!;
+  const stats = computeAllYears(makeDemoPlays(), { lifetime: true }).stats.get(2025)!;
   expect(STATIONS.filter((s) => !isPlayable(s, stats)).map((s) => s.id)).toEqual(['bento', 'ganguro']);
 });
 

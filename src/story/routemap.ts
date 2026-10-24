@@ -10,7 +10,7 @@ export function routeMap(stations: Station[], current: number, playable: boolean
     li.className = 'stop' + (i === current ? ' current' : '') + (i < current ? ' done' : '') + (playable[i] ? '' : ' pass');
     li.innerHTML = `<span class="n">${s.n}</span><span class="nm">${s.nameJp}</span>`;
     if (!playable[i]) {
-      li.title = 'Unlock with your full listening export';
+      li.title = s.lockedHint ?? 'Unlock with your full listening export';
       li.insertAdjacentHTML('beforeend', '<span class="lock">通過🔒</span>');
     }
     ol.append(li);
