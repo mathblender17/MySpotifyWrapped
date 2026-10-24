@@ -1,0 +1,28 @@
+/* World F: station wayfinding (art spec §5, mockup F). */
+.dep { background: #f4f4f2; color: #1a1a1a; font-family: var(--face-text); padding-top: 24px; }
+.dep .bar { position: absolute; left: 0; right: 0; top: 0; height: 14px; background: var(--line); }
+.dep .hd { display: flex; justify-content: space-between; align-items: flex-start; }
+.dep .hd .jp { display: block; font: 900 44px/1 var(--face-text); letter-spacing: 3px; }
+.dep .hd .en { display: block; margin-top: 4px; font: 13px/1 'Archivo Black', sans-serif; letter-spacing: .5px; }
+.dep .os { flex: none; width: 46px; height: 46px; border: 7px solid var(--line); border-radius: 50%; background: #fff; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Archivo Black', sans-serif; line-height: 1; }
+.dep .os small { font-size: 7px; }
+.dep .os b { font-size: 16px; }
+.dep .board { margin: 12px -16px 0; padding: 0 0 2px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: auto; }
+.dep .row { display: grid; grid-template-columns: 28px auto minmax(0, 1fr) 10px; align-items: center; gap: 6px; width: 100%; background: var(--line); border: 0; border-radius: 0; padding: 7px 16px; color: #fff; text-align: left; font-family: var(--face-text); }
+.dep .row .ty { background: #fff; color: var(--line); font-weight: 900; font-size: 9px; text-align: center; border-radius: 2px; padding: 1px 0; }
+.dep .row .yr { font: 22px/1 'Archivo Black', sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.5px; }
+.dep .row .pl { font-weight: 900; font-size: 10px; }
+.dep .row .go { font-size: 10px; }
+.dep button.row:hover, .dep button.row:focus-visible { background: #0090bd; outline: 3px solid var(--pink); outline-offset: -3px; }
+.dep .row.off { background: #c9ccd0; color: #6b6f75; grid-template-columns: 28px auto minmax(0, 1fr); }
+.dep .row.off .ty { background: #e60012; color: #fff; }
+.dep .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.dep .ft { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.dep .led { background: #111; color: #ffb000; font: 12px/1 'DotGothic16', monospace; padding: 7px 10px; border-radius: 3px; text-shadow: 0 0 4px #ffb000, 0 0 10px #ff8a00; letter-spacing: 1px; }
+.dep .led i { font-style: normal; color: #ff2d95; text-shadow: 0 0 6px #ff2d95; }
+.dep .pk { font: 900 9px var(--face-text); color: #555; }
+/* Few years: the trains sit mid-board, not stuck to the top (auto margins keep the scroll start reachable). */
+.dep .row:first-child { margin-top: auto; }
+.dep .row:last-child { margin-bottom: auto; }
+/* Platform edge: the yellow tactile strip (点字ブロック). */
+.dep .ft::before { content: ''; align-self: stretch; margin: 0 -16px 6px; height: 10px; background: radial-gradient(circle, #d9a400 1.6px, transparent 2px) 0 0 / 7px 5px, #f5c400; }

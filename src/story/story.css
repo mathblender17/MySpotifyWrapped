@@ -223,3 +223,5 @@
 .sign.docked .nm { display: none; }
 .sign.docked .os { box-shadow: 0 2px 6px #0006; }
 .reduced .sign { transition: none; }
+/* A slide that prints its own station number circle is the docked sign: don't show two. */
+.story:has(.stage .os) .sign.docked { visibility: hidden; }
