@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import * as THREE from 'three';
+import { createSeasonFx } from './season';
 import { stationT, trackFrame } from './track';
 
 export type World = {
@@ -41,6 +42,9 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 800);
   const state = { t: 0 };
+  const season = createSeasonFx(scene, { reduced: opts.reduced, count: 600 });
+  season.set(0);
+  const clock = new THREE.Clock();
   let running = false;
   let lost = false;
   let destroyed = false;
@@ -59,7 +63,10 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
     renderer.setSize(w, h, false);
   };
 
-  const loop = () => renderer.render(scene, camera);
+  const loop = () => {
+    season.tick(Math.min(clock.getDelta(), 0.1), camera.position);
+    renderer.render(scene, camera);
+  };
   const start = () => {
     if (running || lost || destroyed) return;
     running = true;
@@ -101,7 +108,7 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       state.t = stationT(i);
       place();
     },
-    setSeason() {},
+    setSeason: (dial) => season.set(dial),
     pause: stop,
     resume: start,
     destroy() {
@@ -110,6 +117,7 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       window.removeEventListener('resize', size);
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('webglcontextlost', onLost);
+      season.dispose();
       renderer.dispose();
       canvas.remove();
     },
