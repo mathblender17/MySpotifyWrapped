@@ -194,3 +194,5 @@
 .story.world-on .season-fx { display: none; }
 /* Glass slides: the district glows through, the card floats over the world. */
 .story.world-on .frame > .ph { opacity: 0.92; border-radius: 12px; box-shadow: 0 10px 40px #000a, 0 0 0 1px #fff3; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+/* Adaptive quality step 1: the live canvas behind a blurred card is costly on phones. */
+.lowfx .story.world-on .frame > .ph { -webkit-backdrop-filter: none; backdrop-filter: none; opacity: 1; }

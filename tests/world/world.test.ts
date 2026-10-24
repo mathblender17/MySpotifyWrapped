@@ -97,7 +97,7 @@ test('travel builds the destination district before the camera gets there', () =
   const w = createWorld(container, { reduced: false, stationIds: STATIONS.map((s) => s.id), makeRenderer: () => fakeRenderer() as never })!;
   w.travel(1, 4, 1.6);
   const built = w.scene.children.filter((c) => c.userData.district !== undefined).map((c) => c.userData.district);
-  expect(built.sort()).toEqual([3, 4, 5]);
+  expect(built).toEqual(expect.arrayContaining([3, 4, 5])); // plus the district being left, until the ride ends
   w.destroy();
   expect(w.scene.children.filter((c) => c.userData.district !== undefined)).toHaveLength(0);
 });
@@ -109,4 +109,32 @@ test('destroy hands the WebGL context back (browsers cap live contexts at ~16)',
   w.destroy();
   expect(r.forceContextLoss).toHaveBeenCalled();
   expect(onLost).not.toHaveBeenCalled(); // our own release is not a "lost" world
+});
+
+test('the district you leave stays until the train has left it, even when stations are skipped', () => {
+  const w = createWorld(container, { reduced: false, stationIds: STATIONS.map((s) => s.id), makeRenderer: () => fakeRenderer() as never })!;
+  w.jump(1);
+  const tl = w.travel(1, 4, 1.6); // bento and ganguro passed through
+  const built = () => w.scene.children.filter((c) => c.userData.district !== undefined).map((c) => c.userData.district as number).sort((a, b) => a - b);
+  expect(built()).toEqual(expect.arrayContaining([1, 3, 4, 5]));
+  tl.progress(1);
+  expect(built()).toEqual([3, 4, 5]);
+  w.destroy();
+});
+
+test('if building the world fails after the renderer exists, nothing is left behind', () => {
+  const r = { ...fakeRenderer(), forceContextLoss: vi.fn(), setPixelRatio() { throw new Error('boom'); } };
+  expect(createWorld(container, { reduced: false, makeRenderer: () => r as never })).toBeNull();
+  expect(r.calls).toContain('dispose');
+  expect(r.forceContextLoss).toHaveBeenCalled();
+  expect(container.querySelector('canvas')).toBeNull();
+});
+
+test('the first quality step drops the glass blur (costly over a live canvas)', () => {
+  const r = fakeRenderer();
+  const w = createWorld(container, { reduced: false, makeRenderer: () => r as never })!;
+  (w as unknown as { _qualityStep(l: 1 | 2): void })._qualityStep(1);
+  expect(document.documentElement.classList.contains('lowfx')).toBe(true);
+  w.destroy();
+  expect(document.documentElement.classList.contains('lowfx')).toBe(false);
 });

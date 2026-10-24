@@ -88,3 +88,5 @@ body {
 
 .mute { flex: none; align-self: center; width: 36px; height: 36px; border-radius: 50%; border: 0; background: #000a; color: #fff; font-size: 16px; cursor: pointer; }
 .mute:focus-visible { outline: 3px solid #ff2d95; }
+
+.boarding { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; font-family: 'DotGothic16', monospace; color: #ff2d95; letter-spacing: 2px; }

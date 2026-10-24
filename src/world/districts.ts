@@ -248,8 +248,9 @@ export function createDistrictWindow(scene: THREE.Scene, stationIds: string[]) {
   };
 
   return {
-    focus(i: number) {
-      const want = new Set([i - 1, i, i + 1].filter((n) => n >= 0 && n < stationIds.length));
+    /** Keep i and its neighbours; `also` keeps one more alive (the district a ride is leaving). */
+    focus(i: number, also?: number) {
+      const want = new Set([i - 1, i, i + 1, ...(also === undefined ? [] : [also])].filter((n) => n >= 0 && n < stationIds.length));
       for (const n of [...live.keys()]) if (!want.has(n)) release(n);
       for (const n of want) if (!live.has(n)) build(n);
     },

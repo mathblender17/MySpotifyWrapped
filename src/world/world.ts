@@ -17,6 +17,8 @@ export type World = {
   readonly camera: THREE.PerspectiveCamera;
   readonly scene: THREE.Scene;
   readonly renderer: THREE.WebGLRenderer;
+  /** Test seam: apply a quality step without waiting for slow frames. */
+  _qualityStep(level: 1 | 2): void;
 };
 
 export type WorldOpts = {
@@ -41,6 +43,19 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   } catch {
     return null;
   }
+  try {
+    return build(container, canvas, renderer, opts);
+  } catch {
+    // Something failed after the GPU context existed: give it back rather than leak it.
+    renderer.dispose();
+    renderer.forceContextLoss?.();
+    canvas.remove();
+    document.documentElement.classList.remove('lowfx');
+    return null;
+  }
+}
+
+function build(container: HTMLElement, canvas: HTMLCanvasElement, renderer: THREE.WebGLRenderer, opts: WorldOpts): World {
   container.append(canvas);
 
   const scene = new THREE.Scene();
@@ -51,10 +66,13 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   season.set(0);
   const districts = opts.stationIds ? createDistrictWindow(scene, opts.stationIds) : undefined;
   const clock = new THREE.Clock();
-  const quality = createQuality((level) => {
-    if (level === 1) season.setCount(PARTICLES / 2);
-    else renderer.setPixelRatio(1);
-  });
+  const qualityStep = (level: 1 | 2) => {
+    if (level === 1) {
+      season.setCount(PARTICLES / 2);
+      document.documentElement.classList.add('lowfx'); // CSS drops the glass blur
+    } else renderer.setPixelRatio(1);
+  };
+  const quality = createQuality(qualityStep);
   let running = false;
   let lost = false;
   let destroyed = false;
@@ -108,9 +126,11 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
 
   return {
     travel(from, to, seconds) {
-      districts?.focus(to);
-      const tl = gsap.timeline({ paused: true });
+      // Keep the district being left until the train is out of it (skipped stations would otherwise blank it at once).
+      districts?.focus(to, from);
+      const tl = gsap.timeline({ paused: true, onComplete: () => districts?.focus(to) });
       if (opts.reduced) {
+        districts?.focus(to);
         state.t = stationT(to);
         place();
         return tl;
@@ -140,7 +160,9 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
       // pick builds a new world.
       renderer.forceContextLoss?.();
       canvas.remove();
+      document.documentElement.classList.remove('lowfx');
     },
+    _qualityStep: qualityStep,
     canvas,
     camera,
     scene,

@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { createSoundtrack } from './audio/soundtrack';
+import { withTimeout } from './timeout';
 import { prefersReducedMotion } from './journey/beats';
 import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
@@ -79,18 +80,22 @@ function start(plays: Play[], problems: string[], lifetime: boolean, at?: { stat
     return landing([why, problemsNote(problems)].filter(Boolean).join('<br>'));
   }
   const firstYear = at?.year && ds.stats.has(at.year) ? at.year : ds.years.find((y) => y.eligible)!.year;
-  ride(ds, firstYear, at?.station ? at.station - 1 : 0, problemsNote(problems));
+  ride(ds, firstYear, at?.station ? at.station - 1 : 0, problemsNote(problems)).catch(rideFailed);
 }
 
 /** The 3D world (three.js) is only fetched once a ride starts, so the landing page stays light. */
-async function makeWorld(container: HTMLElement, onLost: () => void) {
-  try {
-    const { createWorld } = await import('./world/world');
-    return createWorld(container, { reduced: prefersReducedMotion(), stationIds: STATIONS.map((s) => s.id), onLost });
-  } catch {
-    return null; // chunk failed to load: ride the flat journey
-  }
+async function makeWorld(container: HTMLElement, onLost: () => void, stillWanted: () => boolean) {
+  // A stalled or failed download (bad mobile network) must never hold the ride: after 3 s, ride the flat journey.
+  const mod = await withTimeout(import('./world/world'), 3000, null);
+  if (!mod || !stillWanted()) return null;
+  return mod.createWorld(container, { reduced: prefersReducedMotion(), stationIds: STATIONS.map((s) => s.id), onLost });
 }
+
+const rideFailed = (err: unknown) => {
+  current?.destroy();
+  current = undefined;
+  landing(`Couldn't start the ride: ${esc(String((err as Error)?.message ?? err))}`);
+};
 
 let rideToken = 0;
 async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
@@ -101,9 +106,10 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
   const backdrop = document.createElement('div');
   backdrop.className = 'world';
   const root = document.createElement('div');
+  root.innerHTML = '<p class="boarding">乗車中… boarding</p>';
   app.append(backdrop, root);
   let story: ReturnType<typeof createStory> | undefined;
-  const world = await makeWorld(backdrop, () => story?.dropWorld());
+  const world = await makeWorld(backdrop, () => story?.dropWorld(), () => token === rideToken);
   if (token !== rideToken) return void world?.destroy(); // a newer ride started while three.js loaded
   if (import.meta.env.DEV) Object.assign(window, { __world: world }); // for in-page checks; stripped from builds
   story = createStory(root, {
@@ -116,7 +122,7 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
       years: ds.years,
       onPickYear: (y) => {
         soundtrack.unlock(); // the year pick is the tap browsers require before sound
-        ride(ds, y, 1);
+        ride(ds, y, 1).catch(rideFailed);
       },
     },
   });
