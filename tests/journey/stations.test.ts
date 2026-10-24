@@ -10,6 +10,7 @@ const FULL: Required<YearStats> = {
   seasons: {} as Required<YearStats>['seasons'], weekly: [], peakWeek: { start: '', value: 0 },
   fastestRiser: { artist: '', via: 'race' }, genreShares: [], topGenre: '', traits: {},
   personality: { id: 'balanced', name: '', jp: '', line: '' }, fortune: { jp: '吉', en: '' }, kanji: { kanji: '', meaning: '' },
+  soundtrack: {},
 };
 
 test('13 stations in order', () => {

@@ -1,4 +1,6 @@
 import { gsap } from 'gsap';
+import { findPreview as itunes } from '../audio/previews';
+import type { Soundtrack } from '../audio/soundtrack';
 import { playBeats, prefersReducedMotion } from '../journey/beats';
 import { HOOKS } from '../journey/hooks';
 import { isPlayable, STATIONS } from '../journey/stations';
@@ -19,7 +21,15 @@ const INTERACTIVE = 'button, a, input, label';
 
 export function createStory(
   root: HTMLElement,
-  opts: { slides: Record<string, Slide>; ctx: SlideContext; startAt?: number; holdMs?: number; reduced?: boolean },
+  opts: {
+    slides: Record<string, Slide>;
+    ctx: SlideContext;
+    startAt?: number;
+    holdMs?: number;
+    reduced?: boolean;
+    soundtrack?: Soundtrack;
+    findPreview?: (artist: string, track: string) => Promise<string | undefined>;
+  },
 ) {
   const holdMs = opts.holdMs ?? 2500;
   const reduced = opts.reduced ?? prefersReducedMotion();
@@ -36,6 +46,19 @@ export function createStory(
   let pressTimer: ReturnType<typeof setTimeout> | undefined;
   let held = false;
   let downX: number | undefined;
+  let alive = true;
+  const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
+
+  /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
+  const cue = (i: number) => {
+    const s = STATIONS[i];
+    if (!s.song || !opts.soundtrack) return;
+    const track = opts.ctx.stats?.soundtrack?.[s.song];
+    if (!track?.artist) return opts.soundtrack.play(undefined);
+    lookup(track.artist, track.name).then((url) => {
+      if (alive && index === i) opts.soundtrack!.play(url);
+    });
+  };
 
   root.classList.add('story');
   root.replaceChildren(route.el, frame.el, ticket.el, guide.el);
@@ -62,6 +85,7 @@ export function createStory(
     const el = opts.slides[s.id](opts.ctx);
     route.set(i);
     season.set(s.act);
+    cue(i);
     const beats = playBeats(el, { reduced });
 
     if (!animate) {
@@ -141,13 +165,17 @@ export function createStory(
       paused = true;
       master?.pause();
       clearTimeout(holdTimer);
+      opts.soundtrack?.pause();
     },
     resume: () => {
       paused = false;
+      opts.soundtrack?.resume();
       if (animating()) master!.play();
       else armHold();
     },
     destroy: () => {
+      alive = false;
+      opts.soundtrack?.stop();
       master?.kill();
       clearTimeout(holdTimer);
       clearTimeout(pressTimer);

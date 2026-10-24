@@ -58,3 +58,10 @@ test('a few months of earlier data is not enough to call artists "new this year"
   expect(ds.stats.get(2026)!.traits!.novelty).toBeUndefined();
   expect(ds.stats.get(2026)!.fastestRiser?.via).not.toBe('race');
 });
+
+test('soundtrack picks: #1 song, the #1 artist’s song, the riser’s song', () => {
+  const s = demo.stats.get(2025)!;
+  expect(s.soundtrack!.top).toEqual(s.topTracks![0]);
+  expect(s.soundtrack!.topArtistTrack!.artist).toBe(s.topArtists![0].name);
+  expect(s.soundtrack!.riserTrack!.artist).toBe('Hoshino Rei');
+});

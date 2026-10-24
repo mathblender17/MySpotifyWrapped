@@ -1,3 +1,4 @@
+import { createSoundtrack } from './audio/soundtrack';
 import { makeDemoPlays } from './ingest/demo';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
@@ -11,6 +12,7 @@ import './app.css';
 const app = document.querySelector<HTMLElement>('#app')!;
 let current: { destroy(): void } | undefined;
 let loadToken = 0;
+const soundtrack = createSoundtrack();
 
 function landing(note?: string) {
   app.innerHTML = `
@@ -82,13 +84,30 @@ function ride(ds: Dataset, year: number, startAt: number, note?: string) {
   const story = createStory(root, {
     slides,
     startAt,
+    soundtrack,
     ctx: {
       stats: ds.stats.get(year),
       years: ds.years,
-      onPickYear: (y) => ride(ds, y, 1),
+      onPickYear: (y) => {
+        soundtrack.unlock(); // the year pick is the tap browsers require before sound
+        ride(ds, y, 1);
+      },
     },
   });
   current = story;
+  const mute = document.createElement('button');
+  mute.type = 'button';
+  mute.className = 'mute';
+  const label = () => {
+    mute.textContent = soundtrack.muted ? '🔇' : '🔊';
+    mute.setAttribute('aria-label', soundtrack.muted ? 'Unmute' : 'Mute');
+  };
+  label();
+  mute.addEventListener('click', () => {
+    soundtrack.mute(!soundtrack.muted);
+    label();
+  });
+  root.append(mute);
   if (note) {
     const n = document.createElement('div');
     n.className = 'note floating';

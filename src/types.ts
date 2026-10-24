@@ -45,6 +45,8 @@ export type YearStats = {
   personality?: Personality;
   fortune?: Fortune;
   kanji?: KanjiReading;
+  /** Songs the story plays: the #1 song, the #1 artist's most-played song, the riser's most-played song. */
+  soundtrack?: { top?: Ranked; topArtistTrack?: Ranked; riserTrack?: Ranked };
 };
 
 export type YearSummary = { year: number; plays: number; eligible: boolean };

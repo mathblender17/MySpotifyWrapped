@@ -14,20 +14,24 @@ function yearStats(year: number, ps: Play[], raw: Play[], firstSeen: Map<string,
   const w = weekly(ps);
   const t = traits(ps, firstSeen, coversPriorYears, topArtistShare, raw);
   const persona = personality(t);
+  const topTracks = topN(ps, 'track', 5);
+  const riser = fastestRiser(ps, firstSeen, coversPriorYears);
+  const songOf = (artist?: string) => (artist ? topN(ps.filter((p) => p.artist === artist), 'track', 1)[0] : undefined);
   return {
     year,
     ...totals(ps),
     topArtists,
-    topTracks: topN(ps, 'track', 5),
+    topTracks,
     topArtistShare,
     seasons: seasonStats,
     weekly: w,
     peakWeek: peakWeek(w),
-    fastestRiser: fastestRiser(ps, firstSeen, coversPriorYears),
+    fastestRiser: riser,
     traits: t,
     personality: persona,
     fortune: fortune(t),
     kanji: kanji(persona.id, peakSeason),
+    soundtrack: { top: topTracks[0], topArtistTrack: songOf(topArtists[0].name), riserTrack: songOf(riser?.artist) },
   };
 }
 

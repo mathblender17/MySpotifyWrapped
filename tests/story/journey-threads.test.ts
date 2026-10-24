@@ -84,3 +84,15 @@ test('with motion: a particle layer', () => {
   story({ startAt: 1 });
   expect(root.querySelectorAll('.season-fx i').length).toBeGreaterThan(0);
 });
+
+test('the soundtrack follows the stations and stops when the story is left', async () => {
+  const calls: (string | undefined)[] = [];
+  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false };
+  const findPreview = vi.fn(async (artist: string, track: string) => `https://x/${artist}/${track}.m4a`);
+  const s = story({ startAt: 1, soundtrack, findPreview });
+  await Promise.resolve();
+  const top = ctx.stats!.soundtrack!.top!;
+  expect(calls).toEqual([`https://x/${top.artist}/${top.name}.m4a`]);
+  s.destroy();
+  expect(soundtrack.stop).toHaveBeenCalled();
+});
