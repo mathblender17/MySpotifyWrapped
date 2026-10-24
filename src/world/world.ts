@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import * as THREE from 'three';
 import { createDistrictWindow } from './districts';
 import { disposeKit } from './kit';
+import { createQuality } from './quality';
 import { createSeasonFx } from './season';
 import { stationT, trackFrame } from './track';
 
@@ -45,10 +46,15 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 800);
   const state = { t: 0 };
-  const season = createSeasonFx(scene, { reduced: opts.reduced, count: 600 });
+  const PARTICLES = 600;
+  const season = createSeasonFx(scene, { reduced: opts.reduced, count: PARTICLES });
   season.set(0);
   const districts = opts.stationIds ? createDistrictWindow(scene, opts.stationIds) : undefined;
   const clock = new THREE.Clock();
+  const quality = createQuality((level) => {
+    if (level === 1) season.setCount(PARTICLES / 2);
+    else renderer.setPixelRatio(1);
+  });
   let running = false;
   let lost = false;
   let destroyed = false;
@@ -68,12 +74,15 @@ export function createWorld(container: HTMLElement, opts: WorldOpts): World | nu
   };
 
   const loop = () => {
-    season.tick(Math.min(clock.getDelta(), 0.1), camera.position);
+    const dt = clock.getDelta();
+    quality.frame(dt * 1000);
+    season.tick(Math.min(dt, 0.1), camera.position);
     renderer.render(scene, camera);
   };
   const start = () => {
     if (running || lost || destroyed) return;
     running = true;
+    clock.getDelta(); // don't count the paused time as one huge frame
     renderer.setAnimationLoop(loop);
   };
   const stop = () => {
