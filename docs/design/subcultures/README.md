@@ -77,6 +77,30 @@ Round 3, picked 2026-10-24:
 
 **Total picked: 45 subcultures** (13 + 14 + 18).
 
+## Story structure (approved 2026-10-24)
+
+**Fixed main story plus extras.** Visual: [main-story.html](main-story.html)
+
+| # | Slide | Stat |
+|---|---|---|
+| 1 | Train / densha | Opening: pick your year's station, the train departs |
+| 2 | Torii gate tunnel | Days listened + total minutes |
+| 3 | Bento box | Genre breakdown |
+| 4 | Ganguro | Top genre |
+| 5 | Sumo banzuke | Top 5 artists |
+| 6 | Idol / oshi-katsu | #1 artist and devotion |
+| 7 | Konbini receipt | Top 5 songs with play counts |
+| 8 | Gacha pull | #1 song reveal |
+| 9 | Weather / sakura | What you played each season |
+| 10 | Mt. Fuji | Peak week |
+| 11 | Shinkansen | Fastest-rising artist |
+| 12 | Omikuji | Personality + next-year fortune |
+| 13 | Kanji of the Year | Final share card |
+
+- **Narrator:** keitai deco-mail gyaru-moji captions on every slide (not a separate slide).
+- **All Years story anchors:** fighting-game VS, kintsugi, city pop, daruma, senbazuru.
+- **Extras:** the other picks become optional "Tour more of Japan" bonus slides.
+
 ## Data caveats (to settle in the spec)
 
 Some mockup stats aren't in the user's own data. Before a slide relies on one, the spec must name its source or drop it:

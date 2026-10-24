@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Main story lineup</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}</style>
+<script>function toggleSelect(e){}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Reggae+One&family=Zen+Maru+Gothic:wght@700;900&family=Noto+Serif+JP:wght@900&family=Yuji+Syuku&family=Kaisei+Decol:wght@700&family=Hachi+Maru+Pop&family=Zen+Kurenaido&family=Mochiy+Pop+One&family=Shippori+Mincho:wght@800&display=swap" rel="stylesheet">
+<style>
+  .idea{border:2px solid #1ed760;border-radius:14px;padding:16px 20px;margin:18px 0 8px;background:#1ed76012}
+  .idea h3{margin:0 0 6px}
+  .idea p{margin:0;font-size:14px;line-height:1.55}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .z{position:relative;z-index:2}
+  .sp{flex:1}
+
+  /* 1 ganguro / yamanba */
+  .gan{background:linear-gradient(160deg,#6b3a1d,#3a1c0b);color:#fff;font-family:'Dela Gothic One'}
+  .gan:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,#ff8a0018 0 10px,transparent 10px 20px)}
+  .gan .hair{position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:conic-gradient(#ff2fa0,#ffe600,#00e1ff,#fff,#ff2fa0);filter:blur(1px);opacity:.9}
+  .gan .eye{display:flex;gap:6px;margin:6px 0}.gan .eye i{display:block;width:44px;height:10px;background:#fff;border-radius:10px}
+  .gan .t{font-size:11px;color:#ffe600;font-family:'DotGothic16'}
+  .gan .big{font-size:30px;line-height:1;text-shadow:3px 3px 0 #ff2fa0}
+  .gan .lips{width:70px;height:16px;border-radius:0 0 40px 40px;background:#fff;margin-top:8px}
+
+  /* 2 keitai deco-mail */
+  .kei{background:#c8c8d0;font-family:'DotGothic16';align-items:center;justify-content:center}
+  .kei .flip{width:150px;background:linear-gradient(#ff7ac6,#e0369a);border-radius:22px 22px 8px 8px;padding:12px 10px 18px;box-shadow:inset 0 0 0 3px #fff8}
+  .kei .scr{background:#0c0c18;border-radius:6px;padding:8px;color:#fff;font-size:11px;line-height:1.5;height:170px}
+  .kei .scr .h{background:#ff4fb0;color:#fff;margin:-8px -8px 6px;padding:2px 6px;font-size:10px}
+  .kei .scr b{color:#ffe600;font-size:14px}
+  .kei .strap{position:absolute;right:30px;bottom:40px;font-size:26px}
+
+  /* 3 host club */
+  .host{background:radial-gradient(circle at 50% 0,#3b2a00,#000 70%);color:#f8d77a;font-family:'Noto Serif JP'}
+  .host .hd{text-align:center;font-size:10px;letter-spacing:4px}
+  .host .n1{margin:10px auto 0;width:118px;height:150px;border:3px solid #f8d77a;box-shadow:0 0 18px #f8d77a88,inset 0 0 18px #f8d77a55;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:8px;background:linear-gradient(#222,#000)}
+  .host .n1 .k{font-family:'Dela Gothic One';font-size:34px;color:#fff;text-shadow:0 0 10px #f8d77a}
+  .host .n1 .nm{font-size:12px;color:#fff}
+  .host .row{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .host .row div{width:52px;height:64px;border:2px solid #b89c4c;font-size:10px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px}
+  .host .ch{text-align:center;font-size:11px;margin-top:10px;color:#fff}
+
+  /* 4 train */
+  .trn{background:#f4f4f0;color:#111;font-family:'Zen Maru Gothic'}
+  .trn .led{background:#111;color:#ff9a1f;font-family:'DotGothic16';font-size:12px;padding:8px;border-radius:4px;text-shadow:0 0 4px #ff9a1f;line-height:1.6}
+  .trn .led span{color:#58ff7a}
+  .trn .sign{margin-top:22px;background:#fff;border:1px solid #ccc;text-align:center;padding:10px 4px 0}
+  .trn .sign .jp{font-family:'Noto Serif JP';font-size:30px}
+  .trn .sign .en{font-size:12px;font-weight:900;letter-spacing:2px}
+  .trn .sign .bar{height:12px;background:#2db34a;margin-top:8px;display:flex;justify-content:space-between;padding:0 6px;font-size:10px;color:#fff;align-items:center}
+  .trn .nx{display:flex;justify-content:space-between;font-size:11px;margin-top:4px;font-weight:900}
+
+  /* 5 food review */
+  .food{background:#fffaf0;color:#3a2a1a;font-family:'Zen Maru Gothic'}
+  .food .stars{color:#f08a00;font-size:20px;letter-spacing:1px}
+  .food .score{font-family:'Dela Gothic One';font-size:44px;color:#e05a00;line-height:1}
+  .food .rv{font-size:11px;background:#fff;border:1px solid #eadcc6;padding:6px;margin-top:8px;border-radius:6px}
+  .food .tk{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}
+  .food .tk div{background:linear-gradient(#ffe36b,#f5b800);border:2px solid #8a6a00;border-radius:4px;font-size:10px;text-align:center;padding:5px 2px;font-weight:900}
+  .food .tk div:first-child{background:linear-gradient(#ff8c7a,#e8442b);color:#fff}
+
+  /* 6 weather */
+  .wx{background:linear-gradient(#0b62c4,#0a3f87);color:#fff;font-family:'Zen Maru Gothic'}
+  .wx .bar{background:#fff;color:#0a3f87;font-weight:900;font-size:12px;padding:4px 8px;border-radius:4px;display:inline-block}
+  .wx .map{margin:12px 0;height:120px;position:relative}
+  .wx .isl{position:absolute;background:#5fd16a;border-radius:40% 60% 50% 40%;border:2px solid #fff}
+  .wx .ic{position:absolute;font-size:20px}
+  .wx .fc{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:10px;text-align:center}
+  .wx .fc div{background:#ffffff22;border-radius:4px;padding:4px 0}
+  .wx .fc b{display:block;font-size:16px}
+
+  /* 7 idol */
+  .idol{background:linear-gradient(#ffe9f6,#fff);color:#d4007a;font-family:'Hachi Maru Pop'}
+  .idol .ch{background:#fff;padding:8px 8px 26px;box-shadow:0 6px 16px #0003;transform:rotate(-4deg);width:130px;margin:6px auto 0}
+  .idol .ch .pic{height:110px;background:linear-gradient(135deg,#ff9ad5,#9ad6ff)}
+  .idol .ch .sig{font-size:13px;margin-top:4px}
+  .idol .oshi{text-align:center;font-family:'Dela Gothic One';font-size:20px;margin-top:14px}
+  .idol .pen{display:flex;justify-content:center;gap:5px;margin-top:8px}
+  .idol .pen i{width:8px;height:44px;border-radius:4px;box-shadow:0 0 10px currentColor}
+
+  /* 8 sumo banzuke */
+  .sumo{background:#efe3c4;color:#111;font-family:'Yuji Syuku'}
+  .sumo .hd{text-align:center;font-size:20px;border-bottom:2px solid #111;padding-bottom:4px}
+  .sumo .cols{display:flex;flex-direction:row-reverse;justify-content:space-between;margin-top:10px;flex:1}
+  .sumo .cols div{writing-mode:vertical-rl;font-size:15px;border-left:1px solid #1115;padding:0 2px}
+  .sumo .cols .y{font-size:24px;color:#a00}
+  .sumo .ft{font-size:10px;text-align:center;font-family:'Zen Maru Gothic'}
+
+  /* 9 koshien scoreboard */
+  .kos{background:#0e3b22;color:#fff;font-family:'DotGothic16'}
+  .kos .bd{background:#062414;border:3px solid #c9c9c9;padding:6px;font-size:10px}
+  .kos table{width:100%;border-collapse:collapse;text-align:center}
+  .kos td{border:1px solid #2c5a3f;padding:2px 0}
+  .kos .hl{color:#ffe600}
+  .kos .tt{font-family:'Dela Gothic One';font-size:22px;margin-top:16px;line-height:1.1}
+  .kos .sub{font-size:11px;color:#9fe0b5;margin-top:6px}
+
+  /* 10 high school */
+  .hs{background:#f7f5ee;color:#1a2a4a;font-family:'Zen Kurenaido'}
+  .hs .cv{background:#1a2a4a;color:#fff;text-align:center;padding:6px;font-size:14px;font-family:'Noto Serif JP'}
+  .hs table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+  .hs td{border:1px solid #1a2a4a55;padding:4px}
+  .hs td:last-child{text-align:center;font-size:18px;color:#c00}
+  .hs .hanko{position:absolute;bottom:24px;right:20px;width:46px;height:46px;border:3px solid #d0021b;border-radius:50%;color:#d0021b;font-family:'Noto Serif JP';display:flex;align-items:center;justify-content:center;font-size:14px;transform:rotate(-12deg)}
+  .hs .cm{font-size:12px;margin-top:10px}
+
+  /* 11 anime eyecatch */
+  .ani{background:repeating-conic-gradient(from 0deg at 50% 45%,#ffde00 0 10deg,#ff7a00 10deg 20deg);color:#111;align-items:center;justify-content:center;text-align:center}
+  .ani .ep{background:#fff;border:4px solid #111;padding:10px 12px;transform:rotate(-3deg);font-family:'Dela Gothic One'}
+  .ani .ep small{display:block;font-size:11px;color:#e6002e}
+  .ani .ep .t{font-size:20px;line-height:1.15}
+  .ani .nx{margin-top:18px;background:#111;color:#fff;font-family:'DotGothic16';font-size:11px;padding:4px 10px}
+
+  /* 12 manga ranking */
+  .mg{background:#fff;color:#111;font-family:'Dela Gothic One';padding:10px}
+  .mg .pn{border:3px solid #111;margin-bottom:6px;position:relative;overflow:hidden}
+  .mg .p1{height:150px;background:repeating-linear-gradient(90deg,#fff 0 3px,#111 3px 4px);display:flex;align-items:center;justify-content:center}
+  .mg .p1 span{background:#fff;padding:4px 8px;font-size:28px;border:3px solid #111}
+  .mg .p2{display:flex;gap:6px;flex:1}
+  .mg .p2 .pn{flex:1;font-size:11px;padding:6px;font-family:'Zen Maru Gothic';font-weight:900}
+  .mg .bub{background:#fff;border:2px solid #111;border-radius:50%;padding:12px 8px;font-size:12px;text-align:center}
+  .mg .fx{position:absolute;right:4px;top:2px;font-family:'Reggae One';font-size:26px;color:#e6002e}
+
+  /* 13 JRPG */
+  .rpg{background:#000;color:#fff;font-family:'DotGothic16';font-size:13px}
+  .rpg .win{border:3px solid #fff;border-radius:6px;padding:8px;margin-bottom:8px;background:#0a0a6a}
+  .rpg .win.b{background:#000}
+  .rpg .row{display:flex;justify-content:space-between}
+  .rpg .cur{color:#ffe600}
+
+  /* 14 gacha */
+  .gac{background:radial-gradient(circle at 50% 45%,#fff 0,#ffe7a0 12%,#b06bff 40%,#14002e 80%);align-items:center;justify-content:center;color:#fff;font-family:'Dela Gothic One'}
+  .gac .card{width:120px;height:170px;border-radius:10px;background:linear-gradient(135deg,#ff6ad5,#ffd700,#6af0ff,#ff6ad5);padding:3px;box-shadow:0 0 30px #fff}
+  .gac .card div{height:100%;border-radius:8px;background:linear-gradient(#2a0f5a,#120530);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px}
+  .gac .ssr{font-size:34px;background:linear-gradient(90deg,#ff6ad5,#ffd700,#6af0ff);-webkit-background-clip:text;color:transparent}
+  .gac .st{color:#ffd700;margin-top:4px}
+  .gac .lb{margin-top:14px;font-size:12px;letter-spacing:2px}
+
+  /* 15 rhythm game result */
+  .rhy{background:linear-gradient(135deg,#00103a,#3b0066);color:#fff;font-family:'Dela Gothic One'}
+  .rhy .fc{font-family:'Rampart One';font-size:30px;color:#6af0ff;text-shadow:0 0 10px #6af0ff;transform:skew(-8deg)}
+  .rhy .rk{font-size:90px;line-height:1;background:linear-gradient(#fff6a0,#ffb400);-webkit-background-clip:text;color:transparent;text-align:center;margin:6px 0}
+  .rhy .ln{display:flex;justify-content:space-between;font-family:'DotGothic16';font-size:12px;border-bottom:1px solid #fff3;padding:3px 0}
+  .rhy .ln b{color:#ffe600}
+
+  /* 16 kouhaku */
+  .kou{background:linear-gradient(90deg,#d0021b 50%,#f5f5f5 50%);font-family:'Dela Gothic One';text-align:center}
+  .kou .hd{background:#111;color:#ffd700;font-size:13px;padding:6px;border-radius:4px}
+  .kou .vs{display:flex;justify-content:space-between;margin-top:18px;font-size:12px}
+  .kou .vs div{width:45%}
+  .kou .r{color:#fff}.kou .w{color:#d0021b}
+  .kou .sc{font-size:40px;line-height:1}
+  .kou .bv{margin-top:auto;background:#111;color:#fff;font-size:20px;padding:6px;border-radius:4px}
+
+  /* 17 omikuji */
+  .omi{background:#7a0c0c;align-items:center}
+  .omi .slip{background:#fdf8ec;width:120px;flex:1;margin:4px 0;font-family:'Yuji Syuku';color:#111;display:flex;flex-direction:column;align-items:center;padding:10px 4px;border:1px solid #c9a}
+  .omi .slip .kk{writing-mode:vertical-rl;font-size:54px;color:#c00;line-height:1}
+  .omi .slip .hd{font-size:12px;border-bottom:1px solid #111;width:100%;text-align:center;padding-bottom:4px;margin-bottom:8px}
+  .omi .slip .ln{font-size:11px;margin-top:8px;font-family:'Zen Kurenaido';text-align:center}
+
+  /* 18 dekotora / bosozoku */
+  .dek{background:#0a0a0a;color:#fff;font-family:'Dela Gothic One'}
+  .dek .chrome{background:linear-gradient(#fff,#9a9a9a 45%,#3a3a3a 50%,#d9d9d9);-webkit-background-clip:text;color:transparent;font-size:34px;line-height:1;text-align:center}
+  .dek .lights{display:flex;justify-content:space-between;margin:10px 0}
+  .dek .lights i{width:14px;height:14px;border-radius:50%}
+  .dek .pan{border:3px solid #ffd700;padding:8px;text-align:center;background:linear-gradient(#5a0090,#200040)}
+  .dek .pan .k{font-family:'Yuji Syuku';font-size:30px;color:#ffd700}
+  .dek .st{font-size:12px;text-align:center;margin-top:8px;color:#ff4f4f}
+
+  /* 19 visual kei */
+  .vk{background:radial-gradient(circle at 50% 30%,#3a0010,#000 70%);color:#eee;font-family:'Kaisei Decol';text-align:center}
+  .vk .rose{font-size:40px;margin-top:10px;filter:hue-rotate(-20deg)}
+  .vk .t{font-size:30px;color:#c4002f;text-shadow:0 0 12px #c4002f;line-height:1.1;margin-top:10px}
+  .vk .s{font-size:12px;letter-spacing:4px;margin-top:10px;color:#aaa}
+  .vk .cr{margin-top:auto;font-size:11px;color:#888}
+
+  /* 20 karaoke score */
+  .kar{background:linear-gradient(#1a0040,#5a00a0);color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .kar .tt{font-size:12px;background:#ffffff22;padding:4px;border-radius:4px}
+  .kar .sc{font-family:'Rampart One';font-size:56px;color:#ffe600;text-shadow:0 0 14px #ff7a00;margin-top:16px;line-height:1}
+  .kar .sc small{font-size:24px}
+  .kar .rad{display:flex;justify-content:space-around;margin-top:14px;font-size:10px;font-family:'DotGothic16'}
+  .kar .rad div b{display:block;font-size:16px;color:#6af0ff}
+  .kar .cm{margin-top:auto;font-family:'Hachi Maru Pop';font-size:12px;background:#fff;color:#5a00a0;border-radius:14px;padding:6px}
+</style>
+<style>
+  .kept{border:1px solid #fff3;border-radius:12px;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.6}
+  .kept b{color:#1ed760}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .sp{flex:1}
+  .c{text-align:center}
+  .dg{font-family:'Dela Gothic One'}
+  .dot{font-family:'DotGothic16'}
+
+  /* decora */
+  .deco{background:#fff0fa;font-family:'Mochiy Pop One';color:#ff3d9a;background-image:radial-gradient(#ffd1ec 3px,transparent 3px);background-size:18px 18px}
+  .deco .clips{display:flex;flex-wrap:wrap;gap:4px}
+  .deco .clips i{width:22px;height:9px;border-radius:5px;transform:rotate(-20deg)}
+  .deco .big{font-size:30px;line-height:1.05;margin-top:24px;text-shadow:2px 2px 0 #7af0ff,4px 4px 0 #ffe94d}
+  .deco .bub{background:#7af0ff;color:#2a2a8a;border-radius:16px;padding:6px 10px;font-size:12px;margin-top:12px;align-self:flex-start}
+  /* lolita */
+  .loli{background:#1b0d14;color:#f5d7e4;font-family:'Kaisei Decol';text-align:center}
+  .loli .lace{height:16px;margin:-16px -16px 10px;background:radial-gradient(circle at 50% 0,#f5d7e4 7px,transparent 8px) 0 0/16px 16px}
+  .loli .fr{border:2px solid #f5d7e4;border-radius:50% 50% 8px 8px;padding:20px 8px 12px;margin-top:6px}
+  .loli .t{font-size:26px;line-height:1.1}
+  .loli .s{font-size:11px;letter-spacing:3px;margin-top:6px;opacity:.8}
+  /* yankii */
+  .yan{background:#111;color:#fff;font-family:'Yuji Syuku'}
+  .yan .tok{background:#fff;color:#111;writing-mode:vertical-rl;font-size:26px;padding:10px 6px;position:absolute;right:16px;top:16px;bottom:16px;text-align:center}
+  .yan .l{width:120px}
+  .yan .l .dg{font-size:13px;color:#ffd700}
+  .yan .l .n{font-family:'Dela Gothic One';font-size:42px;line-height:1;margin-top:6px}
+  /* purikura */
+  .pri{background:linear-gradient(#ffd6f2,#d7c8ff);align-items:center}
+  .pri .strip{background:#fff;padding:6px;display:grid;grid-template-columns:1fr 1fr;gap:5px;width:160px;box-shadow:0 6px 14px #0003}
+  .pri .strip div{height:72px;border-radius:4px;position:relative;font-family:'Hachi Maru Pop';font-size:10px;color:#fff;display:flex;align-items:flex-end;padding:3px;text-shadow:0 0 3px #f0c}
+  .pri .lb{font-family:'Hachi Maru Pop';color:#d0008a;margin-top:12px;font-size:14px}
+
+  /* city pop */
+  .cp{background:linear-gradient(#ff9a8b,#ff6a88 45%,#3a2b8f);color:#fff;font-family:'Zen Maru Gothic'}
+  .cp .rec{width:150px;height:150px;border-radius:50%;margin:8px auto 0;background:repeating-radial-gradient(#111 0 2px,#222 2px 4px);display:flex;align-items:center;justify-content:center}
+  .cp .rec i{width:50px;height:50px;border-radius:50%;background:#ffd36b}
+  .cp .obi{position:absolute;left:14px;top:12px;bottom:12px;width:26px;background:#fff;color:#c4002f;writing-mode:vertical-rl;font-family:'Noto Serif JP';font-size:13px;display:flex;align-items:center;justify-content:center}
+  .cp .t{margin-left:34px;margin-top:12px}
+  .cp .t .dg{font-size:24px}
+  /* pachinko */
+  .pa{background:radial-gradient(circle at 50% 40%,#ff004c,#5a0030 60%,#000);color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .pa .fever{font-family:'Rampart One';font-size:44px;color:#ffe600;text-shadow:0 0 12px #ff8a00,3px 3px 0 #000;transform:rotate(-6deg)}
+  .pa .reels{display:flex;gap:6px;justify-content:center;margin-top:16px}
+  .pa .reels div{width:46px;height:60px;background:#fff;color:#e6002e;font-size:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 3px #ffd700}
+  .pa .balls{margin-top:14px;font-size:13px}
+  /* tamagotchi */
+  .tam{background:#f7e9ff;align-items:center;justify-content:center}
+  .tam .egg{width:170px;height:210px;border-radius:50% 50% 46% 46%/58% 58% 42% 42%;background:linear-gradient(135deg,#7ad7ff,#c77dff);display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:inset 0 -10px 20px #0002}
+  .tam .scr{width:100px;height:86px;background:#b8c99a;border:5px solid #333;border-radius:6px;font-family:'DotGothic16';font-size:10px;color:#222;padding:4px;box-sizing:border-box;text-align:center;line-height:1.3}
+  .tam .scr b{font-size:24px;display:block}
+  .tam .bt{display:flex;gap:10px;margin-top:10px}.tam .bt i{width:14px;height:14px;border-radius:50%;background:#333}
+  /* radio taiso card */
+  .rt{background:#fffbe6;color:#1d3d8f;font-family:'Zen Maru Gothic'}
+  .rt .hd{background:#1d3d8f;color:#fff;text-align:center;padding:6px;font-weight:900;font-size:13px;border-radius:6px}
+  .rt .g{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:10px}
+  .rt .g i{aspect-ratio:1;border:1px solid #1d3d8f55;border-radius:4px;position:relative}
+  .rt .g i.s:after{content:"♪";position:absolute;inset:2px;border-radius:50%;background:#e8352b;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-style:normal}
+  .rt .ft{margin-top:10px;font-size:12px;text-align:center;font-weight:900}
+
+  /* konbini receipt */
+  .kon{background:#2e8b57;align-items:center}
+  .kon .rc{background:#fff;width:170px;flex:1;font-family:'DotGothic16';font-size:11px;color:#222;padding:10px;line-height:1.5;-webkit-mask:radial-gradient(circle at 6px 100%,#0000 5px,#000 5.5px) -6px 0/12px 100%}
+  .kon .rc .h{text-align:center;font-size:13px;border-bottom:1px dashed #999;padding-bottom:4px}
+  .kon .rc .r{display:flex;justify-content:space-between}
+  .kon .rc .tot{border-top:1px dashed #999;margin-top:4px;padding-top:4px;font-size:14px}
+  /* vending machine */
+  .vm{background:#d8261c;color:#fff;font-family:'Zen Maru Gothic'}
+  .vm .win{background:#e8f4ff;border-radius:6px;padding:6px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .vm .win div{height:62px;border-radius:12px 12px 4px 4px;font-size:9px;color:#fff;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-weight:900}
+  .vm .pr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px}
+  .vm .pr span{background:#111;font-family:'DotGothic16';font-size:10px;text-align:center;color:#ff4040}
+  .vm .lb{margin-top:12px;font-family:'Dela Gothic One';font-size:18px;text-align:center}
+  /* bento */
+  .ben{background:#2b1a10;color:#fff;font-family:'Zen Maru Gothic'}
+  .ben .box{flex:1;margin-top:10px;background:#c0392b;border-radius:10px;padding:8px;display:grid;grid-template-columns:1.2fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:6px}
+  .ben .box div{border-radius:6px;font-size:11px;font-weight:900;padding:4px;color:#222}
+  .ben .box .rice{grid-row:span 3;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:13px}
+  .ben .box .rice i{width:16px;height:16px;border-radius:50%;background:#c4002f;margin-bottom:4px}
+  /* gashapon */
+  .gas{background:linear-gradient(#ffe066,#ff9f1c);align-items:center;font-family:'Mochiy Pop One';color:#5a2a00}
+  .gas .dome{width:150px;height:130px;border-radius:75px 75px 10px 10px;background:#ffffffaa;position:relative;overflow:hidden;border:4px solid #fff}
+  .gas .dome i{position:absolute;width:34px;height:34px;border-radius:50%;background:linear-gradient(#ff5d8f 50%,#fff 50%)}
+  .gas .base{width:150px;height:60px;background:#e63946;border-radius:0 0 10px 10px;display:flex;align-items:center;justify-content:center}
+  .gas .base b{width:30px;height:30px;border-radius:50%;background:#fff;border:4px solid #333}
+  .gas .t{font-size:20px;margin-top:12px;text-align:center;line-height:1.2}
+  /* eki stamp */
+  .eki{background:#f2efe6;color:#1a5fa8;font-family:'Zen Maru Gothic'}
+  .eki .stp{border:3px solid currentColor;border-radius:50%;width:96px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:900;transform:rotate(-8deg);opacity:.85;text-align:center}
+  .eki .stp b{font-family:'Shippori Mincho';font-size:18px}
+  .eki .row{display:flex;justify-content:space-around;margin-top:8px}
+  .eki .ft{margin-top:auto;font-family:'Dela Gothic One';font-size:20px;color:#222;text-align:center}
+
+  /* ukiyo-e */
+  .uki{background:#f1e4c3;color:#1b2a4a;font-family:'Shippori Mincho'}
+  .uki .wave{height:150px;margin:6px -16px 0;background:radial-gradient(circle at 30% 100%,transparent 50px,#1b3b6f 51px,#1b3b6f 60px,transparent 61px),radial-gradient(circle at 70% 100%,transparent 36px,#2c5a9a 37px,#2c5a9a 46px,transparent 47px),linear-gradient(transparent 70%,#1b3b6f 70%)}
+  .uki .cart{position:absolute;top:16px;right:16px;writing-mode:vertical-rl;background:#f8f2e2;border:1px solid #1b2a4a;padding:6px 3px;font-size:14px}
+  .uki .t{font-size:22px;margin-top:10px}
+  .uki .hk{position:absolute;bottom:16px;right:16px;background:#c4002f;color:#fff;font-size:11px;padding:4px;writing-mode:vertical-rl}
+  /* kintsugi */
+  .kin{background:#141414;color:#e8d08a;font-family:'Shippori Mincho';align-items:center;text-align:center}
+  .kin .bowl{width:150px;height:90px;border-radius:0 0 75px 75px;background:#2b2b2b;margin-top:16px;position:relative;overflow:hidden}
+  .kin .bowl:after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 46%,#e8c45a 47%,#ffe9a0 48%,transparent 49%),linear-gradient(60deg,transparent 60%,#e8c45a 61%,transparent 62%)}
+  .kin .t{font-size:20px;margin-top:18px;line-height:1.3}
+  .kin .s{font-size:11px;margin-top:10px;color:#aaa}
+  /* ema */
+  .ema{background:#3a2a1a;align-items:center}
+  .ema .plq{width:170px;height:130px;margin-top:40px;background:#e3c08a;clip-path:polygon(50% 0,100% 30%,100% 100%,0 100%,0 30%);padding:42px 12px 10px;box-sizing:border-box;font-family:'Zen Kurenaido';color:#222;font-size:13px;text-align:center}
+  .ema .t{color:#e3c08a;font-family:'Yuji Syuku';font-size:22px;margin-top:20px}
+  /* kanji of the year */
+  .kj{background:#f5f0e6;color:#111;font-family:'Yuji Syuku';align-items:center;text-align:center}
+  .kj .hd{font-size:14px}
+  .kj .big{font-size:150px;line-height:1.1;margin-top:6px}
+  .kj .s{font-family:'Zen Maru Gothic';font-size:11px;font-weight:900}
+  .kj .hk{width:34px;height:34px;background:#c4002f;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:10px}
+  /* nengajo */
+  .nen{background:#fff;color:#c4002f;font-family:'Yuji Syuku';border:6px double #c4002f}
+  .nen .t{writing-mode:vertical-rl;font-size:38px;position:absolute;right:20px;top:20px}
+  .nen .ho{position:absolute;left:18px;bottom:20px;font-family:'Zen Maru Gothic';font-size:12px;color:#222;line-height:1.6}
+  .nen .ho b{font-size:16px;color:#c4002f}
+  .nen .sun{position:absolute;left:30px;top:40px;width:70px;height:70px;border-radius:50%;background:#c4002f}
+  /* matsuri */
+  .mat{background:linear-gradient(#0d1b3d,#2a1650);color:#fff;font-family:'Dela Gothic One'}
+  .mat .ch{display:flex;justify-content:space-between;margin:0 -6px}
+  .mat .ch i{width:26px;height:36px;border-radius:12px;background:#ff3b2f;box-shadow:0 0 14px #ff8a00;position:relative}
+  .mat .stalls{display:flex;gap:4px;margin-top:auto}
+  .mat .stalls div{flex:1;background:repeating-linear-gradient(90deg,#e8352b 0 8px,#fff 8px 16px);height:24px;border-radius:4px 4px 0 0}
+  .mat .t{font-size:24px;text-align:center;margin-top:30px;line-height:1.2}
+  .mat .s{font-family:'Zen Maru Gothic';font-size:12px;text-align:center;margin-top:6px}
+
+  /* variety telop */
+  .tel{background:#3b5ba5;color:#fff;font-family:'Dela Gothic One';justify-content:center}
+  .tel .cap{font-size:26px;line-height:1.15;-webkit-text-stroke:5px #000;paint-order:stroke fill;color:#ffe600;transform:rotate(-2deg)}
+  .tel .cap2{font-size:18px;-webkit-text-stroke:4px #d0006f;paint-order:stroke fill;color:#fff;margin-top:12px}
+  .tel .wipe{position:absolute;right:12px;bottom:12px;width:70px;height:54px;background:#ffd1a8;border:3px solid #fff;font-family:'Zen Maru Gothic';font-size:10px;color:#222;display:flex;align-items:flex-end;justify-content:center}
+  /* sentai */
+  .sen{background:#111;color:#fff;font-family:'Dela Gothic One';text-align:center}
+  .sen .team{display:flex;gap:4px;justify-content:center;margin-top:20px}
+  .sen .team div{width:34px;height:120px;border-radius:16px 16px 4px 4px;position:relative;font-size:8px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
+  .sen .team div:before{content:"";position:absolute;top:10px;left:7px;right:7px;height:10px;background:#111;border-radius:4px}
+  .sen .t{font-size:22px;margin-top:20px;line-height:1.1}
+  .sen .boom{margin-top:auto;font-size:12px;color:#ffe600}
+  /* maid cafe */
+  .maid{background:#fff4f8;color:#b0005a;font-family:'Hachi Maru Pop';align-items:center;text-align:center}
+  .maid .plate{width:170px;height:170px;border-radius:50%;background:#fff;box-shadow:0 6px 18px #0002;display:flex;align-items:center;justify-content:center;margin-top:10px}
+  .maid .om{width:130px;height:84px;border-radius:50%;background:#ffd34d;display:flex;align-items:center;justify-content:center;color:#d0021b;font-size:15px;line-height:1.1}
+  .maid .t{margin-top:14px;font-size:13px}
+  /* fighting VS */
+  .vs{background:linear-gradient(105deg,#0047ff 50%,#ff1a1a 50%);color:#fff;font-family:'Dela Gothic One'}
+  .vs .a,.vs .b{font-size:20px;line-height:1.05}
+  .vs .b{text-align:right;margin-top:auto}
+  .vs .x{font-family:'Rampart One';font-size:70px;text-align:center;color:#ffe600;text-shadow:4px 4px 0 #000;transform:skew(-10deg)}
+  .vs .bar{height:10px;background:#ffe600;border:2px solid #000;margin-top:4px}
+  /* hanafuda */
+  .hana{background:#0d0d0d;color:#fff;font-family:'Yuji Syuku'}
+  .hana .cards{display:flex;gap:6px;justify-content:center;margin-top:10px}
+  .hana .cards div{width:54px;height:86px;background:#f6efe0;border:3px solid #c4002f;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .hana .t{font-size:24px;text-align:center;margin-top:18px}
+  .hana .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center;margin-top:6px;opacity:.8}
+</style>
+<style>
+  .kept{border:1px solid #fff3;border-radius:12px;padding:12px 16px;margin:14px 0;font-size:13px;line-height:1.6}
+  .kept b{color:#1ed760}
+  .grp{margin:30px 0 6px;font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.6}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:22px}
+  .it{cursor:pointer}
+  .it.selected .ph{outline:4px solid #1ed760;outline-offset:3px}
+  .ph{width:210px;height:373px;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.35);padding:16px;box-sizing:border-box;display:flex;flex-direction:column}
+  .it h4{margin:10px 0 3px;font-size:14px}
+  .it p{margin:0;font-size:12px;opacity:.78;line-height:1.45}
+  .it p b{color:#1ed760}
+  .sp{flex:1}.c{text-align:center;align-items:center}
+  .dg{font-family:'Dela Gothic One'}.dot{font-family:'DotGothic16'}.yu{font-family:'Yuji Syuku'}.mi{font-family:'Shippori Mincho'}.zm{font-family:'Zen Maru Gothic'}
+
+  /* samurai scroll */
+  .sam{background:#e9dcc0;color:#111}
+  .sam .rod{height:12px;background:linear-gradient(#5a2e0e,#2a1404);margin:-16px -16px 10px;border-radius:0 0 6px 6px}
+  .sam .ko{display:flex;flex-direction:row-reverse;gap:10px;flex:1;justify-content:center}
+  .sam .ko div{writing-mode:vertical-rl;font-size:30px}
+  .sam .ft{font-size:11px;text-align:center}
+  .sam .hk{position:absolute;left:18px;bottom:40px;width:30px;height:30px;background:#b5121b;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+  /* ninja */
+  .nin{background:radial-gradient(circle at 70% 25%,#f4f0dc 0 34px,transparent 35px),linear-gradient(#0e1424,#05070d);color:#fff}
+  .nin .shu{font-size:40px;transform:rotate(20deg);margin-top:90px;color:#c8ccd6}
+  .nin .t{font-size:20px;line-height:1.15;margin-top:10px}
+  .nin .s{font-size:11px;opacity:.75;margin-top:6px}
+  .nin .roof{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(170deg,transparent 40%,#000 41%)}
+  /* kaiju */
+  .kai{background:linear-gradient(#ff5a1f,#3a0a00 70%);color:#fff;font-family:'Dela Gothic One'}
+  .kai .city{position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(90deg,#111 0 20px,transparent 20px 26px,#111 26px 60px,transparent 60px 66px,#111 66px 90px,transparent 90px 98px,#111 98px 140px,transparent 140px 146px,#111 146px);clip-path:polygon(0 30%,10% 30%,10% 10%,25% 10%,25% 40%,40% 40%,40% 0,55% 0,55% 35%,70% 35%,70% 15%,85% 15%,85% 45%,100% 45%,100% 100%,0 100%)}
+  .kai .mon{position:absolute;right:-10px;bottom:60px;width:110px;height:180px;background:#1f3a1a;border-radius:50% 50% 20% 20%;clip-path:polygon(30% 0,45% 10%,55% 2%,65% 14%,80% 8%,100% 100%,0 100%)}
+  .kai .t{font-size:24px;line-height:1.05;position:relative;z-index:2}
+  .kai .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:6px;position:relative;z-index:2;width:120px}
+  /* mecha HUD */
+  .mec{background:#001a12;color:#3dff9a;font-family:'DotGothic16';font-size:11px}
+  .mec .ring{width:150px;height:150px;border:2px solid #3dff9a;border-radius:50%;margin:16px auto;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:0 0 12px #3dff9a55}
+  .mec .ring:before{content:"";position:absolute;inset:14px;border:1px dashed #3dff9a88;border-radius:50%}
+  .mec .ring b{font-family:'Dela Gothic One';font-size:30px;color:#fff}
+  .mec .ln{display:flex;justify-content:space-between;border-bottom:1px solid #3dff9a44;padding:2px 0}
+  .mec .warn{background:#ff2b2b;color:#fff;text-align:center;margin-top:8px;padding:2px}
+  /* kabuki */
+  .kab{background:#f7f2e8;color:#111}
+  .kab .face{width:150px;height:180px;margin:6px auto 0;background:#fff;border-radius:46% 46% 50% 50%;position:relative;box-shadow:0 0 0 2px #ddd}
+  .kab .face i{position:absolute;background:#d0021b;border-radius:50%}
+  .kab .t{font-size:26px;text-align:center;margin-top:12px}
+  .kab .s{text-align:center;font-size:11px}
+  .kab .curt{position:absolute;inset:0 0 auto 0;height:14px;background:repeating-linear-gradient(90deg,#111 0 24px,#c47a1b 24px 48px,#2e6b3a 48px 72px)}
+  /* daruma */
+  .dar{background:#fff3e6;align-items:center}
+  .dar .body{width:150px;height:170px;background:radial-gradient(circle at 50% 38%,#fff 0 46px,transparent 47px),#d0021b;border-radius:50% 50% 46% 46%;position:relative;margin-top:14px}
+  .dar .eye{position:absolute;top:48px;width:22px;height:22px;border-radius:50%;border:3px solid #111;background:#fff}
+  .dar .eye.f{background:#111}
+  .dar .t{font-family:'Yuji Syuku';font-size:22px;margin-top:14px;color:#d0021b}
+  .dar .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center;color:#333}
+
+  /* fuji postcard */
+  .fuji{background:linear-gradient(#7ec8ff,#ffd6e8);color:#fff}
+  .fuji .mt{position:absolute;left:-10px;right:-10px;bottom:70px;height:150px;background:linear-gradient(#fff 0 26%,#3a5a9a 27%);clip-path:polygon(50% 0,62% 18%,100% 100%,0 100%,38% 18%)}
+  .fuji .gr{position:absolute;left:0;right:0;bottom:0;height:72px;background:#3a5a9a}
+  .fuji .sak{position:absolute;font-size:18px}
+  .fuji .t{font-family:'Dela Gothic One';font-size:20px;position:relative;text-shadow:0 2px 6px #0005}
+  .fuji .bt{position:absolute;bottom:16px;left:16px;right:16px;font-family:'Zen Maru Gothic';font-size:12px;font-weight:900}
+  /* torii tunnel */
+  .tor{background:#1a0a04;color:#fff;align-items:center;justify-content:flex-end}
+  .tor .g{position:absolute;left:50%;transform:translateX(-50%);border:10px solid #e8461c;border-bottom:none;border-top-width:14px}
+  .tor .t{position:relative;font-family:'Dela Gothic One';font-size:24px;text-align:center;text-shadow:0 2px 8px #000}
+  .tor .s{position:relative;font-family:'Zen Maru Gothic';font-size:12px;text-align:center}
+  /* zen garden */
+  .zen{background:repeating-radial-gradient(circle at 70% 60%,#e8e2d2 0 6px,#d7cfbb 6px 8px),#e8e2d2;color:#333}
+  .zen .rock{position:absolute;right:46px;top:186px;width:56px;height:40px;background:#5b5b55;border-radius:50% 50% 40% 40%}
+  .zen .t{font-family:'Shippori Mincho';font-size:22px;background:#e8e2d2;padding:4px;align-self:flex-start}
+  .zen .s{font-family:'Zen Maru Gothic';font-size:12px;background:#e8e2d2;padding:4px;margin-top:auto;align-self:flex-start}
+  /* maiko kyoto */
+  .mai{background:#2a0e1a;color:#ffd6e0;font-family:'Shippori Mincho';align-items:center;text-align:center}
+  .mai .um{width:170px;height:85px;border-radius:85px 85px 0 0;background:repeating-conic-gradient(from -90deg at 50% 100%,#d6224a 0 15deg,#f7c3d0 15deg 30deg);margin-top:16px}
+  .mai .h{width:2px;height:60px;background:#a07040}
+  .mai .t{font-size:22px;margin-top:10px}
+  .mai .s{font-size:11px;font-family:'Zen Maru Gothic';margin-top:6px}
+  /* maneki neko */
+  .neko{background:#ffe9b8;align-items:center;color:#5a2a00}
+  .neko .cat{width:130px;height:170px;background:#fff;border-radius:60px 60px 30px 30px;position:relative;margin-top:14px;box-shadow:0 6px 14px #0002}
+  .neko .paw{position:absolute;right:-14px;top:30px;width:34px;height:60px;background:#fff;border-radius:16px;box-shadow:0 2px 6px #0002}
+  .neko .coin{position:absolute;left:30px;bottom:24px;width:70px;height:46px;background:linear-gradient(#ffd75a,#c99500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One';font-size:18px}
+  .neko .bell{position:absolute;left:55px;top:66px;width:20px;height:20px;border-radius:50%;background:#ffc400;border:2px solid #d0021b}
+  .neko .t{font-family:'Mochiy Pop One';font-size:15px;margin-top:12px;text-align:center}
+  /* cranes */
+  .cra{background:#f6f3ec;color:#222;font-family:'Zen Maru Gothic'}
+  .cra .str{display:flex;justify-content:space-around;flex:1;margin-top:6px}
+  .cra .str div{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .cra .str i{width:16px;height:12px;clip-path:polygon(0 50%,50% 0,100% 50%,50% 70%)}
+  .cra .t{font-family:'Dela Gothic One';font-size:22px;text-align:center}
+  .cra .s{font-size:11px;text-align:center}
+
+  /* kaiten sushi */
+  .sus{background:#f3e3c7;color:#2a1a0a;font-family:'Zen Maru Gothic'}
+  .sus .belt{margin:10px -16px 0;background:#9aa0a6;padding:8px 6px;display:flex;gap:6px;overflow:hidden}
+  .sus .pl{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#222;text-align:center;box-shadow:inset 0 0 0 4px #fff8}
+  .sus .stack{display:flex;flex-direction:column-reverse;align-items:center;margin-top:auto}
+  .sus .stack i{width:90px;height:10px;border-radius:50%;margin-top:-3px;border:1px solid #0003}
+  .sus .t{font-family:'Dela Gothic One';font-size:20px;text-align:center;margin-top:10px}
+  /* ramen */
+  .ram{background:#1c0f08;color:#ffe2b0;align-items:center;text-align:center}
+  .ram .bowl{width:170px;height:100px;background:#b5121b;border-radius:0 0 85px 85px;margin-top:70px;position:relative}
+  .ram .bowl:before{content:"";position:absolute;left:0;right:0;top:-10px;height:22px;border-radius:50%;background:#e8b56a}
+  .ram .steam{position:absolute;top:24px;left:50%;transform:translateX(-50%);font-size:28px;opacity:.6;letter-spacing:6px}
+  .ram .t{font-family:'Dela Gothic One';font-size:22px;margin-top:20px}
+  .ram .s{font-family:'Zen Maru Gothic';font-size:12px}
+  /* izakaya */
+  .iza{background:#2b1408;color:#fff}
+  .iza .noren{display:flex;gap:3px;margin:-16px -16px 0}
+  .iza .noren div{flex:1;height:70px;background:#1d3a6e;color:#fff;font-family:'Yuji Syuku';font-size:20px;display:flex;align-items:center;justify-content:center}
+  .iza .lan{width:56px;height:76px;border-radius:24px;background:#e8461c;margin:16px auto 0;box-shadow:0 0 20px #ff8a00;font-family:'Yuji Syuku';writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .iza .t{font-family:'Dela Gothic One';font-size:20px;text-align:center;margin-top:14px}
+  .iza .s{font-family:'Zen Maru Gothic';font-size:12px;text-align:center}
+  /* tea ceremony */
+  .tea{background:#3f4a2a;color:#eef0dc;align-items:center;text-align:center}
+  .tea .cup{width:110px;height:70px;background:#2b2b2b;border-radius:0 0 50px 50px;margin-top:80px;position:relative}
+  .tea .cup:before{content:"";position:absolute;left:4px;right:4px;top:-8px;height:18px;border-radius:50%;background:#7fae3a}
+  .tea .t{font-family:'Shippori Mincho';font-size:26px;margin-top:24px}
+  .tea .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:6px}
+
+  /* shibuya scramble */
+  .scr{background:#222;color:#fff}
+  .scr .x{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 14px,#ffffff22 14px 20px),repeating-linear-gradient(-45deg,transparent 0 14px,#ffffff22 14px 20px)}
+  .scr .ppl{position:absolute;inset:0;background-image:radial-gradient(#ffd23f 2px,transparent 2.5px),radial-gradient(#ff5d8f 2px,transparent 2.5px),radial-gradient(#5dc8ff 2px,transparent 2.5px);background-size:23px 19px,31px 27px,17px 29px}
+  .scr .bb{position:relative;background:#000c;padding:8px;border:2px solid #ffd23f;margin-top:auto}
+  .scr .bb .dg{font-size:22px;color:#ffd23f}
+  .scr .bb div{font-family:'Zen Maru Gothic';font-size:12px}
+  /* shinkansen */
+  .shk{background:linear-gradient(#cfe8ff,#fff);color:#0b3d91}
+  .shk .nose{position:absolute;left:-40px;right:-10px;top:150px;height:70px;background:#fff;border-radius:120px 0 0 30px;box-shadow:0 6px 14px #0002;border-bottom:8px solid #0b3d91}
+  .shk .win{position:absolute;left:30px;top:162px;width:60px;height:18px;background:#123;border-radius:20px 4px 4px 4px}
+  .shk .t{font-family:'Dela Gothic One';font-size:22px;line-height:1.1}
+  .shk .s{font-family:'Zen Maru Gothic';font-size:12px;margin-top:auto}
+  .shk .sp2{font-family:'DotGothic16';font-size:28px;margin-top:auto}
+  /* salaryman */
+  .sal{background:#e9eef2;color:#1b2a3a;font-family:'Zen Maru Gothic'}
+  .sal .card{background:#fff;border:1px solid #ccd;padding:12px;margin-top:10px;box-shadow:0 4px 10px #0001}
+  .sal .card .n{font-family:'Shippori Mincho';font-size:22px}
+  .sal .card .r{font-size:11px;opacity:.7}
+  .sal .bar{display:flex;align-items:flex-end;gap:3px;height:80px;margin-top:14px}
+  .sal .bar i{flex:1;background:#1b2a3a}
+  .sal .t{font-family:'Dela Gothic One';font-size:18px;margin-top:8px}
+  /* capsule hotel */
+  .cap{background:#0d0d10;color:#fff;font-family:'DotGothic16'}
+  .cap .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+  .cap .grid div{border-radius:30px 30px 6px 6px;background:#1c1c24;border:2px solid #2c2c3a;display:flex;align-items:center;justify-content:center;font-size:10px;color:#666}
+  .cap .grid div.on{background:radial-gradient(#ffe7a8,#c98a2a);color:#222;font-size:12px}
+  .cap .t{font-family:'Dela Gothic One';font-size:18px;margin-top:10px;text-align:center}
+  /* tech toilet */
+  .toi{background:#f2f4f7;color:#1b2a3a;font-family:'Zen Maru Gothic'}
+  .toi .pan{background:#fff;border-radius:16px;padding:10px;box-shadow:0 4px 12px #0002;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .toi .pan div{border-radius:10px;background:#e7edf5;font-size:10px;font-weight:900;text-align:center;padding:8px 2px}
+  .toi .pan div b{display:block;font-size:16px;color:#2a7de1}
+  .toi .pan .stop{background:#ff5a5a;color:#fff;grid-column:span 2}
+  .toi .t{font-family:'Dela Gothic One';font-size:18px;margin-top:auto;text-align:center}
+  /* yuru-chara */
+  .yur{background:#bdf0c8;align-items:center;color:#1a5a2a}
+  .yur .m{width:150px;height:170px;background:#ffd23f;border-radius:50% 50% 44% 44%;margin-top:10px;position:relative;box-shadow:inset 0 -12px 0 #e8b21f}
+  .yur .m:before,.yur .m:after{content:"";position:absolute;top:60px;width:16px;height:16px;border-radius:50%;background:#222}
+  .yur .m:before{left:40px}.yur .m:after{right:40px}
+  .yur .m i{position:absolute;top:84px;left:50%;transform:translateX(-50%);width:30px;height:12px;border-radius:0 0 20px 20px;background:#d0021b}
+  .yur .m b{position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-size:34px}
+  .yur .t{font-family:'Mochiy Pop One';font-size:18px;margin-top:12px}
+  .yur .s{font-family:'Zen Maru Gothic';font-size:11px;text-align:center}
+  /* haiku */
+  .hai{background:#faf7ef;color:#222;font-family:'Shippori Mincho'}
+  .hai .lines{display:flex;flex-direction:row-reverse;gap:14px;justify-content:center;flex:1;margin-top:10px}
+  .hai .lines div{writing-mode:vertical-rl;font-size:18px}
+  .hai .en{font-family:'Zen Kurenaido';font-size:12px;text-align:center;line-height:1.5}
+  /* taiko */
+  .tai{background:radial-gradient(circle at 50% 50%,#3a0d00,#0a0300);color:#fff;align-items:center;text-align:center}
+  .tai .drum{width:160px;height:160px;border-radius:50%;background:radial-gradient(#f0dfbf 0 58%,#2b1a0a 59% 64%,#9a4a1a 65%);margin-top:30px;display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One';font-size:40px;color:#b5121b;box-shadow:0 0 30px #ff6a0055}
+  .tai .t{font-family:'Reggae One';font-size:34px;color:#ffd23f;margin-top:12px}
+  .tai .s{font-family:'Zen Maru Gothic';font-size:12px}
+</style>
+<style>
+  .flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:26px 22px;margin-top:20px}
+  .step{position:relative}
+  .step .no{font-family:'Dela Gothic One';font-size:13px;letter-spacing:2px;color:#1ed760;margin-bottom:6px}
+  .step .no span{opacity:.6;color:#eee;font-family:system-ui;letter-spacing:0;margin-left:6px}
+  .step .it{cursor:default}
+  .arc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0;font-size:12px}
+  .arc span{border:1px solid #fff3;border-radius:20px;padding:3px 10px}
+  .voice{border:2px dashed #ff4fb0;border-radius:12px;padding:10px 14px;margin-top:14px;font-size:13px}
+</style>
+<h2>The main story: 13 slides, in order</h2>
+<p class="subtitle">How the story flows. The stats are placeholders; the real ones come from your data. Click any slide you want to swap out.</p>
+<div class="arc"><span>① Warm-up 1–2</span><span>② Genres 3–4</span><span>③ Artists 5–6</span><span>④ Songs 7–8</span><span>⑤ Your year's shape 9–11</span><span>⑥ Personality + share 12–13</span></div>
+<div class="voice">📱 <b>Narrator on every slide:</b> keitai gyaru-moji captions, e.g. "ぁたしの No.1ゎ…" style garbled text running across the top and bottom.</div>
+<div class="flow">
+<div class="step"><div class="no">01<span>Opening: pick your year's station, the train departs</span></div>  <div class="it" data-choice="train" onclick="toggleSelect(this)"><div class="ph trn"><div class="led">普通 <span>2025</span> 行 · 定刻<br>次は 2026 ▶ 発車</div><div class="sign"><div class="jp">二〇二五</div><div class="en">2025</div><div class="bar"><span>◀ 2024</span><span>2026 ▶</span></div></div><div class="nx"><span>14,221 min</span><span>327 artists</span></div><div class="sp"></div><div style="font-size:11px;text-align:center">♪ 発車メロディー: your #1 song</div></div><h4>Train / densha</h4><p>Station signs, the orange LED departure board, line colors, and departure jingles. <b>→ The year picker: each year is a station</b></p></div></div>
+<div class="step"><div class="no">02<span>Days listened + total minutes</span></div>  <div class="it" data-choice="torii" onclick="toggleSelect(this)"><div class="ph tor"><div class="g" style="top:30px;width:190px;height:330px"></div><div class="g" style="top:70px;width:150px;height:270px;opacity:.85"></div><div class="g" style="top:105px;width:115px;height:215px;opacity:.7"></div><div class="g" style="top:135px;width:85px;height:165px;opacity:.55"></div><div class="t">千本鳥居</div><div class="s">1,000 gates = 1,000 days you listened</div></div><h4>Torii gate tunnel</h4><p>Endless vermilion gates, like Fushimi Inari in Kyoto. <b>→ Total days you listened, walked through gate by gate</b></p></div></div>
+<div class="step"><div class="no">03<span>Genre breakdown</span></div>  <div class="it" data-choice="bento" onclick="toggleSelect(this)"><div class="ph ben"><div class="dg" style="font-size:18px">あなたの音楽弁当</div><div class="box"><div class="rice"><i></i>RAP 42%</div><div style="background:#f6c35a">R&amp;B 23%</div><div style="background:#7bd67b">POP 15%</div><div style="background:#ff9aa8">OTHER 20%</div></div></div><h4>Bento box</h4><p>Your genre mix packed into bento compartments, with an umeboshi on the rice. <b>→ Genre breakdown</b></p></div></div>
+<div class="step"><div class="no">04<span>Your top genre, loud</span></div>  <div class="it" data-choice="ganguro" onclick="toggleSelect(this)"><div class="ph gan"><div class="hair"></div><div class="z t">ガングロ ✦ 渋谷センター街</div><div class="sp"></div><div class="z eye"><i></i><i></i></div><div class="z big">TOP GENRE<br>パラパラ<br>HIP-HOP</div><div class="z lips"></div></div><h4>Ganguro / Yamanba (reverse gyaru)</h4><p>Deep tan, white eye stripes, rainbow hair: the rebellion against pale-skin beauty norms. <b>→ Top genre slide</b></p></div></div>
+<div class="step"><div class="no">05<span>Top 5 artists ranked</span></div>  <div class="it" data-choice="sumo" onclick="toggleSelect(this)"><div class="ph sumo"><div class="hd">令和七年 番付</div><div class="cols"><div class="y">横綱 健土陸</div><div>大関 SZA</div><div>関脇 Drake</div><div>小結 Tyler</div><div>前頭 Doja</div><div>前頭 Frank</div></div><div class="ft">your artist banzuke</div></div><h4>Sumo banzuke</h4><p>The vertical calligraphy ranking sheet. Your #1 is Yokozuna (grand champion). <b>→ Top artists, ranked like sumo wrestlers</b></p></div></div>
+<div class="step"><div class="no">06<span>#1 artist and how devoted you were</span></div>  <div class="it" data-choice="idol" onclick="toggleSelect(this)"><div class="ph idol"><div style="text-align:center;font-size:13px">♡ 今年の推し ♡</div><div class="ch"><div class="pic"></div><div class="sig">SZA ♡ ありがと!</div></div><div class="oshi">推し活 312回</div><div class="pen"><i style="background:#ff4fb0;color:#ff4fb0"></i><i style="background:#ffe600;color:#ffe600"></i><i style="background:#3cf6ff;color:#3cf6ff"></i><i style="background:#7a5cff;color:#7a5cff"></i><i style="background:#58ff7a;color:#58ff7a"></i></div></div><h4>Idol / oshi-katsu</h4><p>Cheki polaroids, penlight colors and "oshi" (your fave) devotion. (Was this your "attracting"?) <b>→ Your most-replayed artist</b></p></div></div>
+<div class="step"><div class="no">07<span>Top 5 songs with play counts</span></div>  <div class="it" data-choice="konbini" onclick="toggleSelect(this)"><div class="ph kon"><div class="rc"><div class="h">♪ YOUR YEAR MART ♪<br>2025/12/31 23:59</div><div class="r"><span>HUMBLE.</span><span>×247</span></div><div class="r"><span>Kill Bill</span><span>×198</span></div><div class="r"><span>Nights</span><span>×176</span></div><div class="r"><span>DtMF</span><span>×151</span></div><div class="r"><span>ポイント</span><span>14221P</span></div><div class="tot r"><span>合計</span><span>14,221分</span></div><div style="text-align:center;margin-top:6px">またのご来店を<br>||||| ||| |||| ||</div></div></div><h4>Konbini receipt</h4><p>A thermal convenience-store receipt for your year. Very screenshot-able. <b>→ Top songs with play counts</b></p></div></div>
+<div class="step"><div class="no">08<span>#1 song SSR reveal</span></div>  <div class="it" data-choice="gacha" onclick="toggleSelect(this)"><div class="ph gac"><div class="card"><div><div class="ssr">SSR</div>HUMBLE.<div class="st">★★★★★</div></div></div><div class="lb">✦ 確定演出 ✦</div></div><h4>Gacha pull</h4><p>The rainbow "guaranteed SSR" reveal from mobile gacha games. Peak suspense. <b>→ Your #1 song reveal</b></p></div></div>
+<div class="step"><div class="no">09<span>What you played each season</span></div>  <div class="it" data-choice="weather" onclick="toggleSelect(this)"><div class="ph wx"><span class="bar">♪ 音楽天気予報</span><div class="map"><div class="isl" style="width:40px;height:30px;top:6px;right:26px"></div><div class="isl" style="width:70px;height:36px;top:40px;right:52px;transform:rotate(-30deg)"></div><div class="isl" style="width:40px;height:26px;top:82px;left:40px"></div><div class="ic" style="top:0;right:60px">☀</div><div class="ic" style="top:50px;left:30px">🌸</div><div class="ic" style="top:84px;right:40px">⛈</div></div><div class="fc"><div>春<b>☀</b>Pop</div><div>夏<b>🔥</b>Rap</div><div>秋<b>🍁</b>R&amp;B</div><div>冬<b>❄</b>Lo-fi</div></div></div><h4>TV weather / sakura forecast</h4><p>The weather-map broadcast and the cherry-blossom front forecast. <b>→ Seasonal mood: what you played each season</b></p></div></div>
+<div class="step"><div class="no">10<span>Your peak week</span></div>  <div class="it" data-choice="fuji" onclick="toggleSelect(this)"><div class="ph fuji"><div class="t">PEAK<br>LISTENING</div><div class="mt"></div><div class="gr"></div><div class="sak" style="top:30px;right:20px">🌸</div><div class="sak" style="top:70px;right:60px">🌸</div><div class="bt">頂上 · your all-time peak week: Mar 10–16, 1,204 min</div></div><h4>Mt. Fuji postcard</h4><p>Snowcapped Fuji with cherry blossoms, the classic tourist postcard. <b>→ Your peak week</b></p></div></div>
+<div class="step"><div class="no">11<span>Fastest-rising artist</span></div>  <div class="it" data-choice="shinkansen" onclick="toggleSelect(this)"><div class="ph shk"><div class="t">FASTEST<br>RISING</div><div class="nose"></div><div class="win"></div><div class="sp2">320 km/h</div><div class="s">Doechii: 0 → top 5 in 6 weeks</div></div><h4>Shinkansen bullet train</h4><p>The bullet train's nose and its sheer speed. <b>→ Your fastest-rising artist</b></p></div></div>
+<div class="step"><div class="no">12<span>Personality + next-year fortune</span></div>  <div class="it" data-choice="omikuji" onclick="toggleSelect(this)"><div class="ph omi"><div class="slip"><div class="hd">音楽みくじ 第十七番</div><div class="kk">大吉</div><div class="ln">新しい出会いあり<br>失せ物: 昔の推し曲<br>待人: 来年来る</div></div></div><h4>Omikuji fortune slip</h4><p>The shrine fortune slip you draw: 大吉 (great luck) down to 凶 (bad luck). <b>→ Your listening personality, and a 2026 prediction</b></p></div></div>
+<div class="step"><div class="no">13<span>Final share card</span></div>  <div class="it" data-choice="kanji" onclick="toggleSelect(this)"><div class="ph kj"><div class="hd">今年の漢字 · 2025</div><div class="big">熱</div><div class="s">HEAT: 42% hype tracks, peak summer</div><div class="hk">印</div></div><h4>Kanji of the Year</h4><p>Japan announces one kanji each December, brushed at Kiyomizu-dera. <b>→ Your year in one kanji</b></p></div></div>
+</div>
+
+</body></html>
