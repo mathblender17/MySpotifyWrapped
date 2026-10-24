@@ -52,7 +52,30 @@ Round 2, picked 2026-10-24:
 | Yankii / Sukeban | Obscurity score |
 | Purikura photo strip | #1 song per season |
 
-Round 3: not picked yet.
+Round 3, picked 2026-10-24:
+
+| Subculture | Stat it carries |
+|---|---|
+| Samurai scroll | Most-devoted song |
+| Kaiju attack | The song that took over your year |
+| Mecha cockpit HUD | Sync rate with #1 artist |
+| Daruma doll | Milestones (e.g. the day you hit 10k minutes) |
+| Mt. Fuji postcard | Peak week |
+| Torii gate tunnel | Total days listened |
+| Zen rock garden | Calmest listening moments |
+| Kyoto maiko / geisha | Albums played front to back |
+| Maneki-neko | Lucky discovery that became a top song |
+| Senbazuru (1,000 cranes) | Liked-songs milestone |
+| Izakaya | Friday-night / weekend sound |
+| Kaiten conveyor sushi | Heavy-rotation songs and total tracks |
+| Shibuya scramble | How common or rare your taste is |
+| Shinkansen | Fastest-rising artist |
+| Capsule hotel | Sleep / late-night listening |
+| Salaryman commute | Commute listening |
+| Haiku | Your year as a 5-7-5 verse |
+| Taiko drums | Average tempo / energy |
+
+**Total picked: 45 subcultures** (13 + 14 + 18).
 
 ## Data caveats (to settle in the spec)
 
