@@ -1,0 +1,87 @@
+:root {
+  --pink: #ff2d95;
+  --ink: #fff;
+  --bg: #0b0b10;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Zen Maru Gothic', system-ui, sans-serif;
+}
+
+.landing {
+  min-height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background:
+    radial-gradient(circle at 85% 10%, #ff2d9555, transparent 40%),
+    repeating-linear-gradient(100deg, transparent 0 22px, #7cf7ff10 22px 23px);
+}
+
+.kicker {
+  margin: 0;
+  font-family: 'DotGothic16', monospace;
+  color: var(--pink);
+  letter-spacing: 2px;
+}
+
+.landing h1 {
+  margin: 0;
+  font-family: 'Dela Gothic One', sans-serif;
+  font-weight: 400;
+  font-size: clamp(32px, 9vw, 48px);
+  line-height: 1.05;
+}
+
+.demo {
+  align-self: flex-start;
+  font: 400 18px 'Dela Gothic One', sans-serif;
+  color: #fff;
+  background: var(--pink);
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 26px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 #fff;
+}
+
+.demo:focus-visible, .drop:focus-within { outline: 3px solid #fff; outline-offset: 3px; }
+
+.drop {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 22px;
+  border: 2px dashed #fff6;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.drop.over { border-color: var(--pink); background: #ff2d9522; }
+.drop span { font-size: 13px; opacity: 0.7; }
+
+.status { min-height: 1.5em; font-size: 14px; }
+.status progress { width: 120px; accent-color: var(--pink); vertical-align: middle; }
+
+.note {
+  position: relative;
+  padding: 12px 36px 12px 14px;
+  border-radius: 12px;
+  background: #ffffff14;
+  border-left: 4px solid var(--pink);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.note ul { margin: 6px 0 0; padding-left: 18px; }
+.note .x { position: absolute; top: 6px; right: 8px; background: none; border: 0; color: inherit; font-size: 18px; cursor: pointer; }
+.note.floating { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 520px; margin: 0 auto; z-index: 10; background: #222c; backdrop-filter: blur(6px); }

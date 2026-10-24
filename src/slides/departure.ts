@@ -1,5 +1,5 @@
 import type { Slide } from '../story/player';
-import { esc, fmt, slide } from './fmt';
+import { esc, plays, slide } from './fmt';
 
 export const departure: Slide = (ctx) => {
   const el = slide('dep', `
@@ -11,8 +11,8 @@ export const departure: Slide = (ctx) => {
     const row = document.createElement(y.eligible ? 'button' : 'div');
     row.className = y.eligible ? 'row' : 'row off';
     row.innerHTML = y.eligible
-      ? `<span class="ty">普通</span><span class="yr">${esc(y.year)}</span><span class="pl">${fmt(y.plays)} plays</span><span class="go">▶</span>`
-      : `<span class="ty">運休</span><span class="yr">${esc(y.year)}</span><span class="pl">only ${fmt(y.plays)} plays</span>`;
+      ? `<span class="ty">普通</span><span class="yr">${esc(y.year)}</span><span class="pl">${plays(y.plays)}</span><span class="go">▶</span>`
+      : `<span class="ty">運休</span><span class="yr">${esc(y.year)}</span><span class="pl">only ${plays(y.plays)}</span>`;
     if (y.eligible) row.addEventListener('click', () => ctx.onPickYear(y.year));
     board.append(row);
   }

@@ -17,6 +17,12 @@ test('departure board: a button per eligible year, greyed rows for thin years', 
   expect(onPickYear).toHaveBeenCalledWith(2025);
 });
 
+test('departure board: a single play reads "1 play"', () => {
+  const el = departure(ctx({ years: [{ year: 2019, plays: 1, eligible: false }] }));
+  expect(el.textContent).toContain('only 1 play');
+  expect(el.textContent).not.toContain('1 plays');
+});
+
 test('torii: days listened and minutes', () => {
   const t = torii(ctx()).textContent!;
   expect(t).toContain('341');
