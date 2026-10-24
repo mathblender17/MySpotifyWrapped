@@ -46,7 +46,7 @@ const advance = (ms: number) => {
     vi.advanceTimersByTime(50);
   }
 };
-const slidesInFrame = () => root.querySelectorAll('.frame > .ph').length;
+const slidesInFrame = () => root.querySelectorAll('.stage > .ph').length;
 const tap = () => {
   root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
   root.dispatchEvent(new MouseEvent('pointerup', { clientX: 900, bubbles: true }));

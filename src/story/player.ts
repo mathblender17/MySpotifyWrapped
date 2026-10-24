@@ -10,6 +10,7 @@ import { createFrame } from './frame';
 import { createGuide } from './guide';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
+import { createSign } from './sign';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -49,6 +50,8 @@ export function createStory(
   const guide = createGuide();
   const route = createRouteMap(STATIONS, playable);
   const ticket = createTicket(STATIONS, playable, reduced);
+  const sign = createSign(reduced);
+  frame.el.append(sign.el);
   let index = -1;
   let current: HTMLElement | null = null;
   let master: gsap.core.Timeline | undefined;
@@ -110,7 +113,9 @@ export function createStory(
     cue(i);
     if (!animate) {
       current?.remove();
-      frame.el.replaceChildren(el);
+      frame.stage.replaceChildren(el);
+      sign.show(s).progress(1);
+      sign.dock().progress(1);
       playBeats(el, { reduced }).progress(1);
       guide.say(s.id).progress(1);
       ticket.stamp(i).progress(1);
@@ -126,7 +131,7 @@ export function createStory(
     // Build the transition first: beats render their start state at once (scaled, offset), and a match cut must
     // measure its target where it will come to rest.
     const trans = runTransition(s.transitionIn, current, el, {
-      stage: frame.el,
+      stage: frame.stage,
       cut: s.cut,
       hook: HOOKS[s.id],
       reduced,
@@ -135,9 +140,14 @@ export function createStory(
       to: i,
     }).paused(false);
     const beats = playBeats(el, { reduced });
+    // The arrival ritual (art spec §4): transition → station sign → dock → stat beats.
+    const signIn = sign.show(s);
+    const signDock = sign.dock();
     tl.add(trans, 0);
+    tl.add(signIn.paused(false), trans.duration());
     tl.add(ticket.stamp(i).paused(false), trans.duration());
-    tl.add(beats.paused(false), trans.duration());
+    tl.add(signDock.paused(false), trans.duration() + signIn.duration());
+    tl.add(beats.paused(false), trans.duration() + signIn.duration() + signDock.duration());
     if (s.id === 'kanji') tl.add(ticket.finale().paused(false));
     current = el;
     master = tl;

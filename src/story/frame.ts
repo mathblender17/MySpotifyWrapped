@@ -2,9 +2,13 @@
 export const DESIGN_W = 210;
 export const DESIGN_H = 373;
 
-export function createFrame(): { el: HTMLElement; destroy(): void } {
+/** The frame scales as one: `stage` holds the slides (transitions own it), anchors like the station sign sit beside it. */
+export function createFrame(): { el: HTMLElement; stage: HTMLElement; destroy(): void } {
   const el = document.createElement('div');
   el.className = 'frame';
+  const stage = document.createElement('div');
+  stage.className = 'stage';
+  el.append(stage);
   const fit = () => {
     // Route map above (56px), guide phone below (84px).
     const k = Math.min(window.innerWidth / DESIGN_W, (window.innerHeight - 56 - 84) / DESIGN_H);
@@ -12,5 +16,5 @@ export function createFrame(): { el: HTMLElement; destroy(): void } {
   };
   fit();
   window.addEventListener('resize', fit);
-  return { el, destroy: () => window.removeEventListener('resize', fit) };
+  return { el, stage, destroy: () => window.removeEventListener('resize', fit) };
 }

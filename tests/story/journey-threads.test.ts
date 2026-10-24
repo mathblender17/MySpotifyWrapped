@@ -55,8 +55,8 @@ test('the story wears the season of the current act', () => {
 
 test('the ticket is stamped at every station you stop at, and passed stations read 通過', () => {
   const s = story({ startAt: 1 });
-  advance(4000); // torii → sumo
-  advance(4000); // sumo → idol
+  advance(4700); // torii → sumo (each arrival now includes the 0.7 s sign ritual)
+  advance(4700); // sumo → idol
   s.next(); // finish idol's animation
   expect(s.index).toBe(5);
   const slots = [...root.querySelectorAll('.ticket .slot')];
