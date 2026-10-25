@@ -55,8 +55,8 @@ test('the story wears the season of the current act', () => {
 
 test('the ticket is stamped at every station you stop at, and passed stations read 通過', () => {
   const s = story({ startAt: 1 });
-  advance(4000); // torii → sumo
-  advance(4000); // sumo → idol
+  advance(4700); // torii → sumo (each arrival now includes the 0.7 s sign ritual)
+  advance(4700); // sumo → idol
   s.next(); // finish idol's animation
   expect(s.index).toBe(5);
   const slots = [...root.querySelectorAll('.ticket .slot')];
@@ -64,6 +64,16 @@ test('the ticket is stamped at every station you stop at, and passed stations re
   expect(slots.filter((x) => x.classList.contains('on')).map((x) => slots.indexOf(x))).toEqual([0, 1, 4, 5]);
   expect(slots[2].textContent).toContain('通過');
   expect(slots[3].textContent).toContain('通過');
+});
+
+test('each ticket stamp takes the accent colour of its station', () => {
+  const s = story({ startAt: 1 });
+  s.next(); // finish torii
+  s.next(); // ride to sumo
+  s.next(); // finish sumo
+  const slots = [...root.querySelectorAll<HTMLElement>('.ticket .slot')];
+  expect(slots[4].style.color).toBe('rgb(230, 0, 51)');
+  expect(slots[1].style.color).toBe('rgb(255, 59, 31)');
 });
 
 test('the train marker sits at the current stop', () => {
@@ -87,7 +97,7 @@ test('with motion: a particle layer', () => {
 
 test('the soundtrack follows the stations and stops when the story is left', async () => {
   const calls: (string | undefined)[] = [];
-  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false };
+  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false, unlocked: false };
   const findPreview = vi.fn(async (artist: string, track: string) => `https://x/${artist}/${track}.m4a`);
   const s = story({ startAt: 1, soundtrack, findPreview });
   await Promise.resolve();
@@ -98,7 +108,7 @@ test('the soundtrack follows the stations and stops when the story is left', asy
 });
 
 test('the first tap or key anywhere in the story unlocks sound (not only the year pick)', () => {
-  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false });
+  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false, unlocked: false });
   const a = make();
   story({ startAt: 0, soundtrack: a });
   root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
@@ -117,4 +127,43 @@ test('reduced motion: ticket stamps land without spinning, and the story is flag
   expect(t.stamp(1).duration()).toBe(0);
   story({ startAt: 1, reduced: true });
   expect(root.classList.contains('reduced')).toBe(true);
+});
+
+test('each arrival rings the station chime; muted or reduced, sound accents are not allowed', () => {
+  let canPlay = () => true;
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const makeSfx = (o: { canPlay: () => boolean }) => ((canPlay = o.canPlay), sfx);
+  const soundtrack = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, muted: true, unlocked: true };
+  const s = story({ startAt: 1, soundtrack, makeSfx });
+  advance(2000); // torii's ride and sign
+  expect(sfx.chime).toHaveBeenCalledTimes(1);
+  root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
+  root.dispatchEvent(new MouseEvent('pointerup', { clientX: 900, bubbles: true }));
+  expect(sfx.unlock).toHaveBeenCalled(); // the tap unlocks the accents too
+  expect(canPlay()).toBe(false); // muted
+  soundtrack.muted = false;
+  expect(canPlay()).toBe(true);
+  soundtrack.unlocked = false;
+  expect(canPlay()).toBe(false); // not unlocked yet
+  s.destroy();
+  expect(sfx.dispose).toHaveBeenCalled();
+});
+
+test('the sumo Yokozuna lands with a ドン', () => {
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const sumoSlide = () => Object.assign(document.createElement('div'), { className: 'ph', innerHTML: '<b data-beat="1">a</b><b data-beat="2" data-sfx="don">y</b>' });
+  story({ startAt: 4, makeSfx: () => sfx, slides: { ...slides, sumo: sumoSlide } });
+  expect(sfx.don).not.toHaveBeenCalled();
+  advance(3500);
+  expect(sfx.don).toHaveBeenCalledTimes(1);
+});
+
+test('tapping to skip an arrival does not fire its queued sounds as one chord', () => {
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const sumoSlide = () => Object.assign(document.createElement('div'), { className: 'ph', innerHTML: '<b data-beat="1">a</b><b data-beat="2" data-sfx="don">y</b>' });
+  const s = story({ startAt: 4, makeSfx: () => sfx, slides: { ...slides, sumo: sumoSlide } });
+  advance(100);
+  s.next(); // skip to the end of the arrival
+  expect(sfx.chime).not.toHaveBeenCalled();
+  expect(sfx.don).not.toHaveBeenCalled();
 });

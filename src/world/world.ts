@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import * as THREE from 'three';
 import { createDistrictWindow } from './districts';
+import { createTrack } from './rails';
 import { disposeKit } from './kit';
 import { createQuality } from './quality';
 import { createSeasonFx } from './season';
@@ -64,6 +65,8 @@ function build(container: HTMLElement, canvas: HTMLCanvasElement, renderer: THRE
   const PARTICLES = 600;
   const season = createSeasonFx(scene, { reduced: opts.reduced, count: PARTICLES });
   season.set(0);
+  const track = createTrack();
+  scene.add(track.group);
   const districts = opts.stationIds ? createDistrictWindow(scene, opts.stationIds) : undefined;
   const clock = new THREE.Clock();
   const qualityStep = (level: 1 | 2) => {
@@ -153,6 +156,7 @@ function build(container: HTMLElement, canvas: HTMLCanvasElement, renderer: THRE
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('webglcontextlost', onLost);
       districts?.dispose();
+      track.dispose();
       season.dispose();
       disposeKit();
       renderer.dispose();

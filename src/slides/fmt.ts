@@ -1,4 +1,5 @@
 import type { YearStats } from '../types';
+import '../style/tokens.css';
 import './slides.css';
 
 export const fmt = (n: number): string => Math.round(n).toLocaleString('en-US');
@@ -25,9 +26,9 @@ export const amountCnt = (beat: number, s: Pick<YearStats, 'minutes' | 'plays'>,
   return src.minutes !== undefined ? cnt(beat, src.minutes, ' min') : cnt(beat, src.plays ?? 0, src.plays === 1 ? ' play' : ' plays');
 };
 
-export function slide(cls: string, html: string): HTMLElement {
+export function slide(cls: string, html: string, opts: { dark?: boolean } = {}): HTMLElement {
   const el = document.createElement('div');
-  el.className = `ph ${cls}`;
+  el.className = `ph ${cls} grain${opts.dark ? ' dark' : ''}`;
   el.innerHTML = html;
   return el;
 }

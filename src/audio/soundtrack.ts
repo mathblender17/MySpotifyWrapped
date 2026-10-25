@@ -12,6 +12,8 @@ export type Soundtrack = {
   pause(): void;
   resume(): void;
   readonly muted: boolean;
+  /** True once a tap has unlocked sound (browsers refuse audio before a gesture). */
+  readonly unlocked: boolean;
 };
 
 function readMuted(): boolean {
@@ -119,6 +121,9 @@ export function createSoundtrack(make: () => HTMLAudioElement = () => new Audio(
     },
     get muted() {
       return muted;
+    },
+    get unlocked() {
+      return unlocked;
     },
   };
 }

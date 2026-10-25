@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
 import { findPreview as itunes } from '../audio/previews';
+import { createSfx, type Sfx } from '../audio/sfx';
 import type { Soundtrack } from '../audio/soundtrack';
-import { playBeats, prefersReducedMotion } from '../journey/beats';
+import { beatTime, playBeats, prefersReducedMotion } from '../journey/beats';
 import { HOOKS } from '../journey/hooks';
 import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
@@ -10,6 +11,7 @@ import { createFrame } from './frame';
 import { createGuide } from './guide';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
+import { createSign } from './sign';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -40,6 +42,8 @@ export function createStory(
     soundtrack?: Soundtrack;
     findPreview?: (artist: string, track: string) => Promise<string | undefined>;
     world?: StoryWorld | null;
+    /** Test seam: build the sound accents. */
+    makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
   },
 ) {
   const holdMs = opts.holdMs ?? 2500;
@@ -49,6 +53,8 @@ export function createStory(
   const guide = createGuide();
   const route = createRouteMap(STATIONS, playable);
   const ticket = createTicket(STATIONS, playable, reduced);
+  const sign = createSign(reduced);
+  frame.el.append(sign.el);
   let index = -1;
   let current: HTMLElement | null = null;
   let master: gsap.core.Timeline | undefined;
@@ -60,6 +66,11 @@ export function createStory(
   let alive = true;
   let world = opts.world ?? null;
   const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
+  // Accents only once sound is unlocked, never muted, never with reduced motion (art spec §8).
+  const canPlay = () => !!opts.soundtrack?.unlocked && !opts.soundtrack.muted && !reduced;
+  const sfx = (opts.makeSfx ?? createSfx)({ canPlay });
+  /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
+  const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
 
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
   const cue = (i: number) => {
@@ -89,8 +100,11 @@ export function createStory(
     if (!paused && !STATIONS[index].waitForInput) holdTimer = setTimeout(() => step(1), holdMs);
   };
 
+  let skipping = false;
   const finish = () => {
+    skipping = true; // jumping to the end fires every queued call: keep the sounds out of it
     master?.progress(1);
+    skipping = false;
     master = undefined;
   };
 
@@ -110,24 +124,28 @@ export function createStory(
     cue(i);
     if (!animate) {
       current?.remove();
-      frame.el.replaceChildren(el);
+      frame.stage.replaceChildren(el);
+      sign.show(s).progress(1);
+      sign.dock().progress(1);
       playBeats(el, { reduced }).progress(1);
       guide.say(s.id).progress(1);
-      ticket.stamp(i).progress(1);
+      ticket.stamp(i, s.accent).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
       return armHold();
     }
 
     const tl = gsap.timeline({ paused: true, onComplete: armHold });
+    const at = (t: number, fn: () => void) => tl.call(() => void (skipping || fn()), undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
     else guide.clear();
     // Build the transition first: beats render their start state at once (scaled, offset), and a match cut must
     // measure its target where it will come to rest.
     const trans = runTransition(s.transitionIn, current, el, {
-      stage: frame.el,
+      stage: frame.stage,
       cut: s.cut,
+      morph: s.morph,
       hook: HOOKS[s.id],
       reduced,
       world: world ?? undefined,
@@ -135,9 +153,21 @@ export function createStory(
       to: i,
     }).paused(false);
     const beats = playBeats(el, { reduced });
+    // The arrival ritual (art spec §4): transition → station sign → dock → stat beats.
+    const signIn = sign.show(s);
+    const signDock = sign.dock();
     tl.add(trans, 0);
-    tl.add(ticket.stamp(i).paused(false), trans.duration());
-    tl.add(beats.paused(false), trans.duration());
+    tl.add(signIn.paused(false), trans.duration());
+    tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
+    tl.add(signDock.paused(false), trans.duration() + signIn.duration());
+    const beatsAt = trans.duration() + signIn.duration() + signDock.duration();
+    tl.add(beats.paused(false), beatsAt);
+    at(trans.duration(), () => arrivalSound(s.id));
+    // Beat-bound accents (ドン, pixel blips) are marked in the slide with data-sfx.
+    for (const b of el.querySelectorAll<HTMLElement>('[data-sfx]')) {
+      const name = b.dataset.sfx as 'don' | 'blip';
+      at(beatsAt + beatTime(el, b, reduced), () => sfx[name]?.());
+    }
     if (s.id === 'kanji') tl.add(ticket.finale().paused(false));
     current = el;
     master = tl;
@@ -162,6 +192,7 @@ export function createStory(
   };
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
+    sfx.unlock();
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     const x = downX;
@@ -180,6 +211,7 @@ export function createStory(
   };
   const onKey = (e: KeyboardEvent) => {
     opts.soundtrack?.unlock();
+    sfx.unlock();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
     else if (e.key === ' ') (paused ? api.resume() : api.pause());
@@ -211,6 +243,7 @@ export function createStory(
     destroy: () => {
       alive = false;
       opts.soundtrack?.stop();
+      sfx.dispose();
       world?.destroy();
       world = null;
       master?.kill();
@@ -237,7 +270,7 @@ export function createStory(
 
   const start = opts.startAt ?? 0;
   // Stations before the starting stop were already ridden through (e.g. the departure board before a year pick).
-  for (let i = 0; i < start; i++) ticket.stamp(i).progress(1);
+  for (let i = 0; i < start; i++) ticket.stamp(i, STATIONS[i].accent).progress(1);
   if (playable[start]) show(start, true);
   else {
     index = start;

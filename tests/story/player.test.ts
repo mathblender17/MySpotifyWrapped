@@ -51,7 +51,7 @@ const tap = (el: Element, clientX = 900) => {
   fire(el, 'pointerdown', clientX);
   fire(el, 'pointerup', clientX);
 };
-const slidesInFrame = () => root.querySelectorAll('.frame > .ph').length;
+const slidesInFrame = () => root.querySelectorAll('.stage > .ph').length;
 
 test('a station plays its transition and beats, holds, then rides on — skipping pass-throughs', () => {
   const s = story({ startAt: 1 });
@@ -159,4 +159,40 @@ test('genre stations explain they are coming, not that an export would unlock th
   story({ startAt: 1 });
   const bento = root.querySelectorAll('.stop')[2] as HTMLElement;
   expect(bento.title).toBe('Genres arrive in a later update');
+});
+
+test('every arrival shows the station sign, then docks it before the beats', () => {
+  story({ startAt: 1 });
+  advance(100);
+  const sign = root.querySelector('.frame .sign')!;
+  expect(sign.textContent).toContain('02'); // a Plan-2 station gets the sign too
+  tap(root); // finish
+  tap(root); // ride on to sumo
+  expect(sign.textContent).toContain('05');
+  tap(root);
+  expect(sign.classList.contains('docked')).toBe(true);
+});
+
+test('the arrival ritual adds the sign beats (0.45 s + 0.25 s dock) to the timeline', async () => {
+  const { runTransition } = await import('../../src/journey/transitions');
+  const { playBeats } = await import('../../src/journey/beats');
+  const spy = vi.spyOn(gsap.core.Timeline.prototype, 'play');
+  story({ startAt: 4 });
+  const master = spy.mock.contexts.at(-1) as gsap.core.Timeline;
+  const el = slides.sumo(ctx);
+  const stage = document.createElement('div');
+  const base = runTransition('ride', null, el, { stage, reduced: false }).duration() + playBeats(el, { reduced: false }).duration();
+  expect(master.duration()).toBeGreaterThanOrEqual(base + 0.7 - 1e-6);
+  spy.mockRestore();
+});
+
+test('going back shows the sign docked at once', () => {
+  const s = story({ startAt: 4 });
+  advance(100);
+  tap(root, 10);
+  tap(root, 10);
+  expect(s.index).toBe(1);
+  const sign = root.querySelector('.frame .sign')!;
+  expect(sign.textContent).toContain('02');
+  expect(sign.classList.contains('docked')).toBe(true);
 });

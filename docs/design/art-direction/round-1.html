@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Art direction - round 1</title>
+<style>body{margin:0;padding:24px 16px 60px;background:#141414;color:#eee;font-family:system-ui,sans-serif}body>*{max-width:1200px;margin-left:auto;margin-right:auto}.subtitle{opacity:.7}.selected .ph{outline:5px solid #1ed760;outline-offset:5px}</style>
+<script>function toggleSelect(e){e.classList.toggle("selected")}</script></head><body>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Yuji+Syuku&family=Hachi+Maru+Pop&family=Anton&family=Zen+Maru+Gothic:wght@900&display=swap" rel="stylesheet">
+<style>
+  .phones{display:flex;gap:30px;flex-wrap:wrap;justify-content:center;margin:22px 0}
+  .pk{cursor:pointer;width:300px}
+  .pk.selected .ph{outline:5px solid #1ed760;outline-offset:5px}
+  .ph{width:300px;height:533px;position:relative;overflow:hidden;border-radius:26px;box-shadow:0 24px 60px #0009}
+  .pk h3{margin:14px 0 4px}
+  .pk p{margin:0 0 6px;font-size:13px;line-height:1.5;opacity:.85}
+  .pk p b{color:#1ed760}
+  .grain::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.55;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .22 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+  /* A — Ukiyo-e × Gyaru zine */
+  .A{background:#efe2c4}
+  .A .print{position:absolute;inset:0 0 auto 0;height:330px;background:url(img/hiroshige.jpg) 72% 40%/auto 118% no-repeat;filter:saturate(.95) contrast(1.05)}
+  .A .cart{position:absolute;top:22px;left:18px;background:#c8102e;color:#fdf6e4;writing-mode:vertical-rl;font-family:'Yuji Syuku',serif;font-size:21px;padding:10px 5px;letter-spacing:4px;box-shadow:3px 3px 0 #1b2a4a}
+  .A .band{position:absolute;left:-6px;right:-6px;top:296px;bottom:0;background:#efe2c4;clip-path:polygon(0 6%,8% 0,17% 5%,29% 1%,41% 6%,55% 0,67% 4%,80% 0,91% 5%,100% 1%,100% 100%,0 100%)}
+  .A .nm{position:absolute;left:16px;top:318px;font-family:'Dela Gothic One';font-size:66px;line-height:.86;color:#141414;letter-spacing:-2px}
+  .A .num{position:absolute;left:18px;bottom:30px;font-family:'Dela Gothic One';font-size:46px;color:#c8102e;letter-spacing:-1px}
+  .A .num small{font-family:'Yuji Syuku';font-size:30px;color:#141414;margin-left:4px}
+  .A .cap{position:absolute;left:20px;bottom:16px;font:900 10px 'Zen Maru Gothic';color:#1b2a4a}
+  .A .hanko{position:absolute;right:20px;bottom:26px;width:62px;height:62px;border:4px solid #c8102e;color:#c8102e;font-family:'Yuji Syuku';font-size:15px;line-height:1.05;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-8deg);mix-blend-mode:multiply}
+  .stk{position:absolute;font-family:'Hachi Maru Pop';color:#ff2d95;background:#fff;padding:5px 10px;border-radius:14px;box-shadow:0 0 0 3px #fff,2px 4px 0 3px #0003;transform:rotate(-7deg);font-size:13px;white-space:nowrap}
+  .A .s1{top:250px;right:14px}
+  .A .s2{top:28px;right:22px;transform:rotate(9deg);font-size:24px;padding:2px 8px}
+  .A .heart{position:absolute;top:356px;right:30px;width:52px;transform:rotate(14deg);filter:drop-shadow(0 0 0 #fff) drop-shadow(2px 3px 0 #0003)}
+
+  /* B — Night riso */
+  .B{background:#0d0b1e}
+  .B .photo{position:absolute;inset:0;background:url(img/kabukicho.jpg) 50% 30%/auto 105% no-repeat;filter:grayscale(1) contrast(1.35) brightness(.85)}
+  .B .duo1{position:absolute;inset:0;background:#ff2d95;mix-blend-mode:multiply}
+  .B .duo2{position:absolute;inset:0;background:#1b1f7a;mix-blend-mode:screen}
+  .B .dots{position:absolute;inset:0;background-image:radial-gradient(#0d0b1e 1.1px,transparent 1.5px);background-size:5px 5px;opacity:.55}
+  .B .top{position:absolute;top:20px;left:18px;right:18px;display:flex;justify-content:space-between;font-family:'DotGothic16';color:#fff;font-size:12px;letter-spacing:1px}
+  .B .big{position:absolute;left:10px;right:0;top:250px;font-family:'Anton';font-size:128px;line-height:.85;letter-spacing:-2px}
+  .B .big span{position:absolute;left:0;top:0}
+  .B .big .c{color:#3cf6ff;transform:translate(4px,3px);mix-blend-mode:screen}
+  .B .big .p{color:#ff5fb4;mix-blend-mode:screen}
+  .B .big .k{position:relative;color:#fff6e0;mix-blend-mode:screen;opacity:.0}
+  .B .unit{position:absolute;left:16px;top:368px;font-family:'Anton';font-size:28px;color:#fff6e0;letter-spacing:2px}
+  .B .sign{position:absolute;right:16px;top:58px;background:#fff6e0;color:#c8102e;writing-mode:vertical-rl;font-family:'Dela Gothic One';font-size:30px;padding:12px 6px;letter-spacing:2px;box-shadow:0 0 0 3px #c8102e,0 0 26px #ff2d95}
+  .B .who{position:absolute;left:16px;bottom:22px;right:16px;font-family:'Anton';font-size:38px;line-height:1;color:#fff6e0}
+  .B .who small{display:block;font-family:'DotGothic16';font-size:11px;color:#3cf6ff;letter-spacing:1px;margin-bottom:4px}
+
+  /* C — Mega type */
+  .C{background:#ff3b1f}
+  .C .sun{position:absolute;width:330px;height:330px;border-radius:50%;background:#ffe9c9;right:-150px;top:-90px}
+  .C .marq{position:absolute;top:22px;left:0;right:0;white-space:nowrap;font-family:'DotGothic16';color:#0b1640;font-size:13px;letter-spacing:3px;overflow:hidden}
+  .C .stack{position:absolute;left:-8px;top:90px;font-family:'Dela Gothic One';color:#0b1640;font-size:132px;line-height:.82;letter-spacing:-6px}
+  .C .stack .o{color:#ffe9c9;-webkit-text-stroke:0}
+  .C .band{position:absolute;left:-20px;right:-20px;top:372px;background:#0b1640;color:#ffe9c9;transform:rotate(-6deg);padding:10px 32px 12px;font-family:'Dela Gothic One';font-size:46px;letter-spacing:-1px}
+  .C .band small{font-family:'Zen Maru Gothic';font-weight:900;font-size:14px;margin-left:6px;color:#ff3b1f}
+  .C .foot{position:absolute;left:18px;bottom:20px;font:900 12px 'Zen Maru Gothic';color:#0b1640}
+  .C .foot b{font-family:'Hachi Maru Pop';color:#fff;background:#0b1640;padding:2px 8px;border-radius:10px;margin-right:6px}
+</style>
+
+<h2>Art direction: pick the look for the whole ride</h2>
+<p class="subtitle">These are the same slide (your #1 artist) in three complete directions. Each one changes everything: slides, type, motion and the 3D world. Click one, or tell me to mix them.</p>
+
+<div class="phones">
+  <div class="pk" data-choice="ukiyoe-gyaru" onclick="toggleSelect(this)">
+    <div class="ph A grain">
+      <div class="print"></div>
+      <div class="cart">東海道 推し之壱</div>
+      <div class="stk s2">♡</div>
+      <div class="stk s1">ぉ前の推しゎコレ!!</div>
+      <div class="band"></div>
+      <div class="nm">AOI<br>KAZE</div>
+      <svg class="heart" viewBox="0 0 32 30"><path d="M16 29S1 20 1 9.5A7.5 7.5 0 0 1 16 6a7.5 7.5 0 0 1 15 3.5C31 20 16 29 16 29z" fill="#ff2d95" stroke="#fff" stroke-width="2.5"/></svg>
+      <div class="num">3,826<small>分</small></div>
+      <div class="hanko">音楽<br>電車</div>
+    </div>
+    <h3>A · Ukiyo-e × Gyaru zine</h3>
+    <p>Real Hiroshige <i>Tōkaidō</i> prints (public domain, 1830s) are the backgrounds. Each station is a stop on Japan's original road trip. Gyaru stickers and kaomoji get slapped over them, with a print cartouche, a hanko stamp and paper grain.</p>
+    <p><b>Motion:</b> stickers slap on, stamps thunk, paper flutters. <b>3D world:</b> layered paper-cut scenery in the prints' indigo and vermilion.</p>
+  </div>
+
+  <div class="pk" data-choice="neon-riso" onclick="toggleSelect(this)">
+    <div class="ph B">
+      <div class="photo"></div><div class="duo1"></div><div class="duo2"></div><div class="dots"></div>
+      <div class="top"><span>新宿 · 2025</span><span>推し No.1</span></div>
+      <div class="sign">推し一番街</div>
+      <div class="big"><span class="c">3,826</span><span class="p">3,826</span><span class="k">3,826</span></div>
+      <div class="unit">MINUTES</div>
+      <div class="who"><small>WITH YOUR #1 ARTIST</small>AOI KAZE</div>
+    </div>
+    <h3>B · Neon riso night</h3>
+    <p>Real Tokyo night photos duotoned in two fluorescent inks with a halftone, and huge condensed numbers printed slightly off-register, like a riso zine. The neon-sign kanji carry the station name.</p>
+    <p><b>Motion:</b> signs flicker on, inks slide into register, numbers roll like a departure board. <b>3D world:</b> rainy night, neon glow, wet reflections.</p>
+  </div>
+
+  <div class="pk" data-choice="mega-type" onclick="toggleSelect(this)">
+    <div class="ph C">
+      <div class="sun"></div>
+      <div class="marq">アオイカゼ · アオイカゼ · アオイカゼ · アオイカゼ · アオイカゼ</div>
+      <div class="stack">AOI<br><span class="o">KA</span><br>ZE</div>
+      <div class="band">3,826<small>MIN</small></div>
+      <div class="foot"><b>推し♡</b>your #1 artist of 2025</div>
+    </div>
+    <h3>C · Mega type</h3>
+    <p>Closest to Wrapped's own language: whole fields of flat colour, enormous cropped type as the picture, one big shape (the rising sun), and kinetic katakana strips. No photos, just bold and graphic.</p>
+    <p><b>Motion:</b> words slam in, split and slide; the band swings in on the beat. <b>3D world:</b> flat-colour abstract Japan with big simple shapes.</p>
+  </div>
+</div>
+<p class="subtitle">Image credits: "Shinagawa" by Utagawa Hiroshige (CC0, via Wikimedia Commons); "Kabukicho red gate…" by Basile Morin (CC BY-SA 4.0, via Openverse/Wikimedia).</p>
+
+</body></html>

@@ -4,17 +4,6 @@
 .ph button { font: inherit; color: inherit; cursor: pointer; }
 
 /* 1 departure board (train mockup, round 1) */
-.dep { background: #f4f4f0; color: #111; font-family: 'Zen Maru Gothic', sans-serif; }
-.dep .hd { display: flex; justify-content: space-between; font-weight: 900; font-size: 12px; border-bottom: 4px solid #ff2d95; padding-bottom: 4px; }
-.dep .board { background: #111; border-radius: 6px; padding: 6px; margin-top: 10px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: auto; }
-.dep .row { display: grid; grid-template-columns: 30px 40px 1fr 12px; align-items: center; gap: 4px; background: #1c1c1c; border: 0; border-radius: 3px; padding: 6px; font-family: 'DotGothic16', monospace; font-size: 11px; color: #ff9a1f; text-shadow: 0 0 4px #ff9a1f; text-align: left; }
-.dep button.row:hover, .dep button.row:focus-visible { background: #2a1a24; outline: 2px solid #ff2d95; }
-.dep .row .ty { color: #58ff7a; }
-.dep .row .yr { font-size: 14px; }
-.dep .row.off { color: #666; text-shadow: none; grid-template-columns: 30px 40px 1fr; }
-.dep .row.off .ty { color: #a33; }
-.dep .ft { margin-top: 10px; font-size: 12px; font-weight: 900; text-align: center; }
-.dep .ft span { font-family: 'Hachi Maru Pop', sans-serif; color: #ff2d95; font-size: 11px; }
 
 /* 2 torii tunnel (round 3) */
 .tor { background: #1a0a04; color: #fff; align-items: center; justify-content: flex-end; }
@@ -48,13 +37,6 @@
 .gan .lips { width: 70px; height: 16px; border-radius: 0 0 40px 40px; background: #fff; margin-top: 8px; }
 
 /* 5 sumo banzuke (round 1) */
-.sumo { background: #efe3c4; color: #111; font-family: 'Yuji Syuku', serif; }
-.sumo .hd { text-align: center; font-size: 20px; border-bottom: 2px solid #111; padding-bottom: 4px; }
-.sumo .cols { display: flex; flex-direction: row-reverse; justify-content: space-around; margin-top: 10px; flex: 1; min-height: 0; }
-.sumo .cols div { writing-mode: vertical-rl; font-size: 16px; border-left: 1px solid #1115; padding: 0 3px; overflow: hidden; }
-.sumo .cols .y { font-size: 24px; color: #a00; }
-.sumo .rk { color: #ff2d95; }
-.sumo .ft { font-size: 10px; text-align: center; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; }
 
 /* 6 idol / oshi (round 1) */
 .idol { background: linear-gradient(#ffe9f6, #fff); color: #d4007a; font-family: 'Hachi Maru Pop', sans-serif; text-align: center; }
@@ -78,14 +60,6 @@
 .kon .bc { text-align: center; margin-top: 8px; }
 
 /* 8 gacha (round 1) */
-.gac { background: radial-gradient(circle at 50% 45%, #fff 0, #ffe7a0 12%, #b06bff 40%, #14002e 80%); align-items: center; justify-content: center; color: #fff; font-family: 'Dela Gothic One', sans-serif; text-align: center; }
-.gac .card { width: 140px; height: 190px; border-radius: 10px; background: linear-gradient(135deg, #ff2d95, #ffd700, #6af0ff, #ff2d95); padding: 3px; box-shadow: 0 0 30px #fff; margin: 14px 0; }
-.gac .card > div { height: 100%; border-radius: 8px; background: linear-gradient(#2a0f5a, #120530); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; box-sizing: border-box; }
-.gac .ssr { font-size: 34px; background: linear-gradient(90deg, #ff2d95, #ffd700, #6af0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.gac .nm { font-size: 16px; line-height: 1.15; margin-top: 4px; overflow-wrap: anywhere; }
-.gac .ar { font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; opacity: 0.8; margin-top: 4px; }
-.gac .st { color: #ffd700; margin-top: 6px; }
-.gac .lb { font-size: 11px; letter-spacing: 2px; }
 
 /* 9 TV weather / sakura forecast (round 1) */
 .wx { background: linear-gradient(#0b62c4, #0a3f87); color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
@@ -100,11 +74,6 @@
 .wx .ft { margin-top: auto; font-size: 10px; text-align: center; opacity: 0.8; }
 
 /* 10 Mt. Fuji (round 3) — ridge is the weekly graph */
-.fuji { background: linear-gradient(#7ec8ff, #ffd6e8); color: #fff; }
-.fuji .t { font-family: 'Dela Gothic One', sans-serif; font-size: 22px; line-height: 1.05; text-shadow: 0 2px 6px #0005; }
-.fuji svg { position: absolute; left: 16px; right: 16px; bottom: 72px; width: 178px; height: 150px; }
-.fuji .bt { position: absolute; left: 0; right: 0; bottom: 0; height: 72px; background: #3a5a9a; padding: 10px 16px; box-sizing: border-box; font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; font-weight: 900; }
-.fuji .bt b { color: #ffd6e8; }
 
 /* 11 shinkansen (round 3) */
 .shk { background: linear-gradient(#cfe8ff, #fff); color: #0b3d91; }
@@ -136,8 +105,5 @@
 .kj .hk { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: #c4002f; color: #fff; font-size: 9px; line-height: 1.1; display: flex; align-items: center; justify-content: center; }
 
 /* Phase 2a: beat helpers */
-.gac .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
-.gac .st i { font-style: normal; }
 .kon .rows { display: flex; flex-direction: column; }
-.fuji .peak { position: absolute; top: 157px; width: 8px; height: 8px; border-radius: 50%; background: #ff2d95; box-shadow: 0 0 0 3px #fff8; }
 .shk .train { position: absolute; inset: 0; pointer-events: none; }

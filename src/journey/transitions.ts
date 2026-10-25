@@ -11,6 +11,8 @@ export type TransitionOpts = {
   world?: { travel(from: number, to: number, seconds: number): gsap.core.Timeline };
   from?: number;
   to?: number;
+  /** A style morph on arrival (art spec §6). Falls back to a ride when its source shape is missing. */
+  morph?: 'pixelate';
 };
 
 const WORLD_RIDE = 1.6;
@@ -28,6 +30,47 @@ function boxIn(stage: HTMLElement, el: Element) {
   const r = el.getBoundingClientRect();
   const k = s.width / DESIGN_W || 1;
   return { left: (r.left - s.left) / k, top: (r.top - s.top) / k, width: r.width / k, height: r.height / k };
+}
+
+const PIX_COLS = 12;
+const PIX_ROWS = 21;
+const PIX_COLORS = ['#2b1a6b', '#5b2a8a', '#b4447e', '#ff8a5b', '#ffd36b']; // world K's dithered sunset
+
+/** Same order every time: a seeded shuffle (LCG), so the wipe is deterministic. */
+function shuffled<T>(items: T[], seed = 7): T[] {
+  const a = [...items];
+  let x = seed;
+  for (let i = a.length - 1; i > 0; i--) {
+    x = (x * 1103515245 + 12345) % 2147483648;
+    const j = x % (i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * Pixel wipe into world K: blocks in K's palette cover the old slide (0.5 s), the slides swap under them, the blocks
+ * clear in reverse (0.5 s). A block wipe, not a true mosaic: CSS can't mosaic arbitrary DOM, and SVG filters on HTML
+ * are unreliable on iOS Safari.
+ */
+function pixelWipe(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement) {
+  const grid = overlay(stage, 'pixwipe');
+  const blocks = Array.from({ length: PIX_COLS * PIX_ROWS }, (_, i) => {
+    const b = document.createElement('i');
+    b.className = 'pix';
+    b.style.cssText = `left:${((i % PIX_COLS) * 100) / PIX_COLS}%;top:${(Math.floor(i / PIX_COLS) * 100) / PIX_ROWS}%;background:${PIX_COLORS[(i * 7) % PIX_COLORS.length]};opacity:0`;
+    return b;
+  });
+  grid.append(...blocks);
+  const order = shuffled(blocks);
+  const step = 0.5 / order.length;
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.to(order, { opacity: 1, duration: 0, stagger: step }, 0);
+  tl.set(out, { opacity: 0 }, 0.5);
+  tl.set(inEl, { opacity: 1 }, 0.5);
+  tl.to([...order].reverse(), { opacity: 0, duration: 0, stagger: step }, 0.5);
+  tl.set({}, {}, 1.0);
+  return [grid];
 }
 
 /** With a world, a ride hands the screen over: the card flies off, the train travels, the next card drops in. */
@@ -72,7 +115,9 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
   } else if (type === 'cut' || type === 'baton') {
     const from = out && o.cut ? out.querySelector(o.cut.from) : null;
     const to = o.cut ? inEl.querySelector(o.cut.to) : null;
-    if (!from || !to) {
+    if (from && o.morph === 'pixelate') {
+      extras = pixelWipe(tl, out!, inEl, stage);
+    } else if (!from || !to) {
       // The station before this one may have been passed through: no shape to carry over, so just ride.
       extras = anyRide();
       parallel = false;

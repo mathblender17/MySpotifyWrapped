@@ -38,3 +38,18 @@ test('empty arrays and missing stats do not count as present', () => {
   expect(isPlayable(sumo, undefined)).toBe(false);
   expect(isPlayable(STATIONS[0], undefined)).toBe(true);
 });
+
+test('every station declares its art world and a #rrggbb accent', () => {
+  for (const s of STATIONS) {
+    expect(['F', 'C', 'J', 'G', 'D', 'Q', 'B', 'K', 'O', 'I', 'L']).toContain(s.world);
+    expect(s.accent).toMatch(/^#[0-9a-f]{6}$/);
+  }
+  expect(STATIONS[0]).toMatchObject({ world: 'F', accent: '#00a7db' });
+  expect(STATIONS[7]).toMatchObject({ world: 'K', accent: '#ffe36b' });
+  expect(STATIONS.map((s) => s.world).join('')).toBe('FCJGDQBKOILIC');
+});
+
+test('the gacha arrives by the pixel-wipe morph', () => {
+  expect(STATIONS.find((s) => s.id === 'gacha')!.morph).toBe('pixelate');
+  expect(STATIONS.filter((s) => s.morph)).toHaveLength(1);
+});

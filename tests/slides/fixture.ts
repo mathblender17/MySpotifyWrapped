@@ -1,7 +1,11 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import type { SlideContext } from '../../src/story/player';
 
-const CSS = readFileSync('src/slides/slides.css', 'utf8').toLowerCase();
+const WORLDS = 'src/slides/worlds';
+const CSS = [
+  readFileSync('src/slides/slides.css', 'utf8'),
+  ...(existsSync(WORLDS) ? readdirSync(WORLDS).map((f) => readFileSync(`${WORLDS}/${f}`, 'utf8')) : []),
+].join(' ').toLowerCase();
 
 /** Gyaru pink is a spec constant on every station: true if the slide's own CSS rules (or markup) use it. */
 export function hasPink(el: HTMLElement): boolean {
