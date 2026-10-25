@@ -6,6 +6,7 @@ import { gacha } from '../../src/slides/gacha';
 import { fuji } from '../../src/slides/fuji';
 import { torii } from '../../src/slides/torii';
 import { bento } from '../../src/slides/bento';
+import { ganguro } from '../../src/slides/ganguro';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -116,4 +117,18 @@ test('J bento: a sports-paper league table of genres under a red vertical headli
   expect(el.querySelector('.hero')!.textContent).toBe('42%');
   expect(el.querySelector('.photo')).not.toBeNull();
   expect(el.querySelector('.credit')).not.toBeNull();
+});
+
+test('G ganguro: the top genre in chrome type, its share as the hero only when shares exist', () => {
+  const el = ganguro(ctx());
+  expect(el.textContent).toContain('CITY POP');
+  expect(el.querySelector('.hero')!.textContent).toBe('42%');
+  const bare = ganguro(ctx({ stats: { ...STATS, genreShares: undefined } }));
+  expect(bare.querySelector('.hero')).toBeNull(); // no number is invented
+  expect(bare.textContent).toContain('CITY POP');
+});
+
+test('G ganguro: a long genre steps down to the smallest size', () => {
+  const el = ganguro(ctx({ stats: { ...STATS, topGenre: 'x'.repeat(40) } }));
+  expect(el.querySelector('.nm')!.classList.contains('l3')).toBe(true);
 });

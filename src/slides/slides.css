@@ -10,16 +10,6 @@
 /* 3 bento (round 2) */
 
 /* 4 ganguro (round 1) */
-.gan { background: linear-gradient(160deg, #6b3a1d, #3a1c0b); color: #fff; font-family: 'Dela Gothic One', sans-serif; }
-.gan::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #ff8a0018 0 10px, transparent 10px 20px); }
-.gan > * { position: relative; }
-.gan .hair { position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#ff2d95, #ffe600, #00e1ff, #fff, #ff2d95); filter: blur(1px); opacity: 0.9; }
-.gan .eye { display: flex; gap: 6px; margin: 6px 0; }
-.gan .eye i { display: block; width: 44px; height: 10px; background: #fff; border-radius: 10px; }
-.gan .t { font-size: 11px; color: #ffe600; font-family: 'DotGothic16', monospace; }
-.gan .big { font-size: 20px; line-height: 1.05; text-shadow: 3px 3px 0 #ff2d95; }
-.gan .big span { font-size: 30px; overflow-wrap: anywhere; }
-.gan .lips { width: 70px; height: 16px; border-radius: 0 0 40px 40px; background: #fff; margin-top: 8px; }
 
 /* 5 sumo banzuke (round 1) */
 

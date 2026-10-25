@@ -141,7 +141,8 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 0, duration: 0 }, 0);
     tl.fromTo(phone, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: 'back.out(1.6)' }, 0);
     tl.to(phone, { x: 6, duration: 0.04, repeat: 6, yoyo: true }, 0.45);
-    if (out) tl.set(out, { opacity: 0 }, 0.8);
+    // The old page is crumpled away behind the phone (art spec §6: J → G).
+    if (out) tl.to(out, { scale: 0.2, rotation: 25, opacity: 0, duration: 0.35, ease: 'power2.in' }, 0.45);
     tl.set(inEl, { opacity: 1 }, 0.8);
     tl.to(phone, { yPercent: 110, duration: 0.5, ease: 'power3.in' }, 0.9);
   } else if (type === 'tease') {

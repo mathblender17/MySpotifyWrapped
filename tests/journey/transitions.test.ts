@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
+import { gsap } from 'gsap';
 import { runTransition } from '../../src/journey/transitions';
 import type { Transition } from '../../src/journey/stations';
 
@@ -94,4 +95,13 @@ describe('pixel wipe into the gacha (morph pixelate)', () => {
     const { out, inEl } = pair();
     expect(runTransition('baton', out, inEl, { stage, cut, morph: 'pixelate', reduced: true }).duration()).toBeCloseTo(0.2);
   });
+});
+
+test('the phone slam crumples the old page away', () => {
+  const out = slideEl('ben');
+  stage.append(out);
+  const tl = runTransition('phone', out, slideEl('gan'), { stage, hook });
+  tl.progress(0.95);
+  expect(gsap.getProperty(out, 'scale')).toBeCloseTo(0.2);
+  expect(Number(gsap.getProperty(out, 'opacity'))).toBe(0);
 });
