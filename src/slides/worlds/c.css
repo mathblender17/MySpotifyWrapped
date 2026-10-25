@@ -1,0 +1,22 @@
+/* World C: mega type (art spec §5, mockup C). Flat field, rising-sun disc, the number is the poster. */
+.tor { background: #ff3b1f; color: #0b1640; font-family: var(--face-text); }
+.tor .sun { position: absolute; width: 190px; height: 190px; border-radius: 50%; background: #ffe9c9; right: -86px; top: -60px; }
+.tor .marq { position: absolute; top: 34px; left: 0; right: 0; white-space: nowrap; overflow: hidden; font: 9px/1 'DotGothic16', monospace; letter-spacing: 3px; padding-left: 30px; }
+.tor .hero { position: absolute; left: -8px; top: 66px; font: 104px/.82 var(--face-num); font-weight: 400; letter-spacing: -6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tor .s { position: absolute; left: 14px; right: 14px; top: 170px; font: 900 14px/1.25 var(--face-text); }
+.tor .s small { display: block; margin-top: 3px; font-size: 10px; font-weight: 500; color: #ffe9c9; }
+.tor .band { position: absolute; left: -20px; right: -20px; top: 246px; background: #0b1640; color: #ffe9c9; transform: rotate(-6deg); padding: 9px 30px 11px; font: 24px/1 var(--face-num); letter-spacing: -1px; white-space: nowrap; }
+.tor .ft { position: absolute; left: 14px; right: 14px; bottom: 16px; font: 900 10px var(--face-text); }
+.tor .ft b { display: inline-block; margin-right: 6px; padding: 2px 8px; border-radius: 10px; background: #0b1640; color: #ff2d95; }
+
+/* Kanji share card (C + F): mega kanji on the flat field, the F band and board. */
+.kj { background: #ff3b1f; color: #0b1640; font-family: var(--face-text); padding: 0; }
+.kj .band { position: absolute; left: 0; right: 0; top: 26px; height: 22px; background: var(--line); color: #fff; font: 900 11px/22px var(--face-text); letter-spacing: 2px; padding-left: 32px; }
+.kj .hero { position: absolute; left: -6px; top: 52px; font: 168px/1 var(--face-num); color: #ffe9c9; text-shadow: 6px 6px 0 #0b1640; }
+.kj .mn { position: absolute; left: 14px; right: 14px; top: 218px; font: 20px/1 'Archivo Black', sans-serif; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: anywhere; }
+.kj .sum { position: absolute; left: 12px; right: 12px; bottom: 50px; background: #fff; border-top: 5px solid var(--line); padding: 6px 8px; font-size: 10px; box-shadow: 4px 4px 0 #0b1640; }
+.kj .sum div { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+.kj .sum span { color: #555; flex: none; }
+.kj .sum b { font-weight: 900; min-width: 0; }
+.kj .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kj .hk { position: absolute; right: 12px; top: 58px; width: 30px; padding: 4px 0; background: #fff; color: #c8102e; font: 10px/1.1 'Yuji Syuku', serif; text-align: center; border: 2px solid #c8102e; box-shadow: 0 0 0 2px #ff2d95; }

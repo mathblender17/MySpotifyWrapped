@@ -12,6 +12,7 @@ import { createGuide } from './guide';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
+import { loadWorldFonts } from '../style/fonts';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -118,6 +119,10 @@ export function createStory(
     world?.setSeason((s.act - 1) / 3);
     // First stop or going back: the camera is simply there.
     if (from < 0 || !animate) world?.jump(i);
+    // Fonts for this world and the next stop's, so the next arrival doesn't flash a fallback face.
+    loadWorldFonts(s.world);
+    const next = playable.findIndex((p, n) => p && n > i);
+    if (next > 0) loadWorldFonts(STATIONS[next].world);
     const el = opts.slides[s.id](opts.ctx);
     route.set(i);
     season.set(s.act);
@@ -157,6 +162,8 @@ export function createStory(
     const signIn = sign.show(s);
     const signDock = sign.dock();
     tl.add(trans, 0);
+    // The phone and tease show the hook themselves; once they're gone the guide's phone picks it up, never blank.
+    if (selfHooked) tl.add(guide.say(s.id).paused(false), trans.duration());
     tl.add(signIn.paused(false), trans.duration());
     tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());

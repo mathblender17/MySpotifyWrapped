@@ -1,0 +1,13 @@
+/* World O: 1960s modernism (art spec §5, mockup O). Cream field, one red sun, Bebas Neue labels. */
+.wx { background: #f4efe6; color: #111; font-family: var(--face-text); }
+.wx .sun { position: absolute; left: 0; top: 0; width: 100px; height: 100px; border-radius: 50%; background: #c8102e; }
+.wx .low { position: absolute; left: 14px; right: 14px; bottom: 30px; display: flex; flex-direction: column; gap: 10px; }
+.wx .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.wx .ss { min-width: 0; border-top: 2px solid #111; padding-top: 3px; }
+.wx .lb { display: block; font: 10px/1 'Bebas Neue', var(--face-text); letter-spacing: 3px; color: #b08a2e; }
+.wx .nm { display: block; font: 17px/1 'Bebas Neue', var(--face-text); letter-spacing: .5px; margin-top: 2px; }
+.wx .fit { overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+
+.wx .loud small { display: block; font: 10px/1 'Bebas Neue', var(--face-text); letter-spacing: 3px; color: #555; }
+.wx .hero { display: block; font: 26px/1.1 var(--face-num); font-weight: 400; color: #c8102e; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wx .ft { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font: 900 9px var(--face-text); letter-spacing: 5px; color: #ff2d95; }

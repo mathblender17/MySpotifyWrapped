@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { createStory, type Slide, type SlideContext } from '../../src/story/player';
 import { seasonFor } from '../../src/story/season';
 import { STATIONS } from '../../src/journey/stations';
+import { HOOKS } from '../../src/journey/hooks';
 import { makeDemoPlays } from '../../src/ingest/demo';
 import { computeAllYears } from '../../src/stats';
 
@@ -166,4 +167,26 @@ test('tapping to skip an arrival does not fire its queued sounds as one chord', 
   s.next(); // skip to the end of the arrival
   expect(sfx.chime).not.toHaveBeenCalled();
   expect(sfx.don).not.toHaveBeenCalled();
+});
+
+test('arriving at a station loads its world fonts and those of the next stop', () => {
+  document.head.querySelectorAll('link[data-world]').forEach((l) => l.remove());
+  story({ startAt: 4 }); // sumo (D), next idol (Q)
+  const worlds = [...document.head.querySelectorAll<HTMLLinkElement>('link[data-world]')].map((l) => l.dataset.world);
+  expect(worlds).toEqual(expect.arrayContaining(['D', 'Q']));
+});
+
+test('light accents (konbini cyan, gacha yellow) stamp in ink so they read on the cream ticket', () => {
+  const s = story({ startAt: 8 }); // weather: every stop before it is already stamped
+  const slots = [...root.querySelectorAll('.ticket .slot')];
+  expect(slots[6].classList.contains('light')).toBe(true);
+  expect(slots[7].classList.contains('light')).toBe(true);
+  expect(slots[4].classList.contains('light')).toBe(false);
+  s.destroy();
+});
+
+test('after a phone or tease arrival the guide picks the hook up again (her phone is never left blank)', () => {
+  const s = story({ startAt: 5 }); // idol arrives by tease
+  s.next(); // finish the arrival
+  expect(root.querySelector('.guide .jp')!.textContent).toBe(HOOKS.idol.jp);
 });

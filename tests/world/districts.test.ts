@@ -48,3 +48,16 @@ test('dispose removes every district', () => {
   w.dispose();
   expect(districtsIn(scene)).toEqual([]);
 });
+
+const hasLineSign = (id: string) => {
+  let found = false;
+  DISTRICTS[id](new THREE.Vector3(), new THREE.Vector3(1, 0, 0)).traverse((o) => {
+    const m = (o as THREE.Mesh).material as THREE.MeshBasicMaterial | undefined;
+    if (m?.color?.getHexString() === '00a7db') found = true;
+  });
+  return found;
+};
+
+test('act-1 districts carry a station signboard in the line colour; later acts do not', () => {
+  for (const s of STATIONS) expect(hasLineSign(s.id), s.id).toBe(s.act === 1);
+});

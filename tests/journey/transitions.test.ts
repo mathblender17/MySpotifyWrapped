@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test } from 'vitest';
+import { gsap } from 'gsap';
 import { runTransition } from '../../src/journey/transitions';
 import type { Transition } from '../../src/journey/stations';
 
@@ -93,5 +94,155 @@ describe('pixel wipe into the gacha (morph pixelate)', () => {
   test('reduced motion is the 0.2 s crossfade', () => {
     const { out, inEl } = pair();
     expect(runTransition('baton', out, inEl, { stage, cut, morph: 'pixelate', reduced: true }).duration()).toBeCloseTo(0.2);
+  });
+});
+
+test('the phone slam crumples the old page away', () => {
+  const out = slideEl('ben');
+  stage.append(out);
+  const tl = runTransition('phone', out, slideEl('gan'), { stage, hook });
+  tl.progress(0.95);
+  expect(gsap.getProperty(out, 'scale')).toBeCloseTo(0.2);
+  expect(Number(gsap.getProperty(out, 'opacity'))).toBe(0);
+});
+
+describe('flight morphs: shrink-to-headline and panel-to-cover', () => {
+  const shrinkCut = { from: '.tor .hero', to: '.ben .h1' };
+  const coverCut = { from: '.sumo .splash', to: '.idol .cover' };
+  const toriiOut = () => { const o = slideEl('tor', '<b class="hero">341</b>'); stage.append(o); return o; };
+
+  const rect = (el: Element, left: number, top: number, width: number, height: number) =>
+    (el.getBoundingClientRect = () => ({ left, top, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON() {} }));
+
+  test('shrink scales a clone of the big number down into the headline (text shrinks, not its box)', () => {
+    const out = toriiOut();
+    const inEl = slideEl('ben', '<div class="h1">首位</div>');
+    rect(stage, 0, 0, 210, 373);
+    rect(out.querySelector('.hero')!, 0, 60, 200, 100);
+    rect(inEl.querySelector('.h1')!, 160, 30, 40, 120);
+    const tl = runTransition('cut', out, inEl, { stage, cut: shrinkCut, morph: 'shrink' });
+    tl.progress(0.74);
+    const clone = stage.querySelector<HTMLElement>('.cut-clone')!;
+    expect(clone.style.width).toBe('200px');
+    // One uniform scale (text keeps its shape), centred on the target box.
+    expect(Number(gsap.getProperty(clone, 'scaleX'))).toBeCloseTo(0.2, 1);
+    expect(Number(gsap.getProperty(clone, 'scaleY'))).toBeCloseTo(0.2, 1);
+    expect(Number(gsap.getProperty(clone, 'x'))).toBeCloseTo(160, 0);
+    expect(Number(gsap.getProperty(clone, 'y'))).toBeCloseTo(20, 0);
+  });
+
+  test("the clone keeps its slide's look: it flies inside a host carrying the source slide's class", () => {
+    const tl = runTransition('cut', toriiOut(), slideEl('ben', '<div class="h1">首位</div>'), { stage, cut: shrinkCut, morph: 'shrink' });
+    tl.progress(0.3);
+    const host = stage.querySelector<HTMLElement>('.cut-clone')!.parentElement!;
+    expect(host.classList.contains('cut-host')).toBe(true);
+    expect(host.classList.contains('tor')).toBe(true);
+    expect(host.classList.contains('ph')).toBe(false);
+    expect(host.classList.contains('grain')).toBe(false);
+  });
+
+  test('shrink takes 0.8 s and leaves only the new slide', () => {
+    const inEl = slideEl('ben', '<div class="h1">首位</div>');
+    const tl = runTransition('cut', toriiOut(), inEl, { stage, cut: shrinkCut, morph: 'shrink' });
+    expect(tl.duration()).toBeCloseTo(0.8);
+    tl.progress(0.5);
+    expect(stage.querySelector('.cut-clone')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test('cover holds the tease card, then flies the splash panel onto the cover (1.4 s)', () => {
+    const out = slideEl('sumo', '<div class="splash">横綱</div>');
+    stage.append(out);
+    const inEl = slideEl('idol', '<div class="cover"></div>');
+    const tl = runTransition('tease', out, inEl, { stage, cut: coverCut, morph: 'cover', hook });
+    expect(tl.duration()).toBeCloseTo(1.4);
+    tl.progress(0.2);
+    expect(stage.textContent).toContain(hook.en);
+    // The panel stays hidden while the hook card is up (it would cover the hook).
+    expect(Number(gsap.getProperty(stage.querySelector('.cut-host')!, 'opacity'))).toBe(0);
+    tl.progress(0.75);
+    expect(stage.querySelector('.cut-clone')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test.each([['shrink', shrinkCut], ['cover', coverCut]] as const)('%s without its source shape falls back to a ride', (morph, cut) => {
+    const ride = runTransition('ride', slideEl('a'), slideEl('b'), { stage }).duration();
+    const out = slideEl('wx');
+    stage.append(out);
+    expect(runTransition('cut', out, slideEl('ben', '<div class="h1"></div><div class="cover"></div>'), { stage, cut, morph }).duration()).toBe(ride);
+  });
+
+  test('reduced motion is the 0.2 s crossfade', () => {
+    expect(runTransition('cut', toriiOut(), slideEl('ben', '<div class="h1"></div>'), { stage, cut: shrinkCut, morph: 'shrink', reduced: true }).duration()).toBeCloseTo(0.2);
+  });
+});
+
+describe('overlay morphs: neon-takeover and ink-to-beast', () => {
+  const neonCut = { from: '.idol .cover', to: '.kon .rc' };
+  const inkCut = { from: '.fuji svg', to: '.shk .beast' };
+  const pair = (fromCls: string, from: string, toCls: string, to: string) => {
+    const out = slideEl(fromCls, from);
+    stage.append(out);
+    return { out, inEl: slideEl(toCls, to) };
+  };
+
+  test('neon floods the cover pink, then splits into two inks sliding apart (0.8 s)', () => {
+    const { out, inEl } = pair('idol', '<div class="cover"></div>', 'kon', '<div class="rc"></div>');
+    const tl = runTransition('cut', out, inEl, { stage, cut: neonCut, morph: 'neon' });
+    expect(tl.duration()).toBeCloseTo(0.8);
+    tl.progress(0.2);
+    expect(stage.querySelector('.neon')).not.toBeNull();
+    tl.progress(0.6);
+    expect(stage.querySelector('.neon-a')).not.toBeNull();
+    expect(stage.querySelector('.neon-b')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+    expect(inEl.style.opacity).toBe('1');
+  });
+
+  test('at its biggest the ink blot covers every corner of the stage, even from a summit near the top', () => {
+    const { out, inEl } = pair('fuji', '<svg></svg>', 'shk', '<svg class="beast"></svg>');
+    const r = (el: Element, left: number, top: number, width: number, height: number) =>
+      (el.getBoundingClientRect = () => ({ left, top, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON() {} }));
+    r(stage, 0, 0, 210, 373);
+    r(out.querySelector('svg')!, 16, 104, 178, 150);
+    r(inEl.querySelector('.beast')!, 40, 22, 130, 162);
+    const tl = runTransition('cut', out, inEl, { stage, cut: { from: '.fuji svg', to: '.shk .beast' }, morph: 'ink' });
+    tl.seek(0.45); // the slides swap under the blot at 0.45 s
+    const blot = stage.querySelector<HTMLElement>('.ink-blot')!;
+    const size = parseFloat(blot.style.width);
+    const cx = parseFloat(blot.style.left) + size / 2;
+    const cy = parseFloat(blot.style.top) + size / 2;
+    // The rough brush edge dips to ~80% of the circle: count only that inner radius as covered.
+    const inner = (Number(gsap.getProperty(blot, 'scale')) * size) / 2 * 0.8;
+    for (const [x, y] of [[0, 0], [210, 0], [0, 373], [210, 373]]) expect(inner).toBeGreaterThanOrEqual(Math.hypot(x - cx, y - cy));
+  });
+
+  test('ink grows a blot from the summit, swaps the slides under it, and shrinks it into the beast (0.9 s)', () => {
+    const { out, inEl } = pair('fuji', '<svg></svg>', 'shk', '<svg class="beast"></svg>');
+    const tl = runTransition('cut', out, inEl, { stage, cut: inkCut, morph: 'ink' });
+    expect(tl.duration()).toBeCloseTo(0.9);
+    tl.progress(0.5);
+    expect(stage.querySelector('.ink-blot')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test.each([['neon', neonCut], ['ink', inkCut]] as const)('%s without its source falls back to a ride, leaving nothing behind', (morph, cut) => {
+    const ride = runTransition('ride', slideEl('a'), slideEl('b'), { stage: document.createElement('div') }).duration();
+    const out = slideEl('wx');
+    stage.append(out);
+    const inEl = slideEl('x', '<div class="rc"></div><svg class="beast"></svg>');
+    const tl = runTransition('cut', out, inEl, { stage, cut, morph });
+    expect(tl.duration()).toBe(ride);
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test.each(['neon', 'ink'] as const)('%s under reduced motion is the 0.2 s crossfade', (morph) => {
+    const { out, inEl } = pair('idol', '<div class="cover"></div><svg></svg>', 'kon', '<div class="rc"></div><svg class="beast"></svg>');
+    expect(runTransition('cut', out, inEl, { stage, cut: morph === 'neon' ? neonCut : { from: '.idol svg', to: '.kon .beast' }, morph, reduced: true }).duration()).toBeCloseTo(0.2);
   });
 });

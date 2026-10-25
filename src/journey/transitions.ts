@@ -1,6 +1,9 @@
 import { gsap } from 'gsap';
-import { DESIGN_W } from '../story/frame';
+import { DESIGN_H, DESIGN_W } from '../story/frame';
 import type { Transition } from './stations';
+
+/** Art spec §6 morphs: pixelate, shrink-to-headline, panel-to-cover, neon-takeover, ink-to-beast. */
+export type Morph = 'pixelate' | 'shrink' | 'cover' | 'neon' | 'ink';
 
 export type TransitionOpts = {
   stage: HTMLElement;
@@ -12,7 +15,7 @@ export type TransitionOpts = {
   from?: number;
   to?: number;
   /** A style morph on arrival (art spec §6). Falls back to a ride when its source shape is missing. */
-  morph?: 'pixelate';
+  morph?: Morph;
 };
 
 const WORLD_RIDE = 1.6;
@@ -73,6 +76,79 @@ function pixelWipe(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, 
   return [grid];
 }
 
+/**
+ * A flight morph: a clone of `from` lands on `to`'s box with one uniform scale (so a big number's text shrinks into a
+ * headline without distorting, a panel grows into a cover). The clone flies inside a host carrying the source slide's
+ * class, so the slide's own CSS (`.tor .hero`, `.sumo .splash`) still styles it. Hidden until `at`; 0.8 s from `at`.
+ */
+function flight(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement, from: Element, to: Element, at = 0) {
+  const a = boxIn(stage, from);
+  const b = boxIn(stage, to);
+  const host = document.createElement('div');
+  host.className = [...out.classList].filter((c) => c !== 'ph' && c !== 'grain' && c !== 'dark').concat('cut-host').join(' ');
+  const clone = from.cloneNode(true) as HTMLElement;
+  clone.classList.add('cut-clone');
+  Object.assign(clone.style, { position: 'absolute', margin: '0', left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`, transformOrigin: '0 0', opacity: '1' });
+  host.append(clone);
+  stage.append(host);
+  const k = a.width && a.height ? Math.min(b.width / a.width, b.height / a.height) : 1;
+  tl.set(host, { opacity: 0 }, 0);
+  tl.set(host, { opacity: 1 }, at);
+  tl.to(out, { opacity: 0, duration: 0.3 }, at);
+  tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, at + 0.4);
+  tl.fromTo(
+    clone,
+    { x: 0, y: 0, scale: 1 },
+    { x: b.left + (b.width - a.width * k) / 2 - a.left, y: b.top + (b.height - a.height * k) / 2 - a.top, scale: k, duration: 0.6, ease: 'power3.inOut' },
+    at,
+  );
+  tl.to(clone, { opacity: 0, duration: 0.2 }, at + 0.6);
+  return [host];
+}
+
+/** Neon takeover (Q → B): the cover's neon floods the screen pink, the slides swap under it, and it splits into the
+ * two riso inks (pink, navy) sliding apart. 0.8 s. */
+function neon(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement) {
+  const flood = overlay(stage, 'neon');
+  const a = overlay(stage, 'neon-a');
+  const b = overlay(stage, 'neon-b');
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.set([a, b], { opacity: 0 }, 0);
+  tl.fromTo(flood, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power1.in' }, 0);
+  tl.set(out, { opacity: 0 }, 0.3);
+  tl.set(inEl, { opacity: 1 }, 0.3);
+  tl.set(flood, { opacity: 0 }, 0.3);
+  tl.set([a, b], { opacity: 1 }, 0.3);
+  tl.to(a, { xPercent: -100, duration: 0.5, ease: 'power3.in' }, 0.3);
+  tl.to(b, { xPercent: 100, duration: 0.5, ease: 'power3.in' }, 0.3);
+  return [flood, a, b];
+}
+
+const BLOT = 40; // the ink blot's base size, design px
+
+/** Ink to beast (I → L): an ink blot grows from Fuji's summit to cover the stage, the slides swap under it, and it
+ * shrinks into the kaiju's silhouette. 0.9 s. */
+function ink(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement, from: Element, to: Element) {
+  const a = boxIn(stage, from);
+  const b = boxIn(stage, to);
+  const blot = overlay(stage, 'ink-blot');
+  const cx = a.left + a.width / 2 - BLOT / 2; // the summit: top centre of the mountain
+  const cy = a.top - BLOT / 2;
+  Object.assign(blot.style, { inset: 'auto', left: `${cx}px`, top: `${cy}px`, width: `${BLOT}px`, height: `${BLOT}px` });
+  // Cover the farthest stage corner from the blot's centre; the rough brush edge dips to ~80% of the circle.
+  const [ox, oy] = [cx + BLOT / 2, cy + BLOT / 2];
+  const reach = Math.max(...[[0, 0], [DESIGN_W, 0], [0, DESIGN_H], [DESIGN_W, DESIGN_H]].map(([x, y]) => Math.hypot(x - ox, y - oy)));
+  const fill = (reach / 0.8) / (BLOT / 2);
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.fromTo(blot, { scale: 0.2 }, { scale: fill, duration: 0.45, ease: 'power2.in' }, 0);
+  tl.set(out, { opacity: 0 }, 0.45);
+  tl.set(inEl, { opacity: 1 }, 0.45);
+  const to2 = { x: b.left + b.width / 2 - BLOT / 2 - cx, y: b.top + b.height / 2 - BLOT / 2 - cy, scale: Math.max(b.width, b.height) / BLOT || 1 };
+  tl.to(blot, { ...to2, duration: 0.35, ease: 'power3.out' }, 0.45);
+  tl.to(blot, { opacity: 0, duration: 0.1 }, 0.8);
+  return [blot];
+}
+
 /** With a world, a ride hands the screen over: the card flies off, the train travels, the next card drops in. */
 function worldRide(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement, travel: gsap.core.Timeline) {
   if (out) tl.to(out, { scale: 0.7, yPercent: -120, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0);
@@ -110,14 +186,33 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     if (out) tl.to(out, { opacity: 0, duration: 0.2 }, 0);
     if (moving) tl.add(travel(0.2), 0);
     parallel = false;
+  } else if (o.morph) {
+    const from = out && o.cut ? out.querySelector(o.cut.from) : null;
+    const to = o.cut ? inEl.querySelector(o.cut.to) : null;
+    if (!from || (o.morph !== 'pixelate' && !to)) {
+      // The station before may have been passed through: no shape to carry over, so just ride.
+      extras = anyRide();
+      parallel = false;
+    } else if (o.morph === 'pixelate') extras = pixelWipe(tl, out!, inEl, stage);
+    else if (o.morph === 'shrink') extras = flight(tl, out!, inEl, stage, from, to!);
+    else if (o.morph === 'neon') extras = neon(tl, out!, inEl, stage);
+    else if (o.morph === 'ink') extras = ink(tl, out!, inEl, stage, from, to!);
+    else {
+      // cover: the tease card holds the hook, then the splash panel flies onto the magazine cover.
+      const card = overlay(stage, 'tease', `<p></p>`);
+      card.querySelector('p')!.textContent = o.hook?.en ?? '';
+      tl.fromTo(card, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0);
+      tl.set(out, { opacity: 0 }, 0.3);
+      tl.set(inEl, { opacity: 0 }, 0);
+      tl.to(card, { opacity: 0, duration: 0.3 }, 0.6);
+      extras = [card, ...flight(tl, out!, inEl, stage, from, to!, 0.6)];
+    }
   } else if (type === 'title') {
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
   } else if (type === 'cut' || type === 'baton') {
     const from = out && o.cut ? out.querySelector(o.cut.from) : null;
     const to = o.cut ? inEl.querySelector(o.cut.to) : null;
-    if (from && o.morph === 'pixelate') {
-      extras = pixelWipe(tl, out!, inEl, stage);
-    } else if (!from || !to) {
+    if (!from || !to) {
       // The station before this one may have been passed through: no shape to carry over, so just ride.
       extras = anyRide();
       parallel = false;
@@ -141,7 +236,8 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 0, duration: 0 }, 0);
     tl.fromTo(phone, { yPercent: 110 }, { yPercent: 0, duration: 0.4, ease: 'back.out(1.6)' }, 0);
     tl.to(phone, { x: 6, duration: 0.04, repeat: 6, yoyo: true }, 0.45);
-    if (out) tl.set(out, { opacity: 0 }, 0.8);
+    // The old page is crumpled away behind the phone (art spec §6: J → G).
+    if (out) tl.to(out, { scale: 0.2, rotation: 25, opacity: 0, duration: 0.35, ease: 'power2.in' }, 0.45);
     tl.set(inEl, { opacity: 1 }, 0.8);
     tl.to(phone, { yPercent: 110, duration: 0.5, ease: 'power3.in' }, 0.9);
   } else if (type === 'tease') {

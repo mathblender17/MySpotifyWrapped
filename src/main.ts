@@ -5,6 +5,8 @@ import { prefersReducedMotion } from './journey/beats';
 import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
 import { withDemoSoundtrack } from './ingest/demoSoundtrack';
+import { withSampleGenres } from './ingest/sampleGenres';
+import { creditsLine } from './art/credits';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
 import { esc, plays as nPlays } from './slides/fmt';
@@ -35,6 +37,7 @@ function landing(note?: string) {
       </label>
       <div class="status" role="status"></div>
       ${note ? `<div class="note">${note}<button type="button" class="x" aria-label="Dismiss">×</button></div>` : ''}
+      <p class="credits">${creditsLine()}</p>
     </main>`;
   app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true, undefined, true));
   app.querySelector('.note .x')?.addEventListener('click', (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
@@ -75,7 +78,9 @@ function problemsNote(problems: string[]) {
 
 function start(plays: Play[], problems: string[], lifetime: boolean, at?: { station?: number; year?: number }, demo = false) {
   const computed = computeAllYears(plays, { lifetime });
-  const ds = demo ? withDemoSoundtrack(computed) : computed;
+  const withSound = demo ? withDemoSoundtrack(computed) : computed;
+  // Genres arrive with Last.fm later; until then bento and ganguro can only be previewed in dev with sample shares.
+  const ds = import.meta.env.DEV && route.genres === 'sample' ? withSampleGenres(withSound) : withSound;
   if (!ds.stats.size) {
     const counts = ds.years.map((y) => `${y.year}: ${nPlays(y.plays)}`).join(', ') || 'no songs found';
     const why = `No year has enough listening yet (needs 50+ plays of 30 seconds or more). Found ${esc(counts)}.`;

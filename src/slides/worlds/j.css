@@ -1,0 +1,20 @@
+/* World J: sports newspaper (art spec §5, mockup J). Newsprint, blue masthead, red vertical headline, halftone photo. */
+.ben { background: #f6f1e3; color: #141414; font-family: var(--face-text); padding: 0; }
+.ben .mast { position: absolute; left: 0; right: 0; top: 0; height: 26px; background: #003da5; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 10px 0 30px; font: 13px/1 var(--face-num); }
+.ben .mast small { font: 900 7px var(--face-text); letter-spacing: 1px; }
+.ben .h1 { position: absolute; right: 6px; top: 32px; writing-mode: vertical-rl; font: 30px/1 var(--face-num); color: #e60012; -webkit-text-stroke: 4px #fff; paint-order: stroke fill; letter-spacing: -1px; }
+.ben .kick { position: absolute; left: 12px; top: 38px; background: #ffe000; font: 12px/1 var(--face-num); padding: 3px 6px; transform: rotate(-3deg); }
+.ben .h3 { position: absolute; left: 12px; right: 50px; top: 60px; font: 22px/1 var(--face-num); letter-spacing: -1px; }
+.ben .fit { overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ben .hero { position: absolute; left: 12px; top: 106px; font: 52px/1 var(--face-num); color: #003da5; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+.ben .box { position: absolute; left: 10px; right: 10px; top: 168px; border-top: 3px solid #141414; border-bottom: 1px solid #141414; }
+.ben .row { display: grid; grid-template-columns: 12px minmax(0, 1fr) 50px 30px; align-items: center; gap: 5px; padding: 3px 0; border-bottom: 1px dotted #1415; font-size: 9px; font-weight: 900; }
+.ben .row:last-child { border-bottom: 0; }
+.ben .rk { font-family: var(--face-num); color: #e60012; }
+.ben .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ben .bar { height: 6px; background: #0001; }
+.ben .bar i { display: block; height: 100%; background: #003da5; box-shadow: 3px 0 0 #ff2d95; }
+.ben .row b { font: 11px/1 var(--face-num); text-align: right; font-weight: 400; }
+.ben .photo { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background: url(/art/kabukicho.webp) 50% 72% / auto 300% no-repeat, #8a8580; filter: grayscale(1) contrast(1.6); }
+.ben .ht { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background-image: radial-gradient(#f6f1e3 .9px, transparent 1.3px); background-size: 4px 4px; mix-blend-mode: screen; opacity: .6; }
+.ben .ft { position: absolute; left: 10px; bottom: 92px; font: 900 8px var(--face-text); color: #e60012; letter-spacing: 1px; }

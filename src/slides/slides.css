@@ -6,104 +6,27 @@
 /* 1 departure board (train mockup, round 1) */
 
 /* 2 torii tunnel (round 3) */
-.tor { background: #1a0a04; color: #fff; align-items: center; justify-content: flex-end; }
-.tor .g { position: absolute; border: 10px solid #e8461c; border-bottom: none; border-top-width: 14px; }
-.tor .tx { position: relative; text-align: center; text-shadow: 0 2px 8px #000; }
-.tor .k { font-family: 'Yuji Syuku', serif; font-size: 16px; }
-.tor .big { font-family: 'Dela Gothic One', sans-serif; font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }
-.tor .s { font-family: 'Zen Maru Gothic', sans-serif; font-size: 11px; }
-.tor .amt { margin-top: 8px; display: inline-block; background: #ff2d95; color: #fff; font-family: 'Dela Gothic One', sans-serif; font-size: 16px; padding: 3px 10px; border-radius: 4px; }
 
 /* 3 bento (round 2) */
-.ben { background: #2b1a10; color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
-.ben .hd { font-family: 'Dela Gothic One', sans-serif; font-size: 18px; }
-.ben .box { flex: 1; margin-top: 10px; background: #c0392b; border-radius: 10px; padding: 8px; display: grid; grid-template-columns: 1.2fr 1fr; grid-auto-rows: 1fr; gap: 6px; }
-.ben .c { border-radius: 6px; font-size: 10px; font-weight: 900; padding: 4px; color: #222; display: flex; flex-direction: column; justify-content: center; }
-.ben .c b { font-family: 'Dela Gothic One', sans-serif; font-size: 16px; }
-.ben .c.rice { grid-row: span 4; align-items: center; font-size: 12px; text-align: center; }
-.ben .c.rice i { width: 16px; height: 16px; border-radius: 50%; background: #c4002f; margin-bottom: 4px; }
-.ben .ft { margin-top: 8px; font-size: 11px; color: #ff2d95; text-align: center; }
 
 /* 4 ganguro (round 1) */
-.gan { background: linear-gradient(160deg, #6b3a1d, #3a1c0b); color: #fff; font-family: 'Dela Gothic One', sans-serif; }
-.gan::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #ff8a0018 0 10px, transparent 10px 20px); }
-.gan > * { position: relative; }
-.gan .hair { position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#ff2d95, #ffe600, #00e1ff, #fff, #ff2d95); filter: blur(1px); opacity: 0.9; }
-.gan .eye { display: flex; gap: 6px; margin: 6px 0; }
-.gan .eye i { display: block; width: 44px; height: 10px; background: #fff; border-radius: 10px; }
-.gan .t { font-size: 11px; color: #ffe600; font-family: 'DotGothic16', monospace; }
-.gan .big { font-size: 20px; line-height: 1.05; text-shadow: 3px 3px 0 #ff2d95; }
-.gan .big span { font-size: 30px; overflow-wrap: anywhere; }
-.gan .lips { width: 70px; height: 16px; border-radius: 0 0 40px 40px; background: #fff; margin-top: 8px; }
 
 /* 5 sumo banzuke (round 1) */
 
 /* 6 idol / oshi (round 1) */
-.idol { background: linear-gradient(#ffe9f6, #fff); color: #d4007a; font-family: 'Hachi Maru Pop', sans-serif; text-align: center; }
-.idol .c { font-size: 13px; }
-.idol .ch { background: #fff; padding: 8px 8px 22px; box-shadow: 0 6px 16px #0003; transform: rotate(-4deg); width: 130px; margin: 6px auto 0; }
-.idol .ch .pic { height: 100px; background: linear-gradient(135deg, #ff2d95, #9ad6ff); }
-.idol .ch .sig { font-size: 12px; margin-top: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.idol .oshi { font-family: 'Dela Gothic One', sans-serif; font-size: 20px; margin-top: 12px; line-height: 1.1; }
-.idol .st { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 11px; color: #333; margin-top: 4px; }
-.idol .pen { display: flex; justify-content: center; gap: 5px; margin-top: auto; }
-.idol .pen i { width: 8px; height: 40px; border-radius: 4px; box-shadow: 0 0 10px currentColor; }
 
 /* 7 konbini receipt (round 2) */
-.kon { background: #2e8b57; align-items: center; }
-.kon .rc { background: #fff; width: 178px; flex: 1; font-family: 'DotGothic16', monospace; font-size: 11px; color: #222; padding: 10px; line-height: 1.5; box-sizing: border-box; }
-.kon .h { text-align: center; font-size: 12px; border-bottom: 1px dashed #999; padding-bottom: 4px; margin-bottom: 4px; }
-.kon .r { display: flex; justify-content: space-between; gap: 6px; }
-.kon .r span:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.kon .tot { border-top: 1px dashed #999; margin-top: 4px; padding-top: 4px; font-size: 13px; color: #ff2d95; }
-.kon .by { text-align: center; font-size: 10px; color: #777; margin-top: 4px; }
-.kon .bc { text-align: center; margin-top: 8px; }
 
 /* 8 gacha (round 1) */
 
 /* 9 TV weather / sakura forecast (round 1) */
-.wx { background: linear-gradient(#0b62c4, #0a3f87); color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
-.wx .bar { background: #fff; color: #0a3f87; font-weight: 900; font-size: 12px; padding: 4px 8px; border-radius: 4px; align-self: flex-start; border-left: 6px solid #ff2d95; }
-.wx .map { margin: 12px 0; height: 120px; position: relative; }
-.wx .isl { position: absolute; background: #5fd16a; border-radius: 40% 60% 50% 40%; border: 2px solid #fff; }
-.wx .fc { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10px; text-align: center; }
-.wx .fc div { background: #ffffff22; border-radius: 6px; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.wx .fc .jp { font-weight: 900; }
-.wx .fc b { font-size: 16px; }
-.wx .fc .nm { font-weight: 900; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.wx .ft { margin-top: auto; font-size: 10px; text-align: center; opacity: 0.8; }
 
 /* 10 Mt. Fuji (round 3) — ridge is the weekly graph */
 
 /* 11 shinkansen (round 3) */
-.shk { background: linear-gradient(#cfe8ff, #fff); color: #0b3d91; }
-.shk .t { font-family: 'Dela Gothic One', sans-serif; font-size: 22px; line-height: 1.1; }
-.shk .nose { position: absolute; left: -40px; right: -10px; top: 130px; height: 70px; background: #fff; border-radius: 120px 0 0 30px; box-shadow: 0 6px 14px #0002; border-bottom: 8px solid #0b3d91; }
-.shk .nose::after { content: ''; position: absolute; left: 40px; right: 0; bottom: 6px; height: 4px; background: #ff2d95; }
-.shk .win { position: absolute; left: 30px; top: 142px; width: 60px; height: 18px; background: #123; border-radius: 20px 4px 4px 4px; }
-.shk .nm { margin-top: auto; font-family: 'Dela Gothic One', sans-serif; font-size: 22px; line-height: 1.1; overflow-wrap: anywhere; }
-.shk .s { font-family: 'Zen Maru Gothic', sans-serif; font-size: 12px; font-weight: 900; margin-top: 4px; }
 
 /* 12 omikuji (round 1) */
-.omi { background: #7a0c0c; align-items: center; }
-.omi .slip { background: #fdf8ec; width: 140px; flex: 1; font-family: 'Yuji Syuku', serif; color: #111; display: flex; flex-direction: column; align-items: center; padding: 10px 6px; border: 1px solid #c9a; box-sizing: border-box; text-align: center; }
-.omi .hd { font-size: 12px; border-bottom: 1px solid #111; width: 100%; padding-bottom: 4px; margin-bottom: 6px; }
-.omi .kk { writing-mode: vertical-rl; font-size: 54px; color: #c00; line-height: 1; }
-.omi .en { font-family: 'Zen Maru Gothic', sans-serif; font-size: 10px; font-weight: 900; }
-.omi .pj { font-size: 18px; margin-top: 8px; color: #ff2d95; }
-.omi .pn { font-family: 'Dela Gothic One', sans-serif; font-size: 13px; }
-.omi .ln { font-family: 'Zen Kurenaido', sans-serif; font-size: 11px; margin-top: 4px; }
 
 /* 13 Kanji of the Year (round 2) — share card */
-.kj { background: #f5f0e6; color: #111; font-family: 'Yuji Syuku', serif; align-items: center; text-align: center; }
-.kj .hd { font-size: 14px; }
-.kj .big { font-size: 120px; line-height: 1.1; }
-.kj .mn { text-transform: uppercase; font-family: 'Dela Gothic One', sans-serif; font-size: 14px; letter-spacing: 4px; color: #ff2d95; }
-.kj .sum { margin-top: auto; width: 100%; font-family: 'Zen Maru Gothic', sans-serif; font-size: 10px; text-align: left; }
-.kj .sum div { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid #1113; padding: 3px 0; }
-.kj .sum b { font-weight: 900; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.kj .hk { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: #c4002f; color: #fff; font-size: 9px; line-height: 1.1; display: flex; align-items: center; justify-content: center; }
 
 /* Phase 2a: beat helpers */
-.kon .rows { display: flex; flex-direction: column; }
-.shk .train { position: absolute; inset: 0; pointer-events: none; }
