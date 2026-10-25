@@ -8,6 +8,7 @@ import { torii } from '../../src/slides/torii';
 import { bento } from '../../src/slides/bento';
 import { ganguro } from '../../src/slides/ganguro';
 import { idol } from '../../src/slides/idol';
+import { konbini } from '../../src/slides/konbini';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -145,4 +146,15 @@ test('Q idol: a gyaru magazine cover of the city, the #1 artist in the cover lin
   expect(el.querySelector('.cover .credit')).not.toBeNull();
   expect(el.querySelector('.oshi')!.classList.contains('fit')).toBe(true);
   expect(el.querySelector('.hero')!.textContent).toContain('3,826');
+});
+
+test('B konbini: a riso receipt over the duotone night; the total is the hero; the stub stays for the pixel wipe', () => {
+  const el = konbini(ctx());
+  for (const tr of STATS.topTracks) expect(el.textContent).toContain(tr.name);
+  expect(el.querySelector('.kon .rc')).not.toBeNull();
+  expect(el.querySelector('.kon .bc')).not.toBeNull();
+  expect(el.querySelector('.hero')!.textContent).toContain('28,243');
+  expect(el.classList.contains('dark')).toBe(true);
+  expect(el.querySelector('.credit')).not.toBeNull();
+  expect(el.querySelector('.r .nm')!.classList.contains('clip')).toBe(true);
 });
