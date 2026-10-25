@@ -196,3 +196,63 @@ test('going back shows the sign docked at once', () => {
   expect(sign.textContent).toContain('02');
   expect(sign.classList.contains('docked')).toBe(true);
 });
+
+/** A soundtrack that records what it was asked to play and lets the test end the song. */
+const fakeSoundtrack = () => {
+  let ended: (() => void) | undefined;
+  const plays: (string | undefined)[] = [];
+  return {
+    plays,
+    end: () => ended?.(),
+    play: (u?: string) => void plays.push(u),
+    onEnded: (cb: () => void) => void (ended = cb),
+    pause() {}, resume() {}, stop() {}, unlock() {}, mute() {},
+    muted: false, unlocked: true,
+  };
+};
+const flush = async () => { for (let i = 0; i < 5; i++) await Promise.resolve(); };
+const queue = ctx.stats!.topTracks.map((t) => t.name);
+
+test('when a preview ends the next song in the mix plays', async () => {
+  const st = fakeSoundtrack();
+  story({ startAt: 1, soundtrack: st, findPreview: async (_a, t) => `url-${t}` });
+  await flush();
+  expect(st.plays.at(-1)).toBe(`url-${queue[0]}`);
+  st.end();
+  await flush();
+  expect(st.plays.at(-1)).toBe(`url-${queue[1]}`);
+});
+
+test('a song that has no preview is skipped, and an all-missing mix goes quiet', async () => {
+  const st = fakeSoundtrack();
+  story({ startAt: 1, soundtrack: st, findPreview: async (_a, t) => (t === queue[1] ? undefined : `url-${t}`) });
+  await flush();
+  st.end();
+  await flush();
+  expect(st.plays.at(-1)).toBe(`url-${queue[2]}`);
+
+  const quiet = fakeSoundtrack();
+  let lookups = 0;
+  story({ startAt: 1, soundtrack: quiet, findPreview: async () => void lookups++ });
+  await flush();
+  const before = lookups;
+  quiet.end();
+  await flush();
+  expect(lookups - before).toBeLessThanOrEqual(queue.length + 2);
+  expect(quiet.plays.filter(Boolean)).toEqual([]);
+});
+
+test('a station song wins over a late mix lookup', async () => {
+  const st = fakeSoundtrack();
+  const pending: ((u: string) => void)[] = [];
+  const s = story({ startAt: 1, soundtrack: st, findPreview: (_a, t) => new Promise((res) => pending.push(() => res(`url-${t}`))) });
+  pending.shift()!('');
+  await flush();
+  st.end(); // mix lookup now pending
+  const mixLookup = pending.shift()!;
+  while (s.index < STATIONS.findIndex((x) => x.id === 'idol')) { s.next(); s.next(); }
+  for (const p of pending.splice(0)) p('');
+  mixLookup('');
+  await flush();
+  expect(st.plays.at(-1)).toBe(`url-${ctx.stats!.soundtrack!.topArtistTrack!.name}`);
+});

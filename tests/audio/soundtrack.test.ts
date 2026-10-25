@@ -181,3 +181,13 @@ test('onEnded does not fire for a song that was faded out or stopped', () => {
   b.end();
   expect(cb).not.toHaveBeenCalled();
 });
+
+test('a song that ended can be played again (a one-song mix wraps around)', () => {
+  const s = createSoundtrack(make);
+  s.unlock();
+  s.play('https://x/a.m4a');
+  const a = made.find((x) => x.src === 'https://x/a.m4a')!;
+  a.end();
+  s.play('https://x/a.m4a');
+  expect(made.some((x) => x.src === 'https://x/a.m4a' && !x.paused)).toBe(true);
+});

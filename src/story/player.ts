@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { mixQueue } from '../audio/mix';
 import { findPreview as itunes } from '../audio/previews';
 import { createSfx, type Sfx } from '../audio/sfx';
 import type { Soundtrack } from '../audio/soundtrack';
@@ -73,16 +74,37 @@ export function createStory(
   /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
   const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
 
+  // The non-stop mix (alive spec §2): when a preview ends the next one starts; a station's own song moves the mix there.
+  const queue = opts.ctx.stats ? mixQueue(opts.ctx.stats) : [];
+  const same = (a: { artist?: string; name: string }, b: { artist?: string; name: string }) => a.name === b.name && a.artist === b.artist;
+  let mixAt = -1;
+  let cueId = 0;
+
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
   const cue = (i: number) => {
     const s = STATIONS[i];
     if (!s.song || !opts.soundtrack) return;
     const track = opts.ctx.stats?.soundtrack?.[s.song];
+    const id = ++cueId;
     if (!track?.artist) return opts.soundtrack.play(undefined);
+    mixAt = queue.findIndex((q) => same(q, track));
     lookup(track.artist, track.name).then((url) => {
-      if (alive && index === i) opts.soundtrack!.play(url);
+      if (alive && cueId === id) opts.soundtrack!.play(url);
     });
   };
+
+  /** Next playable song in the mix; each entry is tried at most once, so an offline ride goes quiet instead of looping. */
+  const mixNext = async () => {
+    const id = cueId;
+    for (let tries = 0; tries < queue.length; tries++) {
+      mixAt = (mixAt + 1) % queue.length;
+      const t = queue[mixAt];
+      const url = await lookup(t.artist!, t.name);
+      if (!alive || cueId !== id) return;
+      if (url) return opts.soundtrack!.play(url);
+    }
+  };
+  opts.soundtrack?.onEnded?.(() => void mixNext());
 
   root.classList.add('story');
   root.classList.toggle('reduced', reduced);

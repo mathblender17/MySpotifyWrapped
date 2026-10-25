@@ -48,7 +48,9 @@ export function createSoundtrack(make: () => HTMLAudioElement = () => new Audio(
   for (const p of players) {
     p.muted = muted;
     p.onended = () => {
-      if (p === playing?.el) ended?.();
+      if (p !== playing?.el) return;
+      playing = undefined; // finished: the same song may be asked for again
+      ended?.();
     };
   }
 
