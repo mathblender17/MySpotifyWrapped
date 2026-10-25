@@ -21,3 +21,7 @@
 .sumo .badge { position: absolute; left: 6px; top: 6px; z-index: 2; background: #e60033; color: #fff; border: 2.5px solid #111; font: 900 13px/1 var(--face-text); padding: 3px 6px; transform: rotate(-5deg); }
 .sumo .don { position: absolute; right: 4px; bottom: 0; z-index: 2; font: 34px/1 'Reggae One', sans-serif; color: #e60033; -webkit-text-stroke: 3px #111; paint-order: stroke fill; transform: rotate(10deg); }
 .sumo .ft { grid-area: ft; text-align: center; font: 900 9px var(--face-text); }
+
+/* Idle loop: the splash panel's ink flickers like a fresh print (the manga image never moves). */
+.ph.sumo.idle .p1 { animation: d-idle 2.4s ease-in-out infinite alternate; }
+@keyframes d-idle { to { filter: contrast(1.6); } }

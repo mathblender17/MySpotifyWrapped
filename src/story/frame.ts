@@ -10,8 +10,8 @@ export function createFrame(): { el: HTMLElement; stage: HTMLElement; destroy():
   stage.className = 'stage';
   el.append(stage);
   const fit = () => {
-    // Route map above (56px), guide phone below (84px).
-    const k = Math.min(window.innerWidth / DESIGN_W, (window.innerHeight - 56 - 84) / DESIGN_H);
+    // Route map above (56px); control strip and guide phone below (56 + 84px).
+    const k = Math.min(window.innerWidth / DESIGN_W, (window.innerHeight - 56 - 140) / DESIGN_H);
     el.style.transform = `translate(-50%, -50%) scale(${k})`;
   };
   fit();

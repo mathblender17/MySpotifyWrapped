@@ -124,3 +124,10 @@ test('brush wipes an element on from left to right, and is instant when reduced'
   playBeats(r, { reduced: true }).progress(1);
   expect(r.querySelector('b')!.style.opacity).toBe('1');
 });
+
+test('beat groups are 0.6 s apart', async () => {
+  const { beatTime } = await import('../../src/journey/beats');
+  const root = document.createElement('div');
+  root.innerHTML = '<b data-beat="1"></b><b data-beat="2"></b><b data-beat="3" id="third"></b>';
+  expect(beatTime(root, root.querySelector('#third')!)).toBeCloseTo(1.2);
+});

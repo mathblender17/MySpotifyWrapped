@@ -13,6 +13,11 @@ class FakeAudio {
   pause() {
     this.paused = true;
   }
+  onended: (() => void) | null = null;
+  end() {
+    this.paused = true;
+    this.onended?.();
+  }
 }
 
 let made: FakeAudio[];
@@ -148,4 +153,41 @@ test('reports whether sound has been unlocked', () => {
   expect(s.unlocked).toBe(false);
   s.unlock();
   expect(s.unlocked).toBe(true);
+});
+
+test('onEnded fires when the playing song finishes by itself', () => {
+  const s = createSoundtrack(make);
+  const cb = vi.fn();
+  s.onEnded(cb);
+  s.play('https://x/a.m4a');
+  s.unlock();
+  made.find((x) => x.src === 'https://x/a.m4a')!.end();
+  expect(cb).toHaveBeenCalledTimes(1);
+});
+
+test('onEnded does not fire for a song that was faded out or stopped', () => {
+  const s = createSoundtrack(make);
+  const cb = vi.fn();
+  s.onEnded(cb);
+  s.unlock();
+  s.play('https://x/a.m4a');
+  const a = made.find((x) => x.src === 'https://x/a.m4a')!;
+  s.play('https://x/b.m4a');
+  vi.advanceTimersByTime(1000);
+  a.end();
+  expect(cb).not.toHaveBeenCalled();
+  const b = made.find((x) => x.src === 'https://x/b.m4a')!;
+  s.stop();
+  b.end();
+  expect(cb).not.toHaveBeenCalled();
+});
+
+test('a song that ended can be played again (a one-song mix wraps around)', () => {
+  const s = createSoundtrack(make);
+  s.unlock();
+  s.play('https://x/a.m4a');
+  const a = made.find((x) => x.src === 'https://x/a.m4a')!;
+  a.end();
+  s.play('https://x/a.m4a');
+  expect(made.some((x) => x.src === 'https://x/a.m4a' && !x.paused)).toBe(true);
 });

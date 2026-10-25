@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { mixQueue } from '../audio/mix';
 import { findPreview as itunes } from '../audio/previews';
 import { createSfx, type Sfx } from '../audio/sfx';
 import type { Soundtrack } from '../audio/soundtrack';
@@ -8,11 +9,15 @@ import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
 import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
+import { createControls } from './controls';
 import { createGuide } from './guide';
+import { createHaptics, type Haptics } from './haptics';
+import { createHint } from './hint';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
 import { loadWorldFonts } from '../style/fonts';
+import { readingHoldMs } from './pacing';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -30,6 +35,9 @@ export type StoryWorld = {
 };
 
 const HOLD_PRESS_MS = 200;
+/** Travel that makes a press a swipe, and the finger movement that rules out a hold (alive spec §4). */
+const SWIPE_PX = 40;
+const SLOP_PX = 10;
 const INTERACTIVE = 'button, a, input, label';
 
 export function createStory(
@@ -45,9 +53,10 @@ export function createStory(
     world?: StoryWorld | null;
     /** Test seam: build the sound accents. */
     makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
+    /** Test seam: build the haptics. */
+    makeHaptics?: (o: { canBuzz: () => boolean }) => Haptics;
   },
 ) {
-  const holdMs = opts.holdMs ?? 2500;
   const reduced = opts.reduced ?? prefersReducedMotion();
   const playable = STATIONS.map((s) => isPlayable(s, opts.ctx.stats));
   const frame = createFrame();
@@ -61,28 +70,72 @@ export function createStory(
   let master: gsap.core.Timeline | undefined;
   let paused = false;
   let holdTimer: ReturnType<typeof setTimeout> | undefined;
+  // The hold is a budget that pausing freezes (alive spec §3): set on arrival, spent while running.
+  let holdLeft = 0;
+  let holdStarted = 0;
   let pressTimer: ReturnType<typeof setTimeout> | undefined;
   let held = false;
   let downX: number | undefined;
+  let downY = 0;
+  let dragX = 0;
+  let dragY = 0;
   let alive = true;
   let world = opts.world ?? null;
   const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
   // Accents only once sound is unlocked, never muted, never with reduced motion (art spec §8).
   const canPlay = () => !!opts.soundtrack?.unlocked && !opts.soundtrack.muted && !reduced;
   const sfx = (opts.makeSfx ?? createSfx)({ canPlay });
+  // Haptics share sound's rules: only after the unlocking tap, never muted, never with reduced motion.
+  const haptics = (opts.makeHaptics ?? createHaptics)({ canBuzz: canPlay });
   /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
   const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
+
+  // The non-stop mix (alive spec §2): when a preview ends the next one starts; a station's own song moves the mix there.
+  const queue = opts.ctx.stats ? mixQueue(opts.ctx.stats) : [];
+  const same = (a: { artist?: string; name: string }, b: { artist?: string; name: string }) => a.name === b.name && a.artist === b.artist;
+  let mixAt = -1;
+  let cueId = 0;
+  let cuePending = false; // a station's song is being looked up: it wins over the mix
+  let musicOn = false; // a song is playing (or was asked to) and hasn't ended
+  const playUrl = (url: string) => {
+    musicOn = true;
+    opts.soundtrack!.play(url);
+  };
 
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
   const cue = (i: number) => {
     const s = STATIONS[i];
     if (!s.song || !opts.soundtrack) return;
     const track = opts.ctx.stats?.soundtrack?.[s.song];
-    if (!track?.artist) return opts.soundtrack.play(undefined);
+    const id = ++cueId;
+    // No song to switch to: keep whatever plays, or start the mix if nothing does — never silence it.
+    if (!track?.artist) return void (musicOn || mixNext());
+    mixAt = queue.findIndex((q) => same(q, track));
+    cuePending = true;
     lookup(track.artist, track.name).then((url) => {
-      if (alive && index === i) opts.soundtrack!.play(url);
+      if (!alive || cueId !== id) return;
+      cuePending = false;
+      if (url) playUrl(url);
+      else if (!musicOn) void mixNext();
     });
   };
+
+  /** Next playable song in the mix; each entry is tried at most once, so an offline ride goes quiet instead of looping. */
+  const mixNext = async () => {
+    if (cuePending) return; // the station's song is on its way
+    const id = cueId;
+    for (let tries = 0; tries < queue.length; tries++) {
+      mixAt = (mixAt + 1) % queue.length;
+      const t = queue[mixAt];
+      const url = await lookup(t.artist!, t.name);
+      if (!alive || cueId !== id || cuePending) return; // a station cue took over meanwhile
+      if (url) return playUrl(url);
+    }
+  };
+  opts.soundtrack?.onEnded?.(() => {
+    musicOn = false;
+    void mixNext();
+  });
 
   root.classList.add('story');
   root.classList.toggle('reduced', reduced);
@@ -91,14 +144,38 @@ export function createStory(
   const dock = document.createElement('div');
   dock.className = 'dock';
   dock.append(guide.el, ticket.el);
-  root.replaceChildren(route.el, frame.el, dock);
+  const controls = createControls({ prev: () => nav(-1), next: () => nav(1), toggle: () => (paused ? api.resume() : api.pause()) });
+  const stamp = Object.assign(document.createElement('div'), { className: 'paused-stamp', textContent: '一時停止 · paused' });
+  root.replaceChildren(route.el, frame.el, controls.el, dock);
   const season = createSeason(root, reduced);
+  const hint = createHint();
+  let hinted = hint.el.hidden;
+  const unhint = () => {
+    if (hinted) return;
+    hinted = true;
+    hint.dismiss();
+  };
+
+  /** The card's reveals are done: its world's idle loop takes over (never under reduced motion). */
+  const settle = (el: HTMLElement) => void (reduced || el.classList.add('idle'));
 
   const animating = () => !!master && master.progress() < 1;
 
   const armHold = () => {
     clearTimeout(holdTimer);
-    if (!paused && !STATIONS[index].waitForInput) holdTimer = setTimeout(() => step(1), holdMs);
+    if (paused || STATIONS[index].waitForInput) return;
+    holdStarted = Date.now();
+    holdTimer = setTimeout(() => {
+      holdTimer = undefined;
+      step(1);
+    }, holdLeft);
+  };
+  /** Stop the hold's clock, keeping what's left of it. */
+  const freezeHold = () => {
+    if (holdTimer === undefined) return;
+    clearTimeout(holdTimer);
+    holdTimer = undefined;
+    holdLeft = Math.max(0, holdLeft - (Date.now() - holdStarted));
   };
 
   let skipping = false;
@@ -113,6 +190,7 @@ export function createStory(
   const show = (i: number, animate: boolean) => {
     finish();
     clearTimeout(holdTimer);
+    holdTimer = undefined; // the new card's hold hasn't started: a pause before it must not spend it
     const from = index;
     index = i;
     const s = STATIONS[i];
@@ -124,8 +202,11 @@ export function createStory(
     const next = playable.findIndex((p, n) => p && n > i);
     if (next > 0) loadWorldFonts(STATIONS[next].world);
     const el = opts.slides[s.id](opts.ctx);
+    holdLeft = opts.holdMs ?? readingHoldMs(el);
     route.set(i);
     season.set(s.act);
+    if (s.id === 'departure' && !hinted) frame.el.append(hint.el);
+    else hint.el.remove(); // the hint belongs to the departure board, never to the ride
     cue(i);
     if (!animate) {
       current?.remove();
@@ -137,10 +218,11 @@ export function createStory(
       ticket.stamp(i, s.accent).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
+      settle(el);
       return armHold();
     }
 
-    const tl = gsap.timeline({ paused: true, onComplete: armHold });
+    const tl = gsap.timeline({ paused: true, onComplete: () => (settle(el), armHold()) });
     const at = (t: number, fn: () => void) => tl.call(() => void (skipping || fn()), undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
@@ -169,7 +251,14 @@ export function createStory(
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());
     const beatsAt = trans.duration() + signIn.duration() + signDock.duration();
     tl.add(beats.paused(false), beatsAt);
-    at(trans.duration(), () => arrivalSound(s.id));
+    at(trans.duration(), () => {
+      arrivalSound(s.id);
+      haptics.buzz(20);
+    });
+    // A tap of the finger on each stamp and drop; the gacha SSR gets its own pattern (data-haptic="ssr").
+    for (const b of el.querySelectorAll<HTMLElement>('[data-fx~="stamp"], [data-fx~="drop"]')) {
+      at(beatsAt + beatTime(el, b, reduced), () => haptics.buzz(b.dataset.haptic === 'ssr' ? [15, 40, 15] : 10));
+    }
     // Beat-bound accents (ドン, pixel blips) are marked in the slide with data-sfx.
     for (const b of el.querySelectorAll<HTMLElement>('[data-sfx]')) {
       const name = b.dataset.sfx as 'don' | 'blip';
@@ -191,41 +280,68 @@ export function createStory(
   const onDown = (e: MouseEvent) => {
     if ((e.target as Element).closest(INTERACTIVE)) return;
     downX = e.clientX;
+    downY = e.clientY;
+    dragX = dragY = 0;
     held = false;
     pressTimer = setTimeout(() => {
       held = true;
       api.pause();
     }, HOLD_PRESS_MS);
   };
+  // While a finger drags, the card follows it a little (0.2×) so a swipe feels physical.
+  const onMove = (e: MouseEvent) => {
+    if (downX === undefined) return;
+    dragX = e.clientX - downX;
+    dragY = e.clientY - downY;
+    if (Math.hypot(dragX, dragY) > SLOP_PX) clearTimeout(pressTimer); // a moving finger is not a hold
+    if (Math.abs(dragX) > Math.abs(dragY)) gsap.set(frame.stage, { x: dragX * 0.2 });
+  };
+  const springBack = () => gsap.to(frame.stage, { x: 0, duration: reduced ? 0 : 0.2, ease: 'power2.out' });
+  /** One gesture, one meaning, decided on release: a swipe (> 40 px), a hold (paused while down), else a tap. */
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
     sfx.unlock();
+    unhint(); // any first touch — the card, a control, a year — shows the rider already knows
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     const x = downX;
     downX = undefined;
-    if (held) return api.resume();
+    springBack();
+    const swiped = Math.hypot(dragX, dragY) > SWIPE_PX;
+    if (held) {
+      api.resume(); // a press that turned into a swipe is a swipe, never a stuck pause
+      if (!swiped) return;
+    }
+    e.preventDefault();
+    if (swiped) {
+      if (Math.abs(dragX) >= Math.abs(dragY)) return nav(dragX < 0 ? 1 : -1);
+      if (dragY > 0) api.pause();
+      return;
+    }
+    if (Math.hypot(dragX, dragY) > SLOP_PX) return; // an abandoned swipe: the card springs back, nothing else
     const width = root.getBoundingClientRect().width || window.innerWidth;
     nav(x < width / 3 ? -1 : 1);
-    e.preventDefault();
   };
   // A touch pan or a release outside the page cancels the gesture: never leave the story stuck on pause.
   const onCancel = () => {
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     downX = undefined;
+    springBack();
     if (held) api.resume();
   };
   const onKey = (e: KeyboardEvent) => {
     opts.soundtrack?.unlock();
     sfx.unlock();
+    unhint();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
-    else if (e.key === ' ') (paused ? api.resume() : api.pause());
+    else if (e.key === ' ' && !(e.target as Element | null)?.closest?.(INTERACTIVE)) (paused ? api.resume() : api.pause()); // a focused button handles its own Space
   };
 
   root.addEventListener('pointerdown', onDown);
   root.addEventListener('pointerup', onUp);
+  root.addEventListener('pointermove', onMove);
   root.addEventListener('pointercancel', onCancel);
   root.addEventListener('pointerleave', onCancel);
   document.addEventListener('keydown', onKey);
@@ -235,13 +351,17 @@ export function createStory(
     prev: () => nav(-1),
     pause: () => {
       paused = true;
+      controls.setPaused(true);
+      frame.el.append(stamp);
       master?.pause();
-      clearTimeout(holdTimer);
+      freezeHold();
       opts.soundtrack?.pause();
       world?.pause();
     },
     resume: () => {
       paused = false;
+      controls.setPaused(false);
+      stamp.remove();
       opts.soundtrack?.resume();
       world?.resume();
       if (animating()) master!.play();
@@ -260,6 +380,7 @@ export function createStory(
       season.destroy();
       root.removeEventListener('pointerdown', onDown);
       root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointermove', onMove);
       root.removeEventListener('pointercancel', onCancel);
       root.removeEventListener('pointerleave', onCancel);
       document.removeEventListener('keydown', onKey);

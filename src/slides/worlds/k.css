@@ -20,3 +20,9 @@
 .gac .lb { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font: 6px/1 'Press Start 2P', monospace; color: #ffe36b; letter-spacing: 1px; }
 .gac .k-scan { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: repeating-linear-gradient(180deg, #0000 0 2px, #0005 2px 3px); }
 .gac .flash { position: absolute; inset: 0; z-index: 4; background: #fff; opacity: 0; pointer-events: none; }
+
+/* Idle loop: the menu cursor blinks and the dithered sun flickers. */
+.ph.gac.idle .cur { animation: k-blink 1s steps(2) infinite; }
+.ph.gac.idle .k-sun { animation: k-flicker 2.4s steps(3) infinite; }
+@keyframes k-blink { 50% { opacity: 0; } }
+@keyframes k-flicker { 50% { filter: brightness(1.2); } }

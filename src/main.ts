@@ -9,6 +9,7 @@ import { withSampleGenres } from './ingest/sampleGenres';
 import { creditsLine } from './art/credits';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
+import { silentWav } from './audio/silent';
 import { esc, plays as nPlays } from './slides/fmt';
 import { slides } from './slides';
 import { computeAllYears } from './stats';
@@ -123,6 +124,8 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
     slides,
     startAt,
     soundtrack,
+    // Dev check (?previews=silent): 3 s silent clips stand in for 30 s previews, so the mix can be timed offline.
+    findPreview: import.meta.env.DEV && route.previews === 'silent' ? async () => silentWav(3) : undefined,
     world,
     ctx: {
       stats: ds.stats.get(year),
@@ -146,8 +149,9 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
     soundtrack.mute(!soundtrack.muted);
     label();
   });
-  const dock = root.querySelector('.dock');
-  if (dock) dock.insertBefore(mute, dock.lastElementChild);
+  // Mute is a control: it sits with Back · Pause · Next (alive spec §4).
+  const controls = root.querySelector('.controls');
+  if (controls) controls.append(mute);
   else root.append(mute);
   if (note) {
     const n = document.createElement('div');

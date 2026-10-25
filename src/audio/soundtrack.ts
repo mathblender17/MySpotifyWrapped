@@ -11,6 +11,8 @@ export type Soundtrack = {
   stop(): void;
   pause(): void;
   resume(): void;
+  /** Called when the playing song finishes on its own (not when faded out, paused or stopped). */
+  onEnded(cb: () => void): void;
   readonly muted: boolean;
   /** True once a tap has unlocked sound (browsers refuse audio before a gesture). */
   readonly unlocked: boolean;
@@ -42,7 +44,15 @@ export function createSoundtrack(make: () => HTMLAudioElement = () => new Audio(
   let wanted: string | undefined;
   let playing: { el: HTMLAudioElement; url: string } | undefined;
   let timer: ReturnType<typeof setInterval> | undefined;
-  for (const p of players) p.muted = muted;
+  let ended: (() => void) | undefined;
+  for (const p of players) {
+    p.muted = muted;
+    p.onended = () => {
+      if (p !== playing?.el) return;
+      playing = undefined; // finished: the same song may be asked for again
+      ended?.();
+    };
+  }
 
   const fadeTo = (incoming?: HTMLAudioElement) => {
     clearInterval(timer);
@@ -118,6 +128,9 @@ export function createSoundtrack(make: () => HTMLAudioElement = () => new Audio(
       if (!playing) return;
       playing.el.volume = 1;
       playing.el.play()?.catch(() => {});
+    },
+    onEnded(cb) {
+      ended = cb;
     },
     get muted() {
       return muted;

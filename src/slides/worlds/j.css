@@ -18,3 +18,7 @@
 .ben .photo { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background: url(/art/kabukicho.webp) 50% 72% / auto 300% no-repeat, #8a8580; filter: grayscale(1) contrast(1.6); }
 .ben .ht { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background-image: radial-gradient(#f6f1e3 .9px, transparent 1.3px); background-size: 4px 4px; mix-blend-mode: screen; opacity: .6; }
 .ben .ft { position: absolute; left: 10px; bottom: 92px; font: 900 8px var(--face-text); color: #e60012; letter-spacing: 1px; }
+
+/* Idle loop: the halftone street photo pans slowly. */
+.ph.ben.idle .photo { animation: j-idle 20s linear infinite alternate; }
+@keyframes j-idle { to { background-position: 60% 40%; } }

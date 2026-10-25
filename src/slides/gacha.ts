@@ -9,7 +9,7 @@ export const gacha: Slide = ({ stats }) => {
   const t = stats!.topTracks![0];
   return slide('gac', `<div class="k-sky"></div><div class="k-sun"></div><div class="k-mt"></div>
     <div class="lv" data-beat="1">✦ 確定演出 ✦</div>
-    <div class="k-win card" data-beat="3" data-fx="stamp" data-sfx="blip">
+    <div class="k-win card" data-beat="3" data-fx="stamp" data-sfx="blip" data-haptic="ssr">
       <div class="ssr">★ SSR GET! ★</div>
       <div class="k-song" data-beat="4">${esc(t.name)}</div>
       <div class="ar" data-beat="4">${esc(t.artist ?? '')}</div>

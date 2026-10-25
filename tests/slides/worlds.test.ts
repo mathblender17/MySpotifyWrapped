@@ -213,3 +213,26 @@ test('C+F kanji: the mega kanji brushes on over the F band, with the summary boa
   for (const t of [STATS.kanji.meaning, '28,243', STATS.topArtists[0].name, STATS.topTracks[0].name]) expect(el.textContent).toContain(t);
   expect(el.querySelectorAll('.sum .clip')).toHaveLength(3);
 });
+
+test('every world has an idle loop and stops it under reduced motion', async () => {
+  const { readFileSync } = await import('node:fs');
+  for (const w of ['f', 'c', 'j', 'g', 'd', 'q', 'b', 'k', 'o', 'i', 'l']) {
+    const css = readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
+    expect(css, w).toMatch(/\.idle/);
+    expect(css, w).toMatch(/@keyframes/);
+  }
+  expect(readFileSync('src/story/story.css', 'utf8')).toMatch(/\.reduced[^{]*\.idle[^{]*\{[^}]*animation:\s*none/);
+});
+
+test('idle loops glide instead of jumping: Q keeps its base filter, D leaves the manga image alone, L does not rescale on settle', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
+  expect(css('q')).toMatch(/@keyframes q-idle \{ to \{ filter: saturate\(1\.4\) contrast\(1\.1\) brightness\(/);
+  expect(css('d')).not.toMatch(/@keyframes d-idle[^}]*background-position/);
+  expect(css('l')).toMatch(/\.shk \.sky \{[^}]*background-size: 140% 140%/);
+});
+
+test('the departure year list keeps native vertical scrolling inside the swipeable story', async () => {
+  const { readFileSync } = await import('node:fs');
+  expect(readFileSync('src/slides/worlds/f.css', 'utf8')).toMatch(/\.dep \.board \{[^}]*touch-action: pan-y/);
+});
