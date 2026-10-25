@@ -139,6 +139,11 @@
 .stage > .ph { position: absolute; top: 0; left: 0; }
 .tx-overlay { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 .pixwipe { overflow: hidden; }
+.neon { background: #ff2d95; }
+.neon-a { right: 50%; background: #ff2d95; mix-blend-mode: multiply; }
+.neon-b { left: 50%; background: #1b1f7a; mix-blend-mode: screen; }
+.ink-blot { background: #141414; border-radius: 50%;
+  clip-path: polygon(50% 0, 64% 6%, 80% 4%, 88% 18%, 100% 30%, 94% 48%, 100% 64%, 86% 80%, 76% 96%, 58% 92%, 44% 100%, 28% 90%, 12% 92%, 6% 74%, 0 58%, 8% 42%, 2% 24%, 18% 12%, 32% 2%); }
 .pixwipe .pix { position: absolute; width: calc(100% / 12 + 0.5px); height: calc(100% / 21 + 0.5px); }
 .speed { background: repeating-linear-gradient(90deg, transparent 0 18px, #fff3 18px 20px), linear-gradient(90deg, #0000, #0006, #0000); mix-blend-mode: screen; }
 .bigphone { inset: auto; left: 18px; top: 36px; width: 174px; height: 300px; background: linear-gradient(#f7f9fc, #9aa1ae 45%, #e9edf3 55%, #7d8492); border-radius: 26px 26px 12px 12px; padding: 12px 10px 40px; box-sizing: border-box; box-shadow: inset 0 0 0 3px #fff8, 0 20px 40px #000a; }

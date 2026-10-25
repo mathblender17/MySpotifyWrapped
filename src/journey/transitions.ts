@@ -2,8 +2,8 @@ import { gsap } from 'gsap';
 import { DESIGN_W } from '../story/frame';
 import type { Transition } from './stations';
 
-/** Art spec §6 morphs: pixelate, shrink-to-headline, panel-to-cover. */
-export type Morph = 'pixelate' | 'shrink' | 'cover';
+/** Art spec §6 morphs: pixelate, shrink-to-headline, panel-to-cover, neon-takeover, ink-to-beast. */
+export type Morph = 'pixelate' | 'shrink' | 'cover' | 'neon' | 'ink';
 
 export type TransitionOpts = {
   stage: HTMLElement;
@@ -100,6 +100,46 @@ function flight(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, sta
   return [clone];
 }
 
+/** Neon takeover (Q → B): the cover's neon floods the screen pink, the slides swap under it, and it splits into the
+ * two riso inks (pink, navy) sliding apart. 0.8 s. */
+function neon(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement) {
+  const flood = overlay(stage, 'neon');
+  const a = overlay(stage, 'neon-a');
+  const b = overlay(stage, 'neon-b');
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.set([a, b], { opacity: 0 }, 0);
+  tl.fromTo(flood, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: 'power1.in' }, 0);
+  tl.set(out, { opacity: 0 }, 0.3);
+  tl.set(inEl, { opacity: 1 }, 0.3);
+  tl.set(flood, { opacity: 0 }, 0.3);
+  tl.set([a, b], { opacity: 1 }, 0.3);
+  tl.to(a, { xPercent: -100, duration: 0.5, ease: 'power3.in' }, 0.3);
+  tl.to(b, { xPercent: 100, duration: 0.5, ease: 'power3.in' }, 0.3);
+  return [flood, a, b];
+}
+
+const BLOT = 40; // the ink blot's base size, design px
+
+/** Ink to beast (I → L): an ink blot grows from Fuji's summit to cover the stage, the slides swap under it, and it
+ * shrinks into the kaiju's silhouette. 0.9 s. */
+function ink(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement, from: Element, to: Element) {
+  const a = boxIn(stage, from);
+  const b = boxIn(stage, to);
+  const blot = overlay(stage, 'ink-blot');
+  const cx = a.left + a.width / 2 - BLOT / 2; // the summit: top centre of the mountain
+  const cy = a.top - BLOT / 2;
+  Object.assign(blot.style, { inset: 'auto', left: `${cx}px`, top: `${cy}px`, width: `${BLOT}px`, height: `${BLOT}px` });
+  const fill = Math.hypot(DESIGN_W, 373) / BLOT; // big enough to cover the stage from anywhere on it
+  tl.set(inEl, { opacity: 0 }, 0);
+  tl.fromTo(blot, { scale: 0.2 }, { scale: fill, duration: 0.45, ease: 'power2.in' }, 0);
+  tl.set(out, { opacity: 0 }, 0.45);
+  tl.set(inEl, { opacity: 1 }, 0.45);
+  const to2 = { x: b.left + b.width / 2 - BLOT / 2 - cx, y: b.top + b.height / 2 - BLOT / 2 - cy, scale: Math.max(b.width, b.height) / BLOT || 1 };
+  tl.to(blot, { ...to2, duration: 0.35, ease: 'power3.out' }, 0.45);
+  tl.to(blot, { opacity: 0, duration: 0.1 }, 0.8);
+  return [blot];
+}
+
 /** With a world, a ride hands the screen over: the card flies off, the train travels, the next card drops in. */
 function worldRide(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement, travel: gsap.core.Timeline) {
   if (out) tl.to(out, { scale: 0.7, yPercent: -120, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0);
@@ -146,6 +186,8 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
       parallel = false;
     } else if (o.morph === 'pixelate') extras = pixelWipe(tl, out!, inEl, stage);
     else if (o.morph === 'shrink') extras = flight(tl, out!, inEl, stage, from, to!);
+    else if (o.morph === 'neon') extras = neon(tl, out!, inEl, stage);
+    else if (o.morph === 'ink') extras = ink(tl, out!, inEl, stage, from, to!);
     else {
       // cover: the tease card holds the hook, then the splash panel flies onto the magazine cover.
       const card = overlay(stage, 'tease', `<p></p>`);

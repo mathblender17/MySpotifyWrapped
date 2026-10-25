@@ -163,3 +163,53 @@ describe('flight morphs: shrink-to-headline and panel-to-cover', () => {
     expect(runTransition('cut', toriiOut(), slideEl('ben', '<div class="h1"></div>'), { stage, cut: shrinkCut, morph: 'shrink', reduced: true }).duration()).toBeCloseTo(0.2);
   });
 });
+
+describe('overlay morphs: neon-takeover and ink-to-beast', () => {
+  const neonCut = { from: '.idol .cover', to: '.kon .rc' };
+  const inkCut = { from: '.fuji svg', to: '.shk .beast' };
+  const pair = (fromCls: string, from: string, toCls: string, to: string) => {
+    const out = slideEl(fromCls, from);
+    stage.append(out);
+    return { out, inEl: slideEl(toCls, to) };
+  };
+
+  test('neon floods the cover pink, then splits into two inks sliding apart (0.8 s)', () => {
+    const { out, inEl } = pair('idol', '<div class="cover"></div>', 'kon', '<div class="rc"></div>');
+    const tl = runTransition('cut', out, inEl, { stage, cut: neonCut, morph: 'neon' });
+    expect(tl.duration()).toBeCloseTo(0.8);
+    tl.progress(0.2);
+    expect(stage.querySelector('.neon')).not.toBeNull();
+    tl.progress(0.6);
+    expect(stage.querySelector('.neon-a')).not.toBeNull();
+    expect(stage.querySelector('.neon-b')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+    expect(inEl.style.opacity).toBe('1');
+  });
+
+  test('ink grows a blot from the summit, swaps the slides under it, and shrinks it into the beast (0.9 s)', () => {
+    const { out, inEl } = pair('fuji', '<svg></svg>', 'shk', '<svg class="beast"></svg>');
+    const tl = runTransition('cut', out, inEl, { stage, cut: inkCut, morph: 'ink' });
+    expect(tl.duration()).toBeCloseTo(0.9);
+    tl.progress(0.5);
+    expect(stage.querySelector('.ink-blot')).not.toBeNull();
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test.each([['neon', neonCut], ['ink', inkCut]] as const)('%s without its source falls back to a ride, leaving nothing behind', (morph, cut) => {
+    const ride = runTransition('ride', slideEl('a'), slideEl('b'), { stage: document.createElement('div') }).duration();
+    const out = slideEl('wx');
+    stage.append(out);
+    const inEl = slideEl('x', '<div class="rc"></div><svg class="beast"></svg>');
+    const tl = runTransition('cut', out, inEl, { stage, cut, morph });
+    expect(tl.duration()).toBe(ride);
+    tl.progress(1);
+    expect([...stage.children]).toEqual([inEl]);
+  });
+
+  test.each(['neon', 'ink'] as const)('%s under reduced motion is the 0.2 s crossfade', (morph) => {
+    const { out, inEl } = pair('idol', '<div class="cover"></div><svg></svg>', 'kon', '<div class="rc"></div><svg class="beast"></svg>');
+    expect(runTransition('cut', out, inEl, { stage, cut: morph === 'neon' ? neonCut : { from: '.idol svg', to: '.kon .beast' }, morph, reduced: true }).duration()).toBeCloseTo(0.2);
+  });
+});

@@ -54,6 +54,8 @@ test('arrivals by morph follow the art spec (§6)', () => {
   expect(m).toEqual({
     bento: ['shrink', '.tor .hero', '.ben .h1'],
     idol: ['cover', '.sumo .splash', '.idol .cover'],
+    konbini: ['neon', '.idol .cover', '.kon .rc'],
     gacha: ['pixelate', '.kon .bc', '.gac .card'],
+    shinkansen: ['ink', '.fuji svg', '.shk .beast'],
   });
 });
