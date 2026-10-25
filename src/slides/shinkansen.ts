@@ -8,8 +8,10 @@ const BEAST = `<svg class="beast" viewBox="0 0 120 150" aria-hidden="true"><path
 // World L (Shōwa kaiju poster): the year's fastest riser is the monster storming the city.
 export const shinkansen: Slide = ({ stats }) => {
   const r = stats!.fastestRiser!;
+  // A same-day binge enters the top 5 "in 0 days": it happened within its first day, so it reads as 1.
+  const days = Math.max(r.days!, 1);
   const line = r.via === 'race'
-    ? `0 → top 5 in <b class="hero">${r.days}</b> days`
+    ? `0 → top 5 in <b class="hero">${days}</b> ${days === 1 ? 'day' : 'days'}`
     : `up <b class="hero">${r.climb}</b> places in the second half of ${stats!.year}`;
   return slide('shk', `<div class="sky"></div>
     <div class="beastwrap" data-beat="2" data-fx="zoom">${BEAST}</div><div class="city"></div>

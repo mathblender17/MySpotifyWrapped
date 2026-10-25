@@ -31,6 +31,14 @@ test('shinkansen: race wording for the race path', () => {
   expect(t).toContain('0 → top 5 in 105 days');
 });
 
+test('shinkansen: an artist who hit the top 5 on the first day reads "in 1 day", never "0 days"', () => {
+  const race = (days: number) => shinkansen(ctx({ stats: { ...STATS, fastestRiser: { artist: 'Binge', via: 'race', days } } })).textContent!;
+  expect(race(0)).toContain('0 → top 5 in 1 day');
+  expect(race(0)).not.toContain('0 days');
+  expect(race(1)).toContain('0 → top 5 in 1 day');
+  expect(race(1)).not.toContain('1 days');
+});
+
 test('shinkansen: climb wording for the halves path', () => {
   const t = shinkansen(ctx({ stats: { ...STATS, fastestRiser: { artist: 'Late', via: 'halves', climb: 7 } } })).textContent!;
   expect(t).toContain('up 7 places');
