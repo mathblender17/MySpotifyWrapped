@@ -1,16 +1,23 @@
 import type { Slide } from '../story/player';
 import type { Season } from '../types';
-import { esc, slide } from './fmt';
+import { cnt, esc, slide } from './fmt';
+import './worlds/o.css';
 
-const CELLS: [Season, string, string][] = [['spring', '春', '🌸'], ['summer', '夏', '☀'], ['autumn', '秋', '🍁'], ['winter', '冬', '❄']];
+const CELLS: [Season, string, string][] = [['spring', '春', 'SPRING'], ['summer', '夏', 'SUMMER'], ['autumn', '秋', 'AUTUMN'], ['winter', '冬', 'WINTER']];
+// The sun's position (design px) as each season arrives: low left → high → high right → low right.
+const PATH = [6, 112, 48, 36, 88, 52, 94, 118];
 
+// World O (1960s modernism): one red sun crossing a cream sky, a season per beat, its #1 artist beneath.
 export const weather: Slide = ({ stats }) => {
-  const cells = CELLS.map(([k, jp, icon]) => {
-    const name = stats!.seasons![k].topArtist?.name;
-    return `<div><span class="jp">${jp}</span><b>${icon}</b><span class="nm">${name ? esc(name) : '—'}</span></div>`;
+  const seasons = stats!.seasons!;
+  const cells = CELLS.map(([k, jp, en], i) => {
+    const name = seasons[k].topArtist?.name;
+    return `<div class="ss" data-beat="${3 + i}"><span class="lb">${en} · ${jp}</span><span class="nm fit">${name ? esc(name) : '—'}</span></div>`;
   }).join('');
-  return slide('wx', `<span class="bar" data-beat="1">♪ 音楽天気予報 · ${stats!.year}</span>
-    <div class="map" data-beat="2"><div class="isl" style="width:40px;height:30px;top:6px;right:26px"></div><div class="isl" style="width:70px;height:36px;top:40px;right:52px;transform:rotate(-30deg)"></div><div class="isl" style="width:40px;height:26px;top:82px;left:40px"></div></div>
-    <div class="fc" data-beat="3" data-fx="type">${cells}</div>
-    <div class="ft" data-beat="4">your #1 artist, season by season</div>`);
+  const [loudKey, loud] = CELLS.map(([k, , en]) => [en, seasons[k].value] as const).reduce((a, b) => (b[1] > a[1] ? b : a));
+  const unit = stats!.minutes !== undefined ? ' min' : ' plays';
+  return slide('wx', `<div class="sun" data-beat="2" data-fx="steps orbit" data-path="${PATH.join(',')}"></div>
+    <div class="low"><div class="grid">${cells}</div>
+    <div class="loud" data-beat="7"><small>your loudest season · ${loudKey}</small><b class="hero">${cnt(7, loud, unit)}</b></div></div>
+    <div class="ft" data-beat="1">音楽天気予報 · ${stats!.year}</div>`);
 };

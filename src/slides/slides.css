@@ -20,16 +20,6 @@
 /* 8 gacha (round 1) */
 
 /* 9 TV weather / sakura forecast (round 1) */
-.wx { background: linear-gradient(#0b62c4, #0a3f87); color: #fff; font-family: 'Zen Maru Gothic', sans-serif; }
-.wx .bar { background: #fff; color: #0a3f87; font-weight: 900; font-size: 12px; padding: 4px 8px; border-radius: 4px; align-self: flex-start; border-left: 6px solid #ff2d95; }
-.wx .map { margin: 12px 0; height: 120px; position: relative; }
-.wx .isl { position: absolute; background: #5fd16a; border-radius: 40% 60% 50% 40%; border: 2px solid #fff; }
-.wx .fc { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10px; text-align: center; }
-.wx .fc div { background: #ffffff22; border-radius: 6px; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.wx .fc .jp { font-weight: 900; }
-.wx .fc b { font-size: 16px; }
-.wx .fc .nm { font-weight: 900; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.wx .ft { margin-top: auto; font-size: 10px; text-align: center; opacity: 0.8; }
 
 /* 10 Mt. Fuji (round 3) — ridge is the weekly graph */
 

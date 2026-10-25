@@ -9,6 +9,7 @@ import { bento } from '../../src/slides/bento';
 import { ganguro } from '../../src/slides/ganguro';
 import { idol } from '../../src/slides/idol';
 import { konbini } from '../../src/slides/konbini';
+import { weather } from '../../src/slides/weather';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -157,4 +158,22 @@ test('B konbini: a riso receipt over the duotone night; the total is the hero; t
   expect(el.classList.contains('dark')).toBe(true);
   expect(el.querySelector('.credit')).not.toBeNull();
   expect(el.querySelector('.r .nm')!.classList.contains('clip')).toBe(true);
+});
+
+test('O weather: one red sun steps through the four seasons; the loudest season is the hero', () => {
+  const el = weather(ctx());
+  for (const n of ['Aoi Kaze', 'Hoshino Rei', 'Sora Takeda', 'Yuki Tsuki']) expect(el.textContent).toContain(n);
+  const sun = el.querySelector<HTMLElement>('.sun')!;
+  expect(sun.dataset.fx).toBe('steps orbit');
+  expect(sun.dataset.path!.split(',')).toHaveLength(8);
+  expect(el.querySelector('.hero')!.textContent).toContain('8,000');
+  expect(el.textContent).toContain('SPRING');
+});
+
+test('I fuji: its arrival starts as the red sun draining into an ink ensō', () => {
+  const el = fuji(ctx());
+  const enso = el.querySelector<HTMLElement>('.enso')!;
+  const lowest = Math.min(...[...el.querySelectorAll<HTMLElement>('[data-beat]')].map((b) => Number(b.dataset.beat)));
+  expect(Number(enso.dataset.beat)).toBe(lowest);
+  expect(enso.dataset.fx).toBe('drain');
 });

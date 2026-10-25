@@ -21,7 +21,8 @@ export const fuji: Slide = ({ stats }) => {
   const poly = `0,${H} ${pts.join(' ')} ${W},${H}`;
   // Two slides can be on stage during a transition: SVG ids must not clash.
   const id = ++uid;
-  return slide('fuji', `<div class="v" data-beat="1">富士</div>
+  // Arrival (art spec §6, O → I): the weather's red sun drains into an ink ensō behind the title.
+  return slide('fuji', `<i class="enso" data-beat="1" data-fx="drain"></i><div class="v" data-beat="1">富士</div>
     <div class="t" data-beat="1">peak listening</div>
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" data-beat="2" style="top:${TOP}px">
       <defs>

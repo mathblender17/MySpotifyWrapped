@@ -1,4 +1,5 @@
 import { afterEach, expect, test, vi } from 'vitest';
+import { gsap } from 'gsap';
 import { playBeats, prefersReducedMotion } from '../../src/journey/beats';
 
 const html = (s: string) => {
@@ -81,4 +82,32 @@ test('grow is instant under reduced motion', () => {
   const el = html('<b data-beat="1" data-fx="grow">x</b>');
   playBeats(el, { reduced: true }).progress(1);
   expect(el.querySelector('b')!.style.opacity).toBe('1');
+});
+
+test('steps snaps an element up in pixel steps; orbit walks it through its path, one point per following beat', () => {
+  const el = html('<b data-beat="2" data-fx="steps orbit" data-path="0,100,40,0,80,20,90,100">o</b><i data-beat="3">a</i><i data-beat="4">b</i><i data-beat="5">c</i><i data-beat="6">d</i>');
+  const tl = playBeats(el);
+  const sun = el.querySelector('b')!;
+  tl.progress(0.001);
+  expect(gsap.getProperty(sun, 'x')).toBe(0);
+  expect(gsap.getProperty(sun, 'y')).toBe(100);
+  tl.progress(1);
+  expect(gsap.getProperty(sun, 'x')).toBe(90);
+  expect(gsap.getProperty(sun, 'y')).toBe(100);
+  expect(sun.style.opacity).toBe('1');
+});
+
+test('orbit under reduced motion lands on the last point at once', () => {
+  const el = html('<b data-beat="1" data-fx="steps orbit" data-path="0,0,10,10,20,20,30,40">o</b>');
+  playBeats(el, { reduced: true }).progress(1);
+  expect(gsap.getProperty(el.querySelector('b')!, 'x')).toBe(30);
+  expect(gsap.getProperty(el.querySelector('b')!, 'y')).toBe(40);
+});
+
+test('drain turns a solid red sun into an ink ring', () => {
+  const el = html('<b data-beat="1" data-fx="drain">o</b>');
+  playBeats(el).progress(1);
+  const b = el.querySelector('b')!;
+  expect(b.style.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+  expect(b.style.borderColor).toBe('rgb(20, 20, 20)');
 });
