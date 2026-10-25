@@ -1,0 +1,10 @@
+/* World C: mega type (art spec §5, mockup C). Flat field, rising-sun disc, the number is the poster. */
+.tor { background: #ff3b1f; color: #0b1640; font-family: var(--face-text); }
+.tor .sun { position: absolute; width: 190px; height: 190px; border-radius: 50%; background: #ffe9c9; right: -86px; top: -60px; }
+.tor .marq { position: absolute; top: 34px; left: 0; right: 0; white-space: nowrap; overflow: hidden; font: 9px/1 'DotGothic16', monospace; letter-spacing: 3px; padding-left: 30px; }
+.tor .hero { position: absolute; left: -8px; top: 66px; font: 104px/.82 var(--face-num); font-weight: 400; letter-spacing: -6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tor .s { position: absolute; left: 14px; right: 14px; top: 170px; font: 900 14px/1.25 var(--face-text); }
+.tor .s small { display: block; margin-top: 3px; font-size: 10px; font-weight: 500; color: #ffe9c9; }
+.tor .band { position: absolute; left: -20px; right: -20px; top: 246px; background: #0b1640; color: #ffe9c9; transform: rotate(-6deg); padding: 9px 30px 11px; font: 24px/1 var(--face-num); letter-spacing: -1px; white-space: nowrap; }
+.tor .ft { position: absolute; left: 14px; right: 14px; bottom: 16px; font: 900 10px var(--face-text); }
+.tor .ft b { display: inline-block; margin-right: 6px; padding: 2px 8px; border-radius: 10px; background: #0b1640; color: #ff2d95; }

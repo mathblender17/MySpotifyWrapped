@@ -1,17 +1,17 @@
 import type { Slide } from '../story/player';
-import { amountCnt, cnt, slide } from './fmt';
+import { amountCnt, fmt, slide } from './fmt';
+import './worlds/c.css';
 
+// World C (mega type): the days count is the whole poster, cropped at the edge, swelling out of the station sign.
+// The gate tunnel itself lives in the 3D district; "one gate for every day" keeps its meaning here in words.
 export const torii: Slide = ({ stats }) => {
   const s = stats!;
-  // Nearest (biggest) gate last, so the tunnel builds towards you. Centred with left, not a CSS transform: beats animate transform.
-  const gates = [0, 1, 2, 3, 4]
-    .map((i) => `<div class="g" data-beat="${5 - i}" style="top:${26 + i * 34}px;left:${(210 - (190 - i * 34)) / 2}px;width:${190 - i * 34}px;height:${330 - i * 58}px;opacity:${1 - i * 0.15}"></div>`)
-    .join('');
-  return slide('tor', `${gates}
-    <div class="tx">
-      <div class="k" data-beat="6" data-fx="stamp">千本鳥居</div>
-      <div class="big">${cnt(7, s.daysListened!)}</div>
-      <div class="s" data-beat="7">days you listened in ${s.year}<br>one gate for every one of them</div>
-      <div class="amt">${amountCnt(8, s)}</div>
-    </div>`);
+  const days = s.daysListened!;
+  const marquee = `千本鳥居 · ${s.year} · `.repeat(4);
+  return slide('tor', `<div class="sun"></div>
+    <div class="marq" data-crop data-beat="1">${marquee}</div>
+    <b class="hero" data-crop data-beat="2" data-fx="grow count" data-count="${days}" data-suffix="">${fmt(days)}</b>
+    <div class="s" data-beat="3">days you listened in ${s.year}<br><small>one gate for every one of them</small></div>
+    <div class="band" data-beat="4">${amountCnt(4, s)}</div>
+    <div class="ft" data-beat="5"><b>千本鳥居</b> one gate, every day</div>`);
 };

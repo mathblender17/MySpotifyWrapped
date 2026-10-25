@@ -34,7 +34,7 @@ const GENRES_LATER = 'Genres arrive in a later update';
 export const STATIONS: Station[] = [
   { id: 'departure', n: 1, act: 1, nameJp: '出発', nameEn: 'Departure', needs: [], transitionIn: 'title', waitForInput: true, song: 'top', world: 'F', accent: '#00a7db' },
   { id: 'torii', n: 2, act: 1, nameJp: '鳥居', nameEn: 'Torii Gates', needs: ['plays', 'daysListened'], transitionIn: 'ride', song: 'top', world: 'C', accent: '#ff3b1f' },
-  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut', lockedHint: GENRES_LATER, cut: { from: '.tor .g', to: '.ben .box' }, world: 'J', accent: '#e60012' },
+  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut', lockedHint: GENRES_LATER, cut: { from: '.tor .hero', to: '.ben .box' }, world: 'J', accent: '#e60012' },
   { id: 'ganguro', n: 4, act: 1, nameJp: 'ガングロ', nameEn: 'Ganguro', needs: ['topGenre'], transitionIn: 'phone', lockedHint: GENRES_LATER, world: 'G', accent: '#b48cff' },
   { id: 'sumo', n: 5, act: 2, nameJp: '番付', nameEn: 'Banzuke', needs: ['topArtists'], transitionIn: 'ride', world: 'D', accent: '#e60033' },
   { id: 'idol', n: 6, act: 2, nameJp: '推し', nameEn: 'Oshi', needs: ['topArtists'], transitionIn: 'tease', song: 'topArtistTrack', world: 'Q', accent: '#ff2d95' },

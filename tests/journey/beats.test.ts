@@ -64,3 +64,21 @@ test('prefersReducedMotion honours the media query and ?reduced=1', () => {
   expect(prefersReducedMotion()).toBe(true);
   history.replaceState(null, '', '/');
 });
+
+test('grow swells an element from a corner to full size; with count it still ends on the value', () => {
+  const el = html('<b data-beat="1" data-fx="grow count" data-count="341" data-suffix="">0</b>');
+  const tl = playBeats(el);
+  tl.progress(0.02);
+  const b = el.querySelector('b')!;
+  expect(Number(b.style.transform.match(/scale\(([\d.]+)/)?.[1] ?? 1)).toBeLessThan(0.5);
+  tl.progress(1);
+  expect(b.style.opacity).toBe('1');
+  expect(b.style.transform).not.toMatch(/scale\(0/);
+  expect(b.textContent).toBe('341');
+});
+
+test('grow is instant under reduced motion', () => {
+  const el = html('<b data-beat="1" data-fx="grow">x</b>');
+  playBeats(el, { reduced: true }).progress(1);
+  expect(el.querySelector('b')!.style.opacity).toBe('1');
+});

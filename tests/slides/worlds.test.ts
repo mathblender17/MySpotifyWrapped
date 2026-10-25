@@ -4,6 +4,7 @@ import { departure } from '../../src/slides/departure';
 import { sumo } from '../../src/slides/sumo';
 import { gacha } from '../../src/slides/gacha';
 import { fuji } from '../../src/slides/fuji';
+import { torii } from '../../src/slides/torii';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -88,4 +89,16 @@ test('I fuji: the weekly graph is a brushed ink mountain with a red seal on the 
 test('I fuji: two renders never share a filter id', () => {
   const id = (el: HTMLElement) => el.querySelector('filter')!.id;
   expect(id(fuji(ctx()))).not.toBe(id(fuji(ctx())));
+});
+
+test('C torii: the days count is cropped mega type that grows out of the station sign', () => {
+  const el = torii(ctx());
+  const hero = el.querySelector<HTMLElement>('.hero')!;
+  expect(hero.textContent).toBe('341');
+  expect(hero.dataset.fx).toContain('grow');
+  expect(hero.dataset.fx).toContain('count');
+  expect(hero.hasAttribute('data-crop')).toBe(true);
+  expect(el.textContent).toContain('28,243');
+  expect(el.querySelector('.g')).toBeNull(); // the gate tunnel lives in the 3D district now
+  expect(css('c')).toMatch(/\.tor \.hero\s*{[^}]*var\(--face-num\)/);
 });
