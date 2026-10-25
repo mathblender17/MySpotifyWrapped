@@ -14,13 +14,8 @@ function base(ground: string): THREE.Group {
   const g = new THREE.Group();
   const floor = plane(LEN, 160, ground);
   floor.position.y = -0.02;
-  const ballast = plane(LEN, 3, '#6b6259');
-  const sleepers = instanced(box(0.3, 0.12, 2.6, '#4a3b2c'), Array.from({ length: 44 }, (_, i) => at(-22 + i, 0.06, 0)));
-  const railL = box(LEN, 0.15, 0.12, '#b8b8c0');
-  const railR = railL.clone();
-  railL.position.set(0, 0.18, -0.7);
-  railR.position.set(0, 0.18, 0.7);
-  g.add(floor, ballast, sleepers, railL, railR);
+  // No rails here: the track is laid once along the real curve (rails.ts), so it stays continuous through bends.
+  g.add(floor);
   return g;
 }
 

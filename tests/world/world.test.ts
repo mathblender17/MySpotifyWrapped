@@ -138,3 +138,9 @@ test('the first quality step drops the glass blur (costly over a live canvas)', 
   w.destroy();
   expect(document.documentElement.classList.contains('lowfx')).toBe(false);
 });
+
+test('the world lays one continuous track along the curve', () => {
+  const w = createWorld(container, { reduced: false, makeRenderer: () => fakeRenderer() as never })!;
+  expect(w.scene.getObjectByName('track')).toBeDefined();
+  w.destroy();
+});
