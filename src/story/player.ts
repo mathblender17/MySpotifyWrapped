@@ -190,7 +190,11 @@ export function createStory(
     const id = ++cueId;
     cuePending = false; // the dropped cue would have cleared it
     const url = await lookup(t.artist, t.name);
-    if (!alive || cueId !== id || !url) return false;
+    if (!alive || cueId !== id) return false;
+    if (!url) {
+      if (!musicOn) void mixNext(); // the aborted mix lookup must not leave the ride silent
+      return false;
+    }
     playUrl(url);
     return true;
   };

@@ -118,3 +118,16 @@ test('a station without a touch entry, or whose attach throws, still shows its c
   advance(6000);
   expect(s.index).toBeGreaterThan(TORII);
 });
+
+test('a touched song with no preview lets the mix carry on', async () => {
+  const plays: (string | undefined)[] = [];
+  let ended: (() => void) | undefined;
+  const st = { play: (u?: string) => void plays.push(u), onEnded: (cb: () => void) => void (ended = cb), pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, muted: false, unlocked: true };
+  const asked: string[] = [];
+  story({ startAt: TORII, soundtrack: st, findPreview: (_a, t) => { asked.push(t); return t === 'None' ? Promise.resolve(undefined) : new Promise(() => {}); } });
+  ended!(); // mix lookup in flight
+  expect(await kit.playTrack({ name: 'None', artist: 'Me' })).toBe(false);
+  await flush();
+  expect(asked.length).toBe(3); // mix #1, the touched song, mix #2 restarted
+  expect(asked.filter((t) => t === 'None')).toHaveLength(1);
+});
