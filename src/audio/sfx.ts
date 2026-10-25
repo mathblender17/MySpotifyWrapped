@@ -1,6 +1,6 @@
 const PEAK = 0.125; // −18 dB under the music (art spec §8)
 
-export type Sfx = { chime(): void; don(): void; blip(): void; bell(): void; dispose(): void };
+export type Sfx = { unlock(): void; chime(): void; don(): void; blip(): void; bell(): void; dispose(): void };
 
 /**
  * Sound accents synthesised with Web Audio: no files, no licences. Nothing is created until a sound is allowed
@@ -39,6 +39,10 @@ export function createSfx(opts: { canPlay: () => boolean; makeContext?: () => Au
   };
 
   return {
+    /** Call inside a tap: iOS only lets an AudioContext start (or resume) during a user gesture. */
+    unlock() {
+      ready()?.resume().catch(() => {});
+    },
     chime() {
       const c = ready();
       if (!c) return;

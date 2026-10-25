@@ -208,7 +208,6 @@
   display: flex; align-items: center; gap: 8px; padding: 6px 8px;
   background: #fff; color: #111; border-radius: 6px; border-bottom: 4px solid var(--sign-accent, var(--line));
   box-shadow: 0 3px 0 #0003; transform-origin: top left; pointer-events: none;
-  transition: translate .25s ease, scale .25s ease;
 }
 .sign .os {
   flex: none; width: 34px; height: 34px; border-radius: 50%; box-sizing: border-box;
@@ -221,9 +220,8 @@
 .sign .nm b { font: 900 16px/1.05 var(--face-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sign .nm i { font: 9px/1.2 'Archivo Black', sans-serif; font-style: normal; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sign.long .nm i { font-size: 7px; }
-.sign.docked { right: auto; padding: 0; background: none; border-bottom-color: transparent; box-shadow: none; translate: -14px -14px; scale: .6; }
+.sign.docked { right: auto; padding: 0; background: none; border-bottom-color: transparent; box-shadow: none; }
 .sign.docked .nm { display: none; }
 .sign.docked .os { box-shadow: 0 2px 6px #0006; }
-.reduced .sign { transition: none; }
 /* A slide that prints its own station number circle is the docked sign: don't show two. */
 .story:has(.stage .os) .sign.docked { visibility: hidden; }

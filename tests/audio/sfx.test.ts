@@ -3,7 +3,7 @@ import { createSfx } from '../../src/audio/sfx';
 
 /** A fake AudioContext that records what the synth builds. */
 function fakeContext() {
-  const made = { oscillators: 0, gains: [] as number[], closed: false };
+  const made = { oscillators: 0, gains: [] as number[], closed: false, resumed: 0 };
   const param = (track?: number[]) => ({
     value: 0,
     setValueAtTime(v: number) { track?.push(v); return this; },
@@ -20,6 +20,7 @@ function fakeContext() {
     createBuffer: (_c: number, n: number) => ({ getChannelData: () => new Float32Array(n) }),
     createBufferSource: () => ({ ...node(), buffer: null, start() {}, stop() {} }),
     close: () => { made.closed = true; return Promise.resolve(); },
+    resume: () => { made.resumed++; return Promise.resolve(); },
   };
   return { ctx: ctx as unknown as AudioContext, made };
 }
@@ -61,4 +62,14 @@ test('the context is made once, lazily, and closed on dispose', () => {
   expect(makeContext).toHaveBeenCalledTimes(1);
   sfx.dispose();
   expect(made.closed).toBe(true);
+});
+
+test('unlock() inside the tap creates and resumes the context (iOS only allows it in a gesture)', () => {
+  const { ctx, made } = fakeContext();
+  const makeContext = vi.fn(() => ctx);
+  createSfx({ canPlay: () => false, makeContext }).unlock();
+  expect(makeContext).not.toHaveBeenCalled();
+  createSfx({ canPlay: () => true, makeContext }).unlock();
+  expect(makeContext).toHaveBeenCalledTimes(1);
+  expect(made.resumed).toBe(1);
 });

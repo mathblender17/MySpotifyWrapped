@@ -100,8 +100,11 @@ export function createStory(
     if (!paused && !STATIONS[index].waitForInput) holdTimer = setTimeout(() => step(1), holdMs);
   };
 
+  let skipping = false;
   const finish = () => {
+    skipping = true; // jumping to the end fires every queued call: keep the sounds out of it
     master?.progress(1);
+    skipping = false;
     master = undefined;
   };
 
@@ -133,7 +136,7 @@ export function createStory(
     }
 
     const tl = gsap.timeline({ paused: true, onComplete: armHold });
-    const at = (t: number, fn: () => void) => tl.call(fn, undefined, t);
+    const at = (t: number, fn: () => void) => tl.call(() => void (skipping || fn()), undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
     else guide.clear();
@@ -189,6 +192,7 @@ export function createStory(
   };
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
+    sfx.unlock();
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     const x = downX;
@@ -207,6 +211,7 @@ export function createStory(
   };
   const onKey = (e: KeyboardEvent) => {
     opts.soundtrack?.unlock();
+    sfx.unlock();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
     else if (e.key === ' ') (paused ? api.resume() : api.pause());

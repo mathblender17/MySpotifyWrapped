@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+import { gsap } from 'gsap';
 import { STATIONS } from '../../src/journey/stations';
 import { createSign } from '../../src/story/sign';
 
@@ -24,4 +25,15 @@ test('docking takes 0.25 s; reduced motion is instant', () => {
   const r = createSign(true);
   expect(r.show(STATIONS[0]).duration()).toBe(0);
   expect(r.dock().duration()).toBe(0);
+});
+
+test('docking moves the sign with GSAP (inline styles would beat a CSS class), and show undocks it', () => {
+  const sign = createSign();
+  sign.show(STATIONS[4]).progress(1);
+  sign.dock().progress(1);
+  expect(gsap.getProperty(sign.el, 'scale')).toBeCloseTo(0.6);
+  expect(gsap.getProperty(sign.el, 'x')).toBe(-14);
+  sign.show(STATIONS[5]).progress(1);
+  expect(gsap.getProperty(sign.el, 'scale')).toBe(1);
+  expect(gsap.getProperty(sign.el, 'x')).toBe(0);
 });

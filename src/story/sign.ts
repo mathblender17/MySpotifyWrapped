@@ -19,15 +19,15 @@ export function createSign(reduced = false) {
       el.classList.toggle('long', s.nameEn.length > 14);
       const tl = gsap.timeline({ paused: true });
       tl.call(() => el.classList.remove('docked'), undefined, 0);
-      if (reduced) return tl.set(el, { y: 0, opacity: 1 }, 0);
-      return tl.fromTo(el, { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }, 0);
+      if (reduced) return tl.set(el, { x: 0, y: 0, scale: 1, opacity: 1 }, 0);
+      return tl.fromTo(el, { x: 0, y: -40, scale: 1, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' }, 0);
     },
     dock(): gsap.core.Timeline {
       const tl = gsap.timeline({ paused: true });
       tl.call(() => el.classList.add('docked'), undefined, 0);
-      // The class carries the docked layout; its CSS transition does the motion, so the timeline only holds the time.
-      if (!reduced) tl.to({}, { duration: 0.25 }, 0);
-      return tl;
+      // GSAP owns the sign's transform (it writes inline translate/scale), so the dock motion is a GSAP tween too.
+      const docked = { x: -14, y: -14, scale: 0.6 };
+      return reduced ? tl.set(el, docked, 0) : tl.to(el, { ...docked, duration: 0.25, ease: 'power2.out' }, 0);
     },
   };
 }
