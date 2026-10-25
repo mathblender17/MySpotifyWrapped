@@ -15,3 +15,5 @@
 /* Idle loop: the sun hums. */
 .ph.wx.idle .sun { animation: o-idle 3s ease-in-out infinite alternate; }
 @keyframes o-idle { to { translate: 1px -1px; } }
+.wx .ss.on { border-top-color: #c8102e; }
+.wx .ss .val { display: block; font: 13px/1.2 var(--face-num); color: #c8102e; font-variant-numeric: tabular-nums; }
