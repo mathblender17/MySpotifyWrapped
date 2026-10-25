@@ -7,7 +7,7 @@
 .dep .os { flex: none; width: 46px; height: 46px; border: 7px solid var(--line); border-radius: 50%; background: #fff; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Archivo Black', sans-serif; line-height: 1; }
 .dep .os small { font-size: 7px; }
 .dep .os b { font-size: 16px; }
-.dep .board { margin: 12px -16px 0; padding: 0 0 2px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: auto; }
+.dep .board { margin: 12px -16px 0; padding: 0 0 2px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: auto; touch-action: pan-y; /* the year list scrolls natively inside the swipeable story */ }
 .dep .row { display: grid; grid-template-columns: 28px auto minmax(0, 1fr) 10px; align-items: center; gap: 6px; width: 100%; background: var(--line); border: 0; border-radius: 0; padding: 7px 16px; color: #fff; text-align: left; font-family: var(--face-text); }
 .dep .row .ty { background: #fff; color: var(--line); font-weight: 900; font-size: 9px; text-align: center; border-radius: 2px; padding: 1px 0; }
 .dep .row .yr { font: 22px/1 'Archivo Black', sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.5px; }

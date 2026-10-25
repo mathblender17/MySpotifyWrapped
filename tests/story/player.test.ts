@@ -346,12 +346,12 @@ test('a slow 50 px drag is a swipe, not a hold-pause', () => {
   expect(root.querySelector('.frame .paused-stamp')).toBeNull();
 });
 
-test('a 30 px drag is a tap, and the card springs back', () => {
+test('an abandoned 30 px drag does nothing, and the card springs back', () => {
   const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
   const s = story({ startAt: sumo });
   advance(5000);
   drag(-30, 0);
-  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol')); // a tap on the right two-thirds moves on
+  expect(s.index).toBe(sumo); // more than a tap (10 px), less than a swipe (40 px): no navigation
   advance(1000);
   expect(Number(gsap.getProperty(root.querySelector('.stage')!, 'x'))).toBe(0);
 });
@@ -380,4 +380,72 @@ test('arrival buzzes 20 ms and each stamp 10 ms; nothing when muted or reduced o
   expect(run({ soundtrack: { ...sound, muted: true } })).toEqual([]);
   expect(run({ soundtrack: sound, reduced: true })).toEqual([]);
   expect(run({ soundtrack: sound }, true)).toEqual([]);
+});
+
+
+test("pausing during an arrival after an auto-advance keeps the new card's full hold", () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const idol = STATIONS.findIndex((x) => x.id === 'idol');
+  const dwell = (pauseAt?: number) => {
+    const s = story({ startAt: sumo, holdMs: 3000 });
+    while (s.index !== idol) advance(50);
+    let t = 0;
+    while (s.index === idol && t < 30000) {
+      if (t === pauseAt) {
+        s.pause();
+        advance(1000);
+        s.resume();
+      }
+      advance(50);
+      t += 50;
+    }
+    s.destroy();
+    return t;
+  };
+  expect(dwell(300)).toBeGreaterThan(dwell() - 200); // the hold survives (the paused second isn't counted)
+});
+
+test('a mix lookup that starts after a station cue does not override the station song', async () => {
+  const st = fakeSoundtrack();
+  const waiting = new Map<string, (u: string) => void>();
+  const s = story({ startAt: STATIONS.findIndex((x) => x.id === 'sumo'), soundtrack: st, findPreview: (_a, t) => new Promise((res) => waiting.set(t, () => res(`url-${t}`))) });
+  s.next(); s.next(); // to idol: its song lookup is pending
+  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol'));
+  st.end(); // the previous song ends: a mix lookup starts after the cue
+  const idolSong = ctx.stats!.soundtrack!.topArtistTrack!.name;
+  waiting.get(idolSong)!('');
+  await flush();
+  for (const [t, res] of waiting) if (t !== idolSong) res('');
+  await flush();
+  expect(st.plays.at(-1)).toBe(`url-${idolSong}`);
+});
+
+test('a song station with no preview keeps the mix going', async () => {
+  const st = fakeSoundtrack();
+  const idolSong = ctx.stats!.soundtrack!.topArtistTrack!.name;
+  const s = story({ startAt: STATIONS.findIndex((x) => x.id === 'sumo'), soundtrack: st, findPreview: async (_a, t) => (t === idolSong ? undefined : `url-${t}`) });
+  st.end(); // the mix is playing something
+  await flush();
+  s.next(); s.next(); // idol: its song has no preview
+  await flush();
+  expect(st.plays.filter((u) => u === undefined)).toEqual([]);
+  expect(st.plays.length).toBeGreaterThan(0);
+});
+
+test('Space on a focused control is left to the button', () => {
+  const s = story({ startAt: STATIONS.findIndex((x) => x.id === 'sumo') });
+  const btn = root.querySelector<HTMLButtonElement>('.controls button[aria-label="Pause"]')!;
+  btn.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+  expect(root.querySelector('.frame .paused-stamp')).toBeNull();
+  void s;
+});
+
+test('the hint goes on the first control tap and never rides past departure', () => {
+  localStorage.clear();
+  story({ startAt: 0 });
+  expect(root.querySelector('.hint')).not.toBeNull();
+  root.querySelector<HTMLButtonElement>('.controls button[aria-label="Next"]')!.dispatchEvent(new MouseEvent('pointerup', { bubbles: true }));
+  root.querySelector<HTMLButtonElement>('.controls button[aria-label="Next"]')!.click();
+  expect(root.querySelector('.hint')).toBeNull();
+  expect(localStorage.getItem('ongaku:hinted')).toBe('1');
 });

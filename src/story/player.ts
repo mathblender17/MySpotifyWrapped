@@ -95,6 +95,12 @@ export function createStory(
   const same = (a: { artist?: string; name: string }, b: { artist?: string; name: string }) => a.name === b.name && a.artist === b.artist;
   let mixAt = -1;
   let cueId = 0;
+  let cuePending = false; // a station's song is being looked up: it wins over the mix
+  let musicOn = false; // a song is playing (or was asked to) and hasn't ended
+  const playUrl = (url: string) => {
+    musicOn = true;
+    opts.soundtrack!.play(url);
+  };
 
   /** Start this station's song, if it has one. The lookup is never awaited: the ride doesn't wait on the network. */
   const cue = (i: number) => {
@@ -102,25 +108,34 @@ export function createStory(
     if (!s.song || !opts.soundtrack) return;
     const track = opts.ctx.stats?.soundtrack?.[s.song];
     const id = ++cueId;
-    if (!track?.artist) return opts.soundtrack.play(undefined);
+    // No song to switch to: keep whatever plays, or start the mix if nothing does — never silence it.
+    if (!track?.artist) return void (musicOn || mixNext());
     mixAt = queue.findIndex((q) => same(q, track));
+    cuePending = true;
     lookup(track.artist, track.name).then((url) => {
-      if (alive && cueId === id) opts.soundtrack!.play(url);
+      if (!alive || cueId !== id) return;
+      cuePending = false;
+      if (url) playUrl(url);
+      else if (!musicOn) void mixNext();
     });
   };
 
   /** Next playable song in the mix; each entry is tried at most once, so an offline ride goes quiet instead of looping. */
   const mixNext = async () => {
+    if (cuePending) return; // the station's song is on its way
     const id = cueId;
     for (let tries = 0; tries < queue.length; tries++) {
       mixAt = (mixAt + 1) % queue.length;
       const t = queue[mixAt];
       const url = await lookup(t.artist!, t.name);
-      if (!alive || cueId !== id) return;
-      if (url) return opts.soundtrack!.play(url);
+      if (!alive || cueId !== id || cuePending) return; // a station cue took over meanwhile
+      if (url) return playUrl(url);
     }
   };
-  opts.soundtrack?.onEnded?.(() => void mixNext());
+  opts.soundtrack?.onEnded?.(() => {
+    musicOn = false;
+    void mixNext();
+  });
 
   root.classList.add('story');
   root.classList.toggle('reduced', reduced);
@@ -150,7 +165,10 @@ export function createStory(
     clearTimeout(holdTimer);
     if (paused || STATIONS[index].waitForInput) return;
     holdStarted = Date.now();
-    holdTimer = setTimeout(() => step(1), holdLeft);
+    holdTimer = setTimeout(() => {
+      holdTimer = undefined;
+      step(1);
+    }, holdLeft);
   };
   /** Stop the hold's clock, keeping what's left of it. */
   const freezeHold = () => {
@@ -172,6 +190,7 @@ export function createStory(
   const show = (i: number, animate: boolean) => {
     finish();
     clearTimeout(holdTimer);
+    holdTimer = undefined; // the new card's hold hasn't started: a pause before it must not spend it
     const from = index;
     index = i;
     const s = STATIONS[i];
@@ -187,6 +206,7 @@ export function createStory(
     route.set(i);
     season.set(s.act);
     if (s.id === 'departure' && !hinted) frame.el.append(hint.el);
+    else hint.el.remove(); // the hint belongs to the departure board, never to the ride
     cue(i);
     if (!animate) {
       current?.remove();
@@ -281,12 +301,12 @@ export function createStory(
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
     sfx.unlock();
+    unhint(); // any first touch — the card, a control, a year — shows the rider already knows
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     const x = downX;
     downX = undefined;
     springBack();
-    unhint();
     const swiped = Math.hypot(dragX, dragY) > SWIPE_PX;
     if (held) {
       api.resume(); // a press that turned into a swipe is a swipe, never a stuck pause
@@ -298,6 +318,7 @@ export function createStory(
       if (dragY > 0) api.pause();
       return;
     }
+    if (Math.hypot(dragX, dragY) > SLOP_PX) return; // an abandoned swipe: the card springs back, nothing else
     const width = root.getBoundingClientRect().width || window.innerWidth;
     nav(x < width / 3 ? -1 : 1);
   };
@@ -315,7 +336,7 @@ export function createStory(
     unhint();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
-    else if (e.key === ' ') (paused ? api.resume() : api.pause());
+    else if (e.key === ' ' && !(e.target as Element | null)?.closest?.(INTERACTIVE)) (paused ? api.resume() : api.pause()); // a focused button handles its own Space
   };
 
   root.addEventListener('pointerdown', onDown);

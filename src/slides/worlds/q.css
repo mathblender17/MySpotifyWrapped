@@ -17,4 +17,4 @@
 
 /* Idle loop: the cover photo shimmers under the studio lights. */
 .ph.idol.idle .cover { animation: q-idle 3s ease-in-out infinite alternate; }
-@keyframes q-idle { to { filter: brightness(1.15) saturate(1.1); } }
+@keyframes q-idle { to { filter: saturate(1.4) contrast(1.1) brightness(1.15); } } /* same function list as the base: it glides */

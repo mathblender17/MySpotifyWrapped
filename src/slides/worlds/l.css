@@ -1,6 +1,6 @@
 /* World L: Shōwa kaiju poster (art spec §5, mockup L). Painted sunset, giant silhouette, slanted brush title. */
 .shk { background: #e9dcbf; color: #1a1410; font-family: var(--face-text); padding: 0; }
-.shk .sky { position: absolute; left: 0; right: 0; top: 0; height: 196px; background: linear-gradient(180deg, #c8102e 0%, #ff7a2b 60%, #f6c26b 100%); }
+.shk .sky { position: absolute; left: 0; right: 0; top: 0; height: 196px; background: linear-gradient(180deg, #c8102e 0%, #ff7a2b 60%, #f6c26b 100%); background-size: 140% 140%; }
 .shk .beastwrap { position: absolute; left: 40px; top: 22px; width: 130px; height: 162px; }
 .shk .beast { width: 100%; height: 100%; display: block; }
 .shk .city { position: absolute; left: 0; right: 0; top: 146px; height: 52px; background: #1a1410;
@@ -15,5 +15,5 @@
 .shk .credits { position: absolute; left: 0; right: 0; bottom: 0; background: #1a1410; color: #e9dcbf; font: 900 7px var(--face-text); padding: 5px 10px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Idle loop: the sunset sky churns. */
-.ph.shk.idle .sky { background-size: 140% 140%; animation: l-idle 16s ease-in-out infinite alternate; }
+.ph.shk.idle .sky { animation: l-idle 16s ease-in-out infinite alternate; }
 @keyframes l-idle { to { background-position: 100% 60%; } }

@@ -22,6 +22,6 @@
 .sumo .don { position: absolute; right: 4px; bottom: 0; z-index: 2; font: 34px/1 'Reggae One', sans-serif; color: #e60033; -webkit-text-stroke: 3px #111; paint-order: stroke fill; transform: rotate(10deg); }
 .sumo .ft { grid-area: ft; text-align: center; font: 900 9px var(--face-text); }
 
-/* Idle loop: the screentone drifts. */
-.ph.sumo.idle .tone { animation: d-idle 12s linear infinite; }
-@keyframes d-idle { to { background-position: 24px 24px; } }
+/* Idle loop: the splash panel's ink flickers like a fresh print (the manga image never moves). */
+.ph.sumo.idle .p1 { animation: d-idle 2.4s ease-in-out infinite alternate; }
+@keyframes d-idle { to { filter: contrast(1.6); } }
