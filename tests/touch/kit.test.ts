@@ -53,6 +53,7 @@ afterEach(() => {
   for (const s of stories) s.destroy();
   stories = [];
   delete TOUCH.torii;
+  delete TOUCH.weather;
   Object.assign(TOUCH, saved);
   vi.useRealTimers();
   root.remove();
@@ -130,4 +131,21 @@ test('a touched song with no preview lets the mix carry on', async () => {
   await flush();
   expect(asked.length).toBe(3); // mix #1, the touched song, mix #2 restarted
   expect(asked.filter((t) => t === 'None')).toHaveLength(1);
+});
+
+test('a touched-song lookup still pending when the card changes is dropped', async () => {
+  const plays: (string | undefined)[] = [];
+  const st = { play: (u?: string) => void plays.push(u), onEnded: () => {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, muted: false, unlocked: true };
+  const waiting = new Map<string, () => void>();
+  TOUCH.weather = (_el, k) => { kit = k; };
+  const s = story({ startAt: STATIONS.findIndex((x) => x.id === 'weather'), soundtrack: st, findPreview: (_a, t) => new Promise((res) => waiting.set(t, () => res(`url-${t}`))) });
+  const got = kit.playTrack({ name: 'Mine', artist: 'Me' });
+  s.next(); // finishes the arrival animation
+  s.next();
+  expect(STATIONS[s.index].id).toBe('fuji');
+  expect(STATIONS[s.index].song).toBeUndefined(); // the new station has no cue to bump the lookup id
+  waiting.get('Mine')!();
+  expect(await got).toBe(false);
+  await flush();
+  expect(plays).not.toContain('url-Mine');
 });

@@ -85,3 +85,17 @@ test('konbini: no track has an artist → no mark', () => {
   TOUCH.konbini!(konbini(ctx({ stats })), kit);
   expect(log.marked).toEqual([]);
 });
+
+test('oshi: the now-playing sticker lasts 2.5 s even under reduced motion', async () => {
+  const stats = withTrack('Aoi Kaze');
+  const el = idol(ctx({ stats }));
+  const { kit } = fake(stats);
+  TOUCH.idol!(el, { ...kit, reduced: true, dur: () => 0 } as TouchKit);
+  el.querySelector<HTMLElement>('.cover')!.click();
+  await settle();
+  const g = gsap.globalTimeline;
+  g.totalTime(g.totalTime() + 1);
+  expect(el.querySelector('.now')).not.toBeNull();
+  g.totalTime(g.totalTime() + 2);
+  expect(el.querySelector('.now')).toBeNull();
+});

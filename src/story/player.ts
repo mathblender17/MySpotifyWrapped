@@ -185,13 +185,13 @@ export function createStory(
   };
 
   /** A song picked by touch: same guards as a station cue, so a pending mix or cue lookup can't override it. */
-  const playTrack = async (t: { name: string; artist?: string }) => {
+  const playTrack = async (t: { name: string; artist?: string }, gen: number) => {
     if (!opts.soundtrack || !t.artist) return false;
     const id = ++cueId;
     cuePending = false; // the dropped cue would have cleared it
     const url = await lookup(t.artist, t.name);
     if (!alive || cueId !== id) return false;
-    if (!url) {
+    if (!url || gen !== cardGen) { // not found, or its card left meanwhile: nothing plays
       if (!musicOn) void mixNext(); // the aborted mix lookup must not leave the ride silent
       return false;
     }
@@ -214,7 +214,7 @@ export function createStory(
           if (--busy === 0 && !paused && !animating()) armHold();
         };
       },
-      playTrack,
+      playTrack: (t) => playTrack(t, gen),
       sfx,
       buzz: (p) => haptics.buzz(p),
       mark(target) {

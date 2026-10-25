@@ -26,7 +26,7 @@ export function idol(el: HTMLElement, kit: TouchKit): void {
     s.className = 'now';
     s.textContent = '♪ now playing';
     el.append(s);
-    gsap.delayedCall(kit.dur(2.5), () => s.remove());
+    gsap.delayedCall(2.5, () => s.remove());
   });
 }
 
