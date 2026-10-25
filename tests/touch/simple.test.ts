@@ -80,3 +80,25 @@ test('departure: pressing an eligible year buzzes', () => {
   expect(log.buzz).toEqual([10]);
   expect(log.marked).toEqual([]);
 });
+
+test('sumo: reduced motion zooms with no transition', () => {
+  const el = sumo(ctx());
+  const { kit } = fake();
+  TOUCH.sumo!(el, { ...kit, reduced: true } as TouchKit);
+  const pa = el.querySelector<HTMLElement>('.pa')!;
+  pa.click();
+  expect(pa.classList.contains('zoom')).toBe(true);
+  expect(pa.style.transition).toBe('none');
+});
+
+test('sumo: an artist with neither minutes nor plays gets no mark and no badge', () => {
+  const stats = { ...STATS, topArtists: STATS.topArtists.map((a, i) => (i === 1 ? { name: a.name } : a)) } as never;
+  const el = sumo(ctx({ stats }));
+  const { kit, log } = fake(stats);
+  TOUCH.sumo!(el, kit);
+  const pa = el.querySelector<HTMLElement>('.pa')!;
+  expect(pa.querySelector('.mins')).toBeNull();
+  expect(log.marked).toEqual([el.querySelector('.pb')]);
+  pa.click();
+  expect(pa.classList.contains('zoom')).toBe(false);
+});

@@ -10,11 +10,12 @@ export function sumo(el: HTMLElement, kit: TouchKit): void {
   for (const [sel, i] of [['.pa', 1], ['.pb', 3]] as const) {
     const pnl = el.querySelector<HTMLElement>(sel);
     const a = list[i];
-    if (!pnl || !a) continue;
+    if (!pnl || !a || (a.minutes === undefined && a.plays === undefined)) continue;
     const badge = document.createElement('b');
     badge.className = 'mins';
-    badge.textContent = a.minutes !== undefined ? `${fmt(a.minutes)} min` : plays(a.plays ?? 0);
+    badge.textContent = a.minutes !== undefined ? `${fmt(a.minutes)} min` : plays(a.plays!);
     pnl.append(badge);
+    if (kit.reduced) pnl.style.transition = 'none';
     kit.mark(pnl);
     pnl.addEventListener('click', () => {
       const same = open?.pnl === pnl;
