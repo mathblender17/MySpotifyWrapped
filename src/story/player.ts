@@ -16,6 +16,8 @@ import { createHint } from './hint';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
+import { TOUCH } from '../touch';
+import type { TouchKit } from '../touch/kit';
 import { loadWorldFonts } from '../style/fonts';
 import { readingHoldMs } from './pacing';
 import { createTicket } from './ticket';
@@ -38,7 +40,7 @@ const HOLD_PRESS_MS = 200;
 /** Travel that makes a press a swipe, and the finger movement that rules out a hold (alive spec §4). */
 const SWIPE_PX = 40;
 const SLOP_PX = 10;
-const INTERACTIVE = 'button, a, input, label';
+const INTERACTIVE = 'button, a, input, label, [data-touch]';
 
 export function createStory(
   root: HTMLElement,
@@ -161,9 +163,13 @@ export function createStory(
 
   const animating = () => !!master && master.progress() < 1;
 
+  // Touch interactions in use (counted); reset per card so a stale release can't unfreeze the next one.
+  let busy = 0;
+  let cardGen = 0;
+
   const armHold = () => {
     clearTimeout(holdTimer);
-    if (paused || STATIONS[index].waitForInput) return;
+    if (paused || busy > 0 || STATIONS[index].waitForInput) return;
     holdStarted = Date.now();
     holdTimer = setTimeout(() => {
       holdTimer = undefined;
@@ -176,6 +182,43 @@ export function createStory(
     clearTimeout(holdTimer);
     holdTimer = undefined;
     holdLeft = Math.max(0, holdLeft - (Date.now() - holdStarted));
+  };
+
+  /** A song picked by touch: same guards as a station cue, so a pending mix or cue lookup can't override it. */
+  const playTrack = async (t: { name: string; artist?: string }) => {
+    if (!opts.soundtrack || !t.artist) return false;
+    const id = ++cueId;
+    cuePending = false; // the dropped cue would have cleared it
+    const url = await lookup(t.artist, t.name);
+    if (!alive || cueId !== id || !url) return false;
+    playUrl(url);
+    return true;
+  };
+
+  const touchKit = (stats: YearStats): TouchKit => {
+    const gen = cardGen;
+    return {
+      stats,
+      reduced,
+      busy() {
+        busy++;
+        freezeHold();
+        let released = false;
+        return () => {
+          if (released || gen !== cardGen) return;
+          released = true;
+          if (--busy === 0 && !paused && !animating()) armHold();
+        };
+      },
+      playTrack,
+      sfx,
+      buzz: (p) => haptics.buzz(p),
+      mark(target) {
+        target.setAttribute('data-touch', '');
+        target.insertAdjacentHTML('beforeend', '<i class="touch-dot" aria-hidden="true"></i>');
+      },
+      dur: (s) => (reduced ? 0 : s),
+    };
   };
 
   let skipping = false;
@@ -202,6 +245,10 @@ export function createStory(
     const next = playable.findIndex((p, n) => p && n > i);
     if (next > 0) loadWorldFonts(STATIONS[next].world);
     const el = opts.slides[s.id](opts.ctx);
+    busy = 0;
+    cardGen++;
+    // A broken touch interaction must never cost the card.
+    if (opts.ctx.stats) try { TOUCH[s.id]?.(el, touchKit(opts.ctx.stats)); } catch { /* card stays as built */ }
     holdLeft = opts.holdMs ?? readingHoldMs(el);
     route.set(i);
     season.set(s.act);
@@ -278,6 +325,7 @@ export function createStory(
   const nav = (dir: 1 | -1) => (animating() ? finish() : step(dir));
 
   const onDown = (e: MouseEvent) => {
+    if ((e.target as Element).closest('[data-touch]')) for (const d of current?.querySelectorAll('.touch-dot') ?? []) d.remove();
     if ((e.target as Element).closest(INTERACTIVE)) return;
     downX = e.clientX;
     downY = e.clientY;

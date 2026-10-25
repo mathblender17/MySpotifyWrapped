@@ -256,3 +256,9 @@
 .hint .finger { display: inline-block; animation: hint-swipe 1.4s ease-in-out infinite; }
 @keyframes hint-swipe { 0%, 20% { translate: 8px 0; } 70%, 100% { translate: -10px 0; opacity: 0.3; } }
 .story.reduced .hint .finger { animation: none; }
+
+/* Touch interactions (alive plan B): a marked element is never a ride gesture; the dot invites the first touch. */
+[data-touch] { cursor: pointer; touch-action: none; position: relative; }
+.touch-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #ff2d95; pointer-events: none; animation: touch-pulse 1.2s ease-in-out infinite; }
+@keyframes touch-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+.story.reduced .touch-dot { animation: none; }
