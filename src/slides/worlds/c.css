@@ -27,3 +27,6 @@
 /* The kanji card has no sun: a light sheen crosses its wayfinding band instead (the text stays still). */
 .ph.kj.idle .band { background-image: linear-gradient(100deg, transparent 40%, #fff6 50%, transparent 60%); background-size: 300% 100%; animation: c-sheen 5s linear infinite; }
 @keyframes c-sheen { from { background-position: 150% 0; } to { background-position: -150% 0; } }
+
+/* Touch: the days number is tappable. */
+.tor .hero[data-touch] { cursor: pointer; }

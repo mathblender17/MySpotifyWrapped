@@ -30,3 +30,6 @@
 /* Idle loop (alive spec §3): the LED chip glows like a live departure board. Never moves text. */
 .ph.dep.idle .led { animation: f-idle 1.6s ease-in-out infinite alternate; }
 @keyframes f-idle { to { filter: brightness(1.35) drop-shadow(0 0 4px #ffb000); } }
+
+/* Touch: pressed year row dims like a button. */
+.dep button.row:active { filter: brightness(.82); transform: scale(.985); }
