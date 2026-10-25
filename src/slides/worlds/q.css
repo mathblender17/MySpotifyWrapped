@@ -1,0 +1,16 @@
+/* World Q: gyaru magazine cover (art spec §5, mockup Q). Full-bleed night photo, cover lines in fighting colours. */
+.idol { background: #111; color: #fff; padding: 0; font-family: var(--face-text); }
+.idol .cover { position: absolute; inset: 0; background: linear-gradient(#0000 40%, #000a), url(/art/kabukicho.webp) 50% 60% / auto 150% no-repeat, #2a0a2a; filter: saturate(1.4) contrast(1.1); }
+.idol .mast { position: absolute; left: 0; right: 0; top: 20px; text-align: center; font: 62px/.85 'Rampart One', var(--face-num); color: #ff2d95; -webkit-text-stroke: 3px #fff; paint-order: stroke fill; letter-spacing: -2px; }
+.idol .issue { position: absolute; right: 10px; top: 84px; background: #fff200; color: #111; font: 10px/1 var(--face-num); padding: 3px 7px; }
+.idol .cl { position: absolute; font-family: var(--face-num); -webkit-text-stroke: 3px #111; paint-order: stroke fill; line-height: 1; }
+.idol .cl1 { left: 12px; top: 112px; font-size: 18px; color: #fff200; transform: rotate(-4deg); }
+.idol .oshi { left: 12px; right: 12px; top: 140px; font-size: 38px; color: #fff; letter-spacing: -1px; }
+.idol .fit { overflow-wrap: anywhere; }
+.idol .fit.l2 { font-size: 28px; }
+.idol .fit.l3 { font-size: 18px; }
+.idol .cl2 { right: 12px; top: 232px; font-size: 13px; color: #3cf6ff; text-align: right; }
+.idol .cl4 { left: 12px; top: 262px; font: 16px/1 'Hachi Maru Pop', var(--face-text); color: #ff2d95; -webkit-text-stroke: 4px #fff; transform: rotate(3deg); }
+.idol .price { position: absolute; right: 10px; bottom: 22px; background: #fff; color: #111; padding: 4px 8px; text-align: right; transform: rotate(-2deg); box-shadow: 3px 3px 0 #ff2d95; }
+.idol .price small { display: block; font: 900 7px var(--face-text); letter-spacing: 1px; }
+.idol .hero { font: 24px/1.05 var(--face-num); font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }

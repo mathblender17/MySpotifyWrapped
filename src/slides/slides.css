@@ -14,15 +14,6 @@
 /* 5 sumo banzuke (round 1) */
 
 /* 6 idol / oshi (round 1) */
-.idol { background: linear-gradient(#ffe9f6, #fff); color: #d4007a; font-family: 'Hachi Maru Pop', sans-serif; text-align: center; }
-.idol .c { font-size: 13px; }
-.idol .ch { background: #fff; padding: 8px 8px 22px; box-shadow: 0 6px 16px #0003; transform: rotate(-4deg); width: 130px; margin: 6px auto 0; }
-.idol .ch .pic { height: 100px; background: linear-gradient(135deg, #ff2d95, #9ad6ff); }
-.idol .ch .sig { font-size: 12px; margin-top: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.idol .oshi { font-family: 'Dela Gothic One', sans-serif; font-size: 20px; margin-top: 12px; line-height: 1.1; }
-.idol .st { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 11px; color: #333; margin-top: 4px; }
-.idol .pen { display: flex; justify-content: center; gap: 5px; margin-top: auto; }
-.idol .pen i { width: 8px; height: 40px; border-radius: 4px; box-shadow: 0 0 10px currentColor; }
 
 /* 7 konbini receipt (round 2) */
 .kon { background: #2e8b57; align-items: center; }

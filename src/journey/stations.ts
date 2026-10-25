@@ -38,7 +38,7 @@ export const STATIONS: Station[] = [
   { id: 'ganguro', n: 4, act: 1, nameJp: 'ガングロ', nameEn: 'Ganguro', needs: ['topGenre'], transitionIn: 'phone', lockedHint: GENRES_LATER, world: 'G', accent: '#b48cff' },
   { id: 'sumo', n: 5, act: 2, nameJp: '番付', nameEn: 'Banzuke', needs: ['topArtists'], transitionIn: 'ride', world: 'D', accent: '#e60033' },
   { id: 'idol', n: 6, act: 2, nameJp: '推し', nameEn: 'Oshi', needs: ['topArtists'], transitionIn: 'tease', song: 'topArtistTrack', world: 'Q', accent: '#ff2d95' },
-  { id: 'konbini', n: 7, act: 2, nameJp: 'コンビニ', nameEn: 'Konbini', needs: ['topTracks'], transitionIn: 'cut', cut: { from: '.idol .pen', to: '.kon .rc' }, world: 'B', accent: '#3cf6ff' },
+  { id: 'konbini', n: 7, act: 2, nameJp: 'コンビニ', nameEn: 'Konbini', needs: ['topTracks'], transitionIn: 'cut', cut: { from: '.idol .cover', to: '.kon .rc' }, world: 'B', accent: '#3cf6ff' },
   { id: 'gacha', n: 8, act: 2, nameJp: 'ガチャ', nameEn: 'Gacha', needs: ['topTracks'], transitionIn: 'baton', song: 'top', cut: { from: '.kon .bc', to: '.gac .card' }, morph: 'pixelate', world: 'K', accent: '#ffe36b' },
   { id: 'weather', n: 9, act: 3, nameJp: '天気', nameEn: 'Forecast', needs: ['seasons'], transitionIn: 'breather', world: 'O', accent: '#c8102e' },
   { id: 'fuji', n: 10, act: 3, nameJp: '富士', nameEn: 'Fuji', needs: ['weekly', 'peakWeek'], transitionIn: 'ride', world: 'I', accent: '#c8102e' },
