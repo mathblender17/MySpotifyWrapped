@@ -16,3 +16,7 @@
 .kon .tot { position: absolute; left: 14px; right: 14px; bottom: 22px; }
 .kon .tot small { display: block; color: #3cf6ff; font-size: 10px; letter-spacing: 2px; text-shadow: 0 0 6px #3cf6ff; }
 .kon .hero { display: block; font: 26px/1.05 var(--face-num); font-weight: 400; color: #fff6e0; font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: 2px 2px 0 #ff2d95, -2px -1px 0 #3cf6ff88; }
+
+/* Idle loop: the two riso inks slip out of register and back. */
+.ph.kon.idle .duo::after { animation: b-idle 2s steps(2) infinite; }
+@keyframes b-idle { 50% { translate: 1px -1px; } }

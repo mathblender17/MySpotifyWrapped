@@ -119,6 +119,9 @@ export function createStory(
   root.replaceChildren(route.el, frame.el, dock);
   const season = createSeason(root, reduced);
 
+  /** The card's reveals are done: its world's idle loop takes over (never under reduced motion). */
+  const settle = (el: HTMLElement) => void (reduced || el.classList.add('idle'));
+
   const animating = () => !!master && master.progress() < 1;
 
   const armHold = () => {
@@ -172,10 +175,11 @@ export function createStory(
       ticket.stamp(i, s.accent).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
+      settle(el);
       return armHold();
     }
 
-    const tl = gsap.timeline({ paused: true, onComplete: armHold });
+    const tl = gsap.timeline({ paused: true, onComplete: () => (settle(el), armHold()) });
     const at = (t: number, fn: () => void) => tl.call(() => void (skipping || fn()), undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
     if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);

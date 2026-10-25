@@ -13,3 +13,7 @@
 .shk .s { position: absolute; left: 12px; right: 8px; bottom: 40px; font: 900 11px/1.35 var(--face-text); }
 .shk .hero { font: 28px/1 var(--face-num); font-weight: 400; color: #c8102e; font-variant-numeric: tabular-nums; }
 .shk .credits { position: absolute; left: 0; right: 0; bottom: 0; background: #1a1410; color: #e9dcbf; font: 900 7px var(--face-text); padding: 5px 10px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Idle loop: the sunset sky churns. */
+.ph.shk.idle .sky { background-size: 140% 140%; animation: l-idle 16s ease-in-out infinite alternate; }
+@keyframes l-idle { to { background-position: 100% 60%; } }

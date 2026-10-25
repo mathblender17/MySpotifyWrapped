@@ -235,3 +235,7 @@
 .sign.docked .os { box-shadow: 0 2px 6px #0006; }
 /* A slide that prints its own station number circle is the docked sign: don't show two. */
 .story:has(.stage .os) .sign.docked { visibility: hidden; }
+
+/* Idle loops never run under reduced motion (alive spec §3). */
+.story.reduced .ph.idle, .story.reduced .ph.idle *, .story.reduced .ph.idle *::after { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .ph.idle, .ph.idle *, .ph.idle *::after { animation: none !important; } }

@@ -11,3 +11,7 @@
 .wx .loud small { display: block; font: 10px/1 'Bebas Neue', var(--face-text); letter-spacing: 3px; color: #555; }
 .wx .hero { display: block; font: 26px/1.1 var(--face-num); font-weight: 400; color: #c8102e; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .wx .ft { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font: 900 9px var(--face-text); letter-spacing: 5px; color: #ff2d95; }
+
+/* Idle loop: the sun hums. */
+.ph.wx.idle .sun { animation: o-idle 3s ease-in-out infinite alternate; }
+@keyframes o-idle { to { translate: 1px -1px; } }

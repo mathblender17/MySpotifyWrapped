@@ -285,3 +285,17 @@ test('pausing mid-hold keeps the time left', () => {
   expect(t).toBeGreaterThan(0);
   expect(t).toBeLessThan(2900); // the remaining time, not a fresh 3 s
 });
+
+test('a card gets the idle class once its beats finish, never with reduced motion', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  story({ startAt: sumo });
+  expect(root.querySelector('#sumo')!.classList.contains('idle')).toBe(false);
+  advance(4000);
+  expect(root.querySelector('#sumo')!.classList.contains('idle')).toBe(true);
+  for (const s of stories) s.destroy();
+  stories = [];
+  root.replaceChildren();
+  story({ startAt: sumo, reduced: true });
+  advance(4000);
+  expect(root.querySelector('#sumo')!.classList.contains('idle')).toBe(false);
+});

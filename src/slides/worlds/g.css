@@ -16,3 +16,11 @@
 .gan .s2 { left: 156px; top: 206px; font-size: 26px; }
 .gan .s3 { left: 30px; top: 92px; font-size: 14px; }
 .gan .ft { position: absolute; left: 14px; right: 14px; bottom: 18px; font: 10px/1.3 'DotGothic16', monospace; letter-spacing: 1px; }
+
+/* Idle loop: glitter twinkles and the chrome sheen sweeps. */
+.ph.gan.idle .star { animation: g-twinkle 1.4s ease-in-out infinite alternate; }
+.ph.gan.idle .star.s2 { animation-delay: -0.5s; }
+.ph.gan.idle .star.s3 { animation-delay: -1s; }
+.ph.gan.idle .nm { background-size: 200% 100%; animation: g-sheen 6s linear infinite; }
+@keyframes g-twinkle { to { opacity: 0.25; scale: 0.7; rotate: 20deg; } }
+@keyframes g-sheen { to { background-position: 200% 0; } }
