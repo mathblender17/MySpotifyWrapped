@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
 import { createTicket } from '../../src/story/ticket';
 import { STATIONS } from '../../src/journey/stations';
@@ -12,4 +13,13 @@ test('the ticket has one hidden back face, flip() toggles .flipped and fills the
   expect(t.el.querySelector('.back')!.textContent).toContain('2 / 13');
   t.flip();
   expect(t.el.classList.contains('flipped')).toBe(false);
+});
+
+test('the docked final ticket still rotates when flipped', () => {
+  const css = readFileSync('src/story/story.css', 'utf8');
+  const final = css.indexOf('.dock .ticket.final {');
+  const flipped = css.indexOf('.dock .ticket.final.flipped {');
+  expect(final).toBeGreaterThan(-1);
+  expect(flipped).toBeGreaterThan(final);
+  expect(css.slice(flipped, css.indexOf('}', flipped))).toContain('rotateY(180deg)');
 });

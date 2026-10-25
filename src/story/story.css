@@ -207,6 +207,7 @@
 .ticket.flipped .back { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px; transform: rotateY(180deg); font: 900 9px/1.4 var(--face-text); }
 .ticket.flipped .back span { font: 14px/1.2 var(--face-num); }
 .dock .ticket.final { bottom: 0; transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }
+.dock .ticket.final.flipped { transform: perspective(400px) rotateY(180deg); }
 
 /* 3D world behind the story */
 .world { position: fixed; inset: 0; z-index: 0; background: #0b0b10; }
