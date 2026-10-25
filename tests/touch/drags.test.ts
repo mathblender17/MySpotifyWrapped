@@ -2,6 +2,7 @@ import { expect, test } from 'vitest';
 import { gsap } from 'gsap';
 import { weather as weatherSlide } from '../../src/slides/weather';
 import { fuji as fujiSlide } from '../../src/slides/fuji';
+import { playBeats } from '../../src/journey/beats';
 import { TOUCH } from '../../src/touch';
 import type { TouchKit } from '../../src/touch/kit';
 import { ctx, STATS } from '../slides/fixture';
@@ -57,6 +58,38 @@ test('forecast: release resumes the hold', () => {
   ptr(sun, 'pointerup');
   ptr(sun, 'pointercancel');
   expect(log.release).toBe(1);
+});
+
+test('forecast: a drag during the arrival orbit is not pulled back by it', () => {
+  const el = weatherSlide(ctx());
+  const { kit } = fake();
+  layout(el);
+  const tl = playBeats(el);
+  TOUCH.weather!(el, kit);
+  const sun = el.querySelector<HTMLElement>('.sun')!;
+  tl.totalTime(1.3);
+  ptr(sun, 'pointerdown', 138, 102);
+  ptr(sun, 'pointerup');
+  gsap.globalTimeline.totalTime(gsap.globalTimeline.totalTime() + 1);
+  tl.totalTime(tl.duration());
+  expect([gsap.getProperty(sun, 'x'), gsap.getProperty(sun, 'y')]).toEqual([88, 52]);
+  expect(el.querySelector('.ss.on')).toBe(el.querySelectorAll('.ss')[2]);
+  expect(gsap.getProperty(sun, 'opacity')).toBe(1);
+});
+
+test('forecast: a new drag right after a release is not overwritten by the snap', () => {
+  const el = weatherSlide(ctx());
+  const { kit } = fake();
+  layout(el);
+  TOUCH.weather!(el, kit);
+  const sun = el.querySelector<HTMLElement>('.sun')!;
+  ptr(sun, 'pointerdown', 138, 102);
+  ptr(sun, 'pointerup');
+  ptr(sun, 'pointerdown', 60, 80);
+  ptr(sun, 'pointermove', 90, 90);
+  gsap.globalTimeline.totalTime(gsap.globalTimeline.totalTime() + 1);
+  expect([gsap.getProperty(sun, 'x'), gsap.getProperty(sun, 'y')]).toEqual([40, 40]);
+  ptr(sun, 'pointerup');
 });
 
 test('forecast: no seasons → no mark', () => {

@@ -6,7 +6,7 @@ import { fujiStep, weekDate } from '../slides/fuji';
 const SEASONS = ['spring', 'summer', 'autumn', 'winter'] as const;
 
 /** Wire a captured drag: busy for exactly one take; `move` gets design-px coords relative to `slide`. */
-function drag(target: HTMLElement, slide: HTMLElement, kit: TouchKit, move: (x: number, y: number) => void, up?: () => void): void {
+function drag(target: HTMLElement, slide: HTMLElement, kit: TouchKit, move: (x: number, y: number) => void, up?: () => void, down?: () => void): void {
   let release: (() => void) | undefined;
   const at = (e: PointerEvent) => {
     const r = slide.getBoundingClientRect();
@@ -16,6 +16,7 @@ function drag(target: HTMLElement, slide: HTMLElement, kit: TouchKit, move: (x: 
   const end = () => { if (release) { release(); release = undefined; up?.(); } };
   target.addEventListener('pointerdown', (e) => {
     release ??= kit.busy();
+    down?.();
     try { target.setPointerCapture?.(e.pointerId); } catch { /* synthetic pointer */ }
     at(e);
   });
@@ -50,6 +51,9 @@ export function weather(el: HTMLElement, kit: TouchKit): void {
     const d = kit.dur(0.25);
     if (d > 0) gsap.to(sun, { x: pts[near][0], y: pts[near][1], duration: d, ease: 'power2.out' });
     else gsap.set(sun, { x: pts[near][0], y: pts[near][1] });
+  }, () => {
+    // Take the sun off the arrival orbit and any running snap, but leave its entrance (scale/opacity) alone.
+    gsap.killTweensOf(sun, 'x,y');
   });
 }
 
