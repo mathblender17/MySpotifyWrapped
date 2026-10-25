@@ -167,3 +167,19 @@ test('tapping to skip an arrival does not fire its queued sounds as one chord', 
   expect(sfx.chime).not.toHaveBeenCalled();
   expect(sfx.don).not.toHaveBeenCalled();
 });
+
+test('arriving at a station loads its world fonts and those of the next stop', () => {
+  document.head.querySelectorAll('link[data-world]').forEach((l) => l.remove());
+  story({ startAt: 4 }); // sumo (D), next idol (Q)
+  const worlds = [...document.head.querySelectorAll<HTMLLinkElement>('link[data-world]')].map((l) => l.dataset.world);
+  expect(worlds).toEqual(expect.arrayContaining(['D', 'Q']));
+});
+
+test('light accents (konbini cyan, gacha yellow) stamp in ink so they read on the cream ticket', () => {
+  const s = story({ startAt: 8 }); // weather: every stop before it is already stamped
+  const slots = [...root.querySelectorAll('.ticket .slot')];
+  expect(slots[6].classList.contains('light')).toBe(true);
+  expect(slots[7].classList.contains('light')).toBe(true);
+  expect(slots[4].classList.contains('light')).toBe(false);
+  s.destroy();
+});

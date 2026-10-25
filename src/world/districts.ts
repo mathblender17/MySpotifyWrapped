@@ -19,6 +19,9 @@ function base(ground: string): THREE.Group {
   return g;
 }
 
+/** Act 1 rides through the departure line: its districts carry a station signboard in the F line colour (spec §7). */
+const lineSign = (g: THREE.Group) => put(g, sign(6, 1.2, '#00a7db'), 0, 3, -5);
+
 const put = <T extends THREE.Object3D>(g: THREE.Object3D, o: T, x: number, y: number, z: number, ry = 0): T => {
   o.position.set(x, y, z);
   o.rotation.y = ry;
@@ -28,6 +31,7 @@ const put = <T extends THREE.Object3D>(g: THREE.Object3D, o: T, x: number, y: nu
 
 const departure: District = () => {
   const g = base('#cfc8bd');
+  lineSign(g);
   put(g, box(36, 1, 5, '#9a9a9f'), 0, 0.5, -4);
   put(g, box(30, 0.3, 6, '#2c3e50'), 2, 4.6, -4.5);
   g.add(instanced(cylinder(0.12, 0.12, 4, '#7f8c8d'), [-10, -4, 2, 8, 14].map((x) => at(x, 3, -2.2))));
@@ -44,6 +48,7 @@ const departure: District = () => {
 
 const toriiTunnel: District = () => {
   const g = base('#5b7c4a');
+  lineSign(g);
   // 60 gates over the rail: one draw call per part.
   const parts = torii('#e8461c', 1.15).children as THREE.Mesh[];
   for (const p of parts) {
@@ -61,6 +66,7 @@ const toriiTunnel: District = () => {
 
 const bento: District = () => {
   const g = base('#3a2a1a');
+  lineSign(g);
   const shop = put(g, building(10, 5, 8, '#c0392b'), 8, 0, -10);
   put(shop, box(10.4, 0.8, 8.4, '#fdf6e3'), 0, 5.3, 0); // white "rice" roof
   for (let i = 0; i < 4; i++) put(g, sign(1.4, 2.2, i % 2 ? '#1d3a6e' : '#ffffff'), 4.6 + i * 1.6, 2.2, -5.9);
@@ -72,6 +78,7 @@ const bento: District = () => {
 
 const ganguro: District = () => {
   const g = base('#2a2a33');
+  lineSign(g);
   const neon = ['#ff2d95', '#3cf6ff', '#ffe600', '#7a5cff'];
   for (let i = 0; i < 8; i++) {
     const side = i % 2 ? 1 : -1;

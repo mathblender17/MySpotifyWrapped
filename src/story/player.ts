@@ -12,6 +12,7 @@ import { createGuide } from './guide';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
+import { loadWorldFonts } from '../style/fonts';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -118,6 +119,10 @@ export function createStory(
     world?.setSeason((s.act - 1) / 3);
     // First stop or going back: the camera is simply there.
     if (from < 0 || !animate) world?.jump(i);
+    // Fonts for this world and the next stop's, so the next arrival doesn't flash a fallback face.
+    loadWorldFonts(s.world);
+    const next = playable.findIndex((p, n) => p && n > i);
+    if (next > 0) loadWorldFonts(STATIONS[next].world);
     const el = opts.slides[s.id](opts.ctx);
     route.set(i);
     season.set(s.act);
