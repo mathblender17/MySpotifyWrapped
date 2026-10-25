@@ -206,6 +206,7 @@ export function createStory(
     return {
       stats,
       reduced,
+      ticket,
       busy() {
         busy++;
         freezeHold();
@@ -333,7 +334,8 @@ export function createStory(
   const nav = (dir: 1 | -1) => (animating() ? finish() : step(dir));
 
   const onDown = (e: MouseEvent) => {
-    if ((e.target as Element).closest('[data-touch]')) for (const d of current?.querySelectorAll('.touch-dot') ?? []) d.remove();
+    const touched = (e.target as Element).closest('[data-touch]');
+    if (touched) for (const d of [...(current?.querySelectorAll('.touch-dot') ?? []), ...touched.querySelectorAll('.touch-dot')]) d.remove(); // the ticket sits outside the card
     if ((e.target as Element).closest(INTERACTIVE)) return;
     downX = e.clientX;
     downY = e.clientY;

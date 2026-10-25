@@ -149,3 +149,23 @@ test('a touched-song lookup still pending when the card changes is dropped', asy
   await flush();
   expect(plays).not.toContain('url-Mine');
 });
+
+test('the first touch on the ticket removes its dot; leaving kanji undoes the ticket', () => {
+  const KANJI = STATIONS.findIndex((s) => s.id === 'kanji');
+  TOUCH.kanji = saved.kanji;
+  const s = story({ startAt: KANJI, holdMs: 3000 });
+  const t = root.querySelector<HTMLElement>('.ticket')!;
+  expect(t.hasAttribute('data-touch')).toBe(true);
+  expect(t.querySelectorAll('.touch-dot')).toHaveLength(1);
+  fire(t, 'pointerdown');
+  expect(t.querySelectorAll('.touch-dot')).toHaveLength(0);
+  fire(t, 'pointerup');
+  t.click();
+  expect(t.classList.contains('flipped')).toBe(true);
+  advance(4000); // let the arrival and finale settle
+  s.prev();
+  expect(s.index).toBeLessThan(KANJI);
+  expect(t.hasAttribute('data-touch')).toBe(false);
+  expect(t.querySelector('.touch-dot')).toBeNull();
+  expect(t.classList.contains('flipped')).toBe(false);
+});

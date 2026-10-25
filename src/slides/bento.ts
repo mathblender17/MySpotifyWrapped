@@ -11,7 +11,7 @@ export const bento: Slide = ({ stats }) => {
   const rows = [...top, ...(other > 0.005 ? [{ genre: 'other', share: other }] : [])]
     .map((x, i) => {
       const pct = Math.round(x.share * 100);
-      return `<div class="row"><span class="rk">${i + 1}</span><span class="gn clip">${esc(x.genre.toUpperCase())}</span><span class="bar"><i style="width:${pct}%"></i></span><b>${cnt(3, pct, '%')}</b></div>`;
+      return `<div class="row"><span class="rk">${i + 1}</span><span class="gn clip">${esc(x.genre.toUpperCase())}</span><span class="bar"><i style="width:${pct}%" data-pct="${pct}%"></i></span><b>${cnt(3, pct, '%')}</b></div>`;
     })
     .join('');
   const lead = g[0];

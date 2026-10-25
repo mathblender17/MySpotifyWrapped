@@ -5,6 +5,8 @@ import type { Ranked, YearStats } from '../types';
 export type TouchKit = {
   stats: YearStats;
   reduced: boolean;
+  /** The dock ticket (outside the card): the kanji station lets a tap flip it. */
+  ticket: { el: HTMLElement; flip(): void };
   /** Freeze the card's hold until the returned release is called (counted: overlapping uses nest). */
   busy(): () => void;
   /** Play a track's preview over the mix; resolves true when a preview was found and started. */

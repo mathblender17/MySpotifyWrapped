@@ -199,6 +199,13 @@
 .dock .guide .jp { font-size: 13px; }
 .dock .ticket { position: relative; top: auto; right: auto; flex: none; width: 84px; }
 .dock .ticket .slots { gap: 1px; }
+.ticket[data-touch] { pointer-events: auto; cursor: pointer; }
+.dock .ticket { transition: transform var(--flip, 0s) ease, box-shadow .8s; }
+.ticket .back { display: none; }
+.ticket.flipped { transform: perspective(400px) rotateY(180deg); }
+.ticket.flipped > :not(.back) { visibility: hidden; }
+.ticket.flipped .back { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px; transform: rotateY(180deg); font: 900 9px/1.4 var(--face-text); }
+.ticket.flipped .back span { font: 14px/1.2 var(--face-num); }
 .dock .ticket.final { bottom: 0; transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }
 
 /* 3D world behind the story */

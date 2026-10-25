@@ -14,6 +14,12 @@
 .ben .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ben .bar { height: 6px; background: #0001; }
 .ben .bar i { display: block; height: 100%; background: #003da5; box-shadow: 3px 0 0 #ff2d95; }
+.ben .box[data-touch] { cursor: pointer; }
+.ben .row { transition: transform .2s, box-shadow .2s; }
+.ben .row.lift { transform: translateY(-4px); box-shadow: 0 4px 0 #1414; position: relative; background: #f6f1e3; }
+.ben .row.lift .bar i { width: 100% !important; transition: width .2s; position: relative; }
+.ben .row.lift .bar i::after { content: attr(data-pct); position: absolute; right: 2px; top: -1px; font: 8px/6px var(--face-num); color: #fff; }
+.ben .row.lift b { visibility: hidden; }
 .ben .row b { font: 11px/1 var(--face-num); text-align: right; font-weight: 400; }
 .ben .photo { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background: url(/art/kabukicho.webp) 50% 72% / auto 300% no-repeat, #8a8580; filter: grayscale(1) contrast(1.6); }
 .ben .ht { position: absolute; left: 0; right: 0; bottom: 0; height: 86px; background-image: radial-gradient(#f6f1e3 .9px, transparent 1.3px); background-size: 4px 4px; mix-blend-mode: screen; opacity: .6; }
