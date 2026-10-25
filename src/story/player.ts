@@ -11,6 +11,7 @@ import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
 import { createControls } from './controls';
 import { createGuide } from './guide';
+import { createHaptics, type Haptics } from './haptics';
 import { createHint } from './hint';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
@@ -52,6 +53,8 @@ export function createStory(
     world?: StoryWorld | null;
     /** Test seam: build the sound accents. */
     makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
+    /** Test seam: build the haptics. */
+    makeHaptics?: (o: { canBuzz: () => boolean }) => Haptics;
   },
 ) {
   const reduced = opts.reduced ?? prefersReducedMotion();
@@ -82,6 +85,8 @@ export function createStory(
   // Accents only once sound is unlocked, never muted, never with reduced motion (art spec §8).
   const canPlay = () => !!opts.soundtrack?.unlocked && !opts.soundtrack.muted && !reduced;
   const sfx = (opts.makeSfx ?? createSfx)({ canPlay });
+  // Haptics share sound's rules: only after the unlocking tap, never muted, never with reduced motion.
+  const haptics = (opts.makeHaptics ?? createHaptics)({ canBuzz: canPlay });
   /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
   const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
 
@@ -226,7 +231,14 @@ export function createStory(
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());
     const beatsAt = trans.duration() + signIn.duration() + signDock.duration();
     tl.add(beats.paused(false), beatsAt);
-    at(trans.duration(), () => arrivalSound(s.id));
+    at(trans.duration(), () => {
+      arrivalSound(s.id);
+      haptics.buzz(20);
+    });
+    // A tap of the finger on each stamp and drop; the gacha SSR gets its own pattern (data-haptic="ssr").
+    for (const b of el.querySelectorAll<HTMLElement>('[data-fx~="stamp"], [data-fx~="drop"]')) {
+      at(beatsAt + beatTime(el, b, reduced), () => haptics.buzz(b.dataset.haptic === 'ssr' ? [15, 40, 15] : 10));
+    }
     // Beat-bound accents (ドン, pixel blips) are marked in the slide with data-sfx.
     for (const b of el.querySelectorAll<HTMLElement>('[data-sfx]')) {
       const name = b.dataset.sfx as 'don' | 'blip';

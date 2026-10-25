@@ -363,3 +363,21 @@ test('the hint shows on the departure board and goes on the first tap', () => {
   tap(root.querySelector('.stage')!);
   expect(root.querySelector('.hint')).toBeNull();
 });
+
+test('arrival buzzes 20 ms and each stamp 10 ms; nothing when muted or reduced or skipped', () => {
+  const stampy: Record<string, Slide> = { ...slides, sumo: () => Object.assign(document.createElement('div'), { id: 'sumo', className: 'ph', innerHTML: '<b data-beat="1" data-fx="stamp">a</b><b data-beat="2" data-fx="drop">b</b><b data-beat="3" data-fx="stamp" data-haptic="ssr">c</b>' }) };
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const run = (o: Partial<Parameters<typeof createStory>[1]>, finishEarly = false) => {
+    const buzzes: (number | number[])[] = [];
+    const s = story({ slides: stampy, startAt: sumo, holdMs: 60000, makeHaptics: (h) => ({ buzz: (p) => void (h.canBuzz() && buzzes.push(p)) }), ...o });
+    if (finishEarly) s.next();
+    advance(6000);
+    s.destroy();
+    return buzzes;
+  };
+  const sound = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, onEnded() {}, muted: false, unlocked: true };
+  expect(run({ soundtrack: sound })).toEqual([20, 10, 10, [15, 40, 15]]);
+  expect(run({ soundtrack: { ...sound, muted: true } })).toEqual([]);
+  expect(run({ soundtrack: sound, reduced: true })).toEqual([]);
+  expect(run({ soundtrack: sound }, true)).toEqual([]);
+});
