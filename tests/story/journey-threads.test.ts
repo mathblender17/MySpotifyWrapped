@@ -55,8 +55,8 @@ test('the story wears the season of the current act', () => {
 });
 
 test('the ticket is stamped at every station you stop at, and passed stations read 通過', () => {
-  const s = story({ startAt: 1 });
-  advance(4700); // torii → sumo (each arrival now includes the 0.7 s sign ritual)
+  const s = story({ startAt: 1, holdMs: 2500 }); // a fixed short hold: this test is about stamps, not reading time
+  advance(4700); // torii → sumo (arrival incl. the sign ritual + 0.6 s beats)
   advance(4700); // sumo → idol
   s.next(); // finish idol's animation
   expect(s.index).toBe(5);

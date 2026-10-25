@@ -14,6 +14,7 @@ import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
 import { loadWorldFonts } from '../style/fonts';
+import { readingHoldMs } from './pacing';
 import { createTicket } from './ticket';
 import './story.css';
 
@@ -48,7 +49,6 @@ export function createStory(
     makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
   },
 ) {
-  const holdMs = opts.holdMs ?? 2500;
   const reduced = opts.reduced ?? prefersReducedMotion();
   const playable = STATIONS.map((s) => isPlayable(s, opts.ctx.stats));
   const frame = createFrame();
@@ -62,6 +62,9 @@ export function createStory(
   let master: gsap.core.Timeline | undefined;
   let paused = false;
   let holdTimer: ReturnType<typeof setTimeout> | undefined;
+  // The hold is a budget that pausing freezes (alive spec §3): set on arrival, spent while running.
+  let holdLeft = 0;
+  let holdStarted = 0;
   let pressTimer: ReturnType<typeof setTimeout> | undefined;
   let held = false;
   let downX: number | undefined;
@@ -120,7 +123,16 @@ export function createStory(
 
   const armHold = () => {
     clearTimeout(holdTimer);
-    if (!paused && !STATIONS[index].waitForInput) holdTimer = setTimeout(() => step(1), holdMs);
+    if (paused || STATIONS[index].waitForInput) return;
+    holdStarted = Date.now();
+    holdTimer = setTimeout(() => step(1), holdLeft);
+  };
+  /** Stop the hold's clock, keeping what's left of it. */
+  const freezeHold = () => {
+    if (holdTimer === undefined) return;
+    clearTimeout(holdTimer);
+    holdTimer = undefined;
+    holdLeft = Math.max(0, holdLeft - (Date.now() - holdStarted));
   };
 
   let skipping = false;
@@ -146,6 +158,7 @@ export function createStory(
     const next = playable.findIndex((p, n) => p && n > i);
     if (next > 0) loadWorldFonts(STATIONS[next].world);
     const el = opts.slides[s.id](opts.ctx);
+    holdLeft = opts.holdMs ?? readingHoldMs(el);
     route.set(i);
     season.set(s.act);
     cue(i);
@@ -258,7 +271,7 @@ export function createStory(
     pause: () => {
       paused = true;
       master?.pause();
-      clearTimeout(holdTimer);
+      freezeHold();
       opts.soundtrack?.pause();
       world?.pause();
     },

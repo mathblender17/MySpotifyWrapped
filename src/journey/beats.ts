@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { fmt } from '../slides/fmt';
 
-const GAP = 0.35;
+const GAP = 0.6;
 
 export function prefersReducedMotion(): boolean {
   if (new URLSearchParams(location.search).get('reduced') === '1') return true;

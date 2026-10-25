@@ -54,7 +54,7 @@ const tap = (el: Element, clientX = 900) => {
 const slidesInFrame = () => root.querySelectorAll('.stage > .ph').length;
 
 test('a station plays its transition and beats, holds, then rides on — skipping pass-throughs', () => {
-  const s = story({ startAt: 1 });
+  const s = story({ startAt: 1, holdMs: 2500 }); // navigation test: a fixed short hold, not reading time
   expect(s.index).toBe(1);
   advance(6000);
   expect(s.index).toBe(4);
@@ -116,7 +116,7 @@ test('tapping a button inside a slide does not move the story', () => {
 });
 
 test('holding pauses everything, releasing resumes', () => {
-  const s = story({ startAt: 1 });
+  const s = story({ startAt: 1, holdMs: 2500 }); // navigation test: a fixed short hold, not reading time
   advance(3000);
   fire(root, 'pointerdown');
   advance(10000);
@@ -127,7 +127,7 @@ test('holding pauses everything, releasing resumes', () => {
 });
 
 test('a cancelled hold resumes instead of staying paused', () => {
-  const s = story({ startAt: 1 });
+  const s = story({ startAt: 1, holdMs: 2500 }); // navigation test: a fixed short hold, not reading time
   advance(3000);
   fire(root, 'pointerdown');
   advance(300);
@@ -255,4 +255,33 @@ test('a station song wins over a late mix lookup', async () => {
   mixLookup('');
   await flush();
   expect(st.plays.at(-1)).toBe(`url-${ctx.stats!.soundtrack!.topArtistTrack!.name}`);
+});
+
+test('without holdMs a card holds for its reading time', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const dwell = (text: string) => {
+    const withText: Record<string, Slide> = { ...slides, sumo: () => Object.assign(document.createElement('div'), { id: 'sumo', className: 'ph', innerHTML: `<b data-beat="1">${text}</b>` }) };
+    const s = story({ slides: withText, startAt: sumo, holdMs: undefined });
+    let t = 0;
+    while (s.index === sumo && t < 30000) { advance(50); t += 50; }
+    s.destroy();
+    return t;
+  };
+  // 1 word holds 6 s (the floor); 21 words hold 3 + 0.25 × 21 = 8.25 s. Same arrival, so the dwells differ by the hold.
+  expect(dwell('x') - 0).toBeGreaterThan(6000);
+  expect(dwell(Array(21).fill('w').join(' ')) - dwell('x')).toBeCloseTo(2250, -2);
+});
+
+test('pausing mid-hold keeps the time left', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const s = story({ startAt: sumo, holdMs: 3000 });
+  advance(4000); // arrival done (under 2 s) and part of the 3 s hold gone
+  s.pause();
+  advance(10000);
+  expect(s.index).toBe(sumo);
+  s.resume();
+  let t = 0;
+  while (s.index === sumo && t < 5000) { advance(50); t += 50; }
+  expect(t).toBeGreaterThan(0);
+  expect(t).toBeLessThan(2900); // the remaining time, not a fresh 3 s
 });
