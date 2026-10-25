@@ -166,6 +166,8 @@ export function createStory(
   // Touch interactions in use (counted); reset per card so a stale release can't unfreeze the next one.
   let busy = 0;
   let cardGen = 0;
+  let leaves: (() => void)[] = [];
+  const runLeaves = () => { const fns = leaves; leaves = []; for (const f of fns) try { f(); } catch { /* cleanup must not cost the ride */ } };
 
   const armHold = () => {
     clearTimeout(holdTimer);
@@ -222,6 +224,7 @@ export function createStory(
         target.insertAdjacentHTML('beforeend', '<i class="touch-dot" aria-hidden="true"></i>');
       },
       dur: (s) => (reduced ? 0 : s),
+      onLeave: (fn) => void leaves.push(fn),
     };
   };
 
@@ -248,6 +251,7 @@ export function createStory(
     loadWorldFonts(s.world);
     const next = playable.findIndex((p, n) => p && n > i);
     if (next > 0) loadWorldFonts(STATIONS[next].world);
+    runLeaves();
     const el = opts.slides[s.id](opts.ctx);
     busy = 0;
     cardGen++;
@@ -421,6 +425,7 @@ export function createStory(
     },
     destroy: () => {
       alive = false;
+      runLeaves();
       opts.soundtrack?.stop();
       sfx.dispose();
       world?.destroy();

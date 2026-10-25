@@ -15,4 +15,6 @@ export type TouchKit = {
   mark(target: Element): void;
   /** Seconds → 0 under reduced motion. */
   dur(s: number): number;
+  /** Run `fn` when the card is left (before the next card is built, or on destroy); cleanup for listeners. */
+  onLeave(fn: () => void): void;
 };
