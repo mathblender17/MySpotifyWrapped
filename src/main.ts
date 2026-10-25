@@ -6,6 +6,7 @@ import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
 import { withDemoSoundtrack } from './ingest/demoSoundtrack';
 import { withSampleGenres } from './ingest/sampleGenres';
+import { creditsLine } from './art/credits';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
 import { esc, plays as nPlays } from './slides/fmt';
@@ -36,6 +37,7 @@ function landing(note?: string) {
       </label>
       <div class="status" role="status"></div>
       ${note ? `<div class="note">${note}<button type="button" class="x" aria-label="Dismiss">×</button></div>` : ''}
+      <p class="credits">${creditsLine()}</p>
     </main>`;
   app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true, undefined, true));
   app.querySelector('.note .x')?.addEventListener('click', (e) => (e.currentTarget as HTMLElement).parentElement!.remove());

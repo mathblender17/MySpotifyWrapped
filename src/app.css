@@ -90,3 +90,6 @@ body {
 .mute:focus-visible { outline: 3px solid #ff2d95; }
 
 .boarding { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; font-family: 'DotGothic16', monospace; color: #ff2d95; letter-spacing: 2px; }
+
+.credits { margin-top: 28px; font-size: 11px; line-height: 1.5; color: #fff8; max-width: 36em; }
+.credits a { color: inherit; }
