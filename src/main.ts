@@ -146,8 +146,9 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
     soundtrack.mute(!soundtrack.muted);
     label();
   });
-  const dock = root.querySelector('.dock');
-  if (dock) dock.insertBefore(mute, dock.lastElementChild);
+  // Mute is a control: it sits with Back · Pause · Next (alive spec §4).
+  const controls = root.querySelector('.controls');
+  if (controls) controls.append(mute);
   else root.append(mute);
   if (note) {
     const n = document.createElement('div');

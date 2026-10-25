@@ -299,3 +299,17 @@ test('a card gets the idle class once its beats finish, never with reduced motio
   advance(4000);
   expect(root.querySelector('#sumo')!.classList.contains('idle')).toBe(false);
 });
+
+test('the control buttons move, pause and resume the story and never count as a tap on the card', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const s = story({ startAt: sumo });
+  advance(5000);
+  const btn = (label: string) => root.querySelector<HTMLButtonElement>(`.controls button[aria-label="${label}"]`)!;
+  tap(btn('Next'));
+  btn('Next').click();
+  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol'));
+  btn('Pause').click();
+  expect(root.querySelector('.frame .paused-stamp')).not.toBeNull();
+  btn('Play').click();
+  expect(root.querySelector('.frame .paused-stamp')).toBeNull();
+});

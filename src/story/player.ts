@@ -9,6 +9,7 @@ import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
 import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
+import { createControls } from './controls';
 import { createGuide } from './guide';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
@@ -116,7 +117,9 @@ export function createStory(
   const dock = document.createElement('div');
   dock.className = 'dock';
   dock.append(guide.el, ticket.el);
-  root.replaceChildren(route.el, frame.el, dock);
+  const controls = createControls({ prev: () => nav(-1), next: () => nav(1), toggle: () => (paused ? api.resume() : api.pause()) });
+  const stamp = Object.assign(document.createElement('div'), { className: 'paused-stamp', textContent: '一時停止 · paused' });
+  root.replaceChildren(route.el, frame.el, controls.el, dock);
   const season = createSeason(root, reduced);
 
   /** The card's reveals are done: its world's idle loop takes over (never under reduced motion). */
@@ -274,6 +277,8 @@ export function createStory(
     prev: () => nav(-1),
     pause: () => {
       paused = true;
+      controls.setPaused(true);
+      frame.el.append(stamp);
       master?.pause();
       freezeHold();
       opts.soundtrack?.pause();
@@ -281,6 +286,8 @@ export function createStory(
     },
     resume: () => {
       paused = false;
+      controls.setPaused(false);
+      stamp.remove();
       opts.soundtrack?.resume();
       world?.resume();
       if (animating()) master!.play();
