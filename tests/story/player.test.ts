@@ -313,3 +313,53 @@ test('the control buttons move, pause and resume the story and never count as a 
   btn('Play').click();
   expect(root.querySelector('.frame .paused-stamp')).toBeNull();
 });
+
+const drag = (dx: number, dy: number, steps = 5, ms = 0) => {
+  const at = (x: number, y: number, type: string) => root.dispatchEvent(new MouseEvent(type, { clientX: 500 + x, clientY: 400 + y, bubbles: true }));
+  at(0, 0, 'pointerdown');
+  for (let i = 1; i <= steps; i++) {
+    if (ms) advance(ms / steps);
+    at((dx * i) / steps, (dy * i) / steps, 'pointermove');
+  }
+  at(dx, dy, 'pointerup');
+};
+
+test('swipe left moves on, swipe right goes back, swipe down pauses', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const s = story({ startAt: sumo });
+  advance(5000);
+  drag(-80, 0);
+  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol'));
+  s.next(); // finish idol's arrival
+  drag(80, 0);
+  expect(s.index).toBe(sumo);
+  drag(0, 80);
+  expect(root.querySelector('.frame .paused-stamp')).not.toBeNull();
+});
+
+test('a slow 50 px drag is a swipe, not a hold-pause', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const s = story({ startAt: sumo });
+  advance(5000);
+  drag(-50, 0, 5, 300);
+  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol'));
+  expect(root.querySelector('.frame .paused-stamp')).toBeNull();
+});
+
+test('a 30 px drag is a tap, and the card springs back', () => {
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  const s = story({ startAt: sumo });
+  advance(5000);
+  drag(-30, 0);
+  expect(s.index).toBe(STATIONS.findIndex((x) => x.id === 'idol')); // a tap on the right two-thirds moves on
+  advance(1000);
+  expect(Number(gsap.getProperty(root.querySelector('.stage')!, 'x'))).toBe(0);
+});
+
+test('the hint shows on the departure board and goes on the first tap', () => {
+  localStorage.clear();
+  story({ startAt: 0 });
+  expect(root.querySelector('.hint')).not.toBeNull();
+  tap(root.querySelector('.stage')!);
+  expect(root.querySelector('.hint')).toBeNull();
+});

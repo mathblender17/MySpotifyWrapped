@@ -11,6 +11,7 @@ import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
 import { createControls } from './controls';
 import { createGuide } from './guide';
+import { createHint } from './hint';
 import { createRouteMap } from './routemap';
 import { createSeason } from './season';
 import { createSign } from './sign';
@@ -33,6 +34,9 @@ export type StoryWorld = {
 };
 
 const HOLD_PRESS_MS = 200;
+/** Travel that makes a press a swipe, and the finger movement that rules out a hold (alive spec §4). */
+const SWIPE_PX = 40;
+const SLOP_PX = 10;
 const INTERACTIVE = 'button, a, input, label';
 
 export function createStory(
@@ -69,6 +73,9 @@ export function createStory(
   let pressTimer: ReturnType<typeof setTimeout> | undefined;
   let held = false;
   let downX: number | undefined;
+  let downY = 0;
+  let dragX = 0;
+  let dragY = 0;
   let alive = true;
   let world = opts.world ?? null;
   const lookup = opts.findPreview ?? ((a: string, t: string) => itunes(a, t));
@@ -121,6 +128,13 @@ export function createStory(
   const stamp = Object.assign(document.createElement('div'), { className: 'paused-stamp', textContent: '一時停止 · paused' });
   root.replaceChildren(route.el, frame.el, controls.el, dock);
   const season = createSeason(root, reduced);
+  const hint = createHint();
+  let hinted = hint.el.hidden;
+  const unhint = () => {
+    if (hinted) return;
+    hinted = true;
+    hint.dismiss();
+  };
 
   /** The card's reveals are done: its world's idle loop takes over (never under reduced motion). */
   const settle = (el: HTMLElement) => void (reduced || el.classList.add('idle'));
@@ -167,6 +181,7 @@ export function createStory(
     holdLeft = opts.holdMs ?? readingHoldMs(el);
     route.set(i);
     season.set(s.act);
+    if (s.id === 'departure' && !hinted) frame.el.append(hint.el);
     cue(i);
     if (!animate) {
       current?.remove();
@@ -233,12 +248,24 @@ export function createStory(
   const onDown = (e: MouseEvent) => {
     if ((e.target as Element).closest(INTERACTIVE)) return;
     downX = e.clientX;
+    downY = e.clientY;
+    dragX = dragY = 0;
     held = false;
     pressTimer = setTimeout(() => {
       held = true;
       api.pause();
     }, HOLD_PRESS_MS);
   };
+  // While a finger drags, the card follows it a little (0.2×) so a swipe feels physical.
+  const onMove = (e: MouseEvent) => {
+    if (downX === undefined) return;
+    dragX = e.clientX - downX;
+    dragY = e.clientY - downY;
+    if (Math.hypot(dragX, dragY) > SLOP_PX) clearTimeout(pressTimer); // a moving finger is not a hold
+    if (Math.abs(dragX) > Math.abs(dragY)) gsap.set(frame.stage, { x: dragX * 0.2 });
+  };
+  const springBack = () => gsap.to(frame.stage, { x: 0, duration: reduced ? 0 : 0.2, ease: 'power2.out' });
+  /** One gesture, one meaning, decided on release: a swipe (> 40 px), a hold (paused while down), else a tap. */
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
     sfx.unlock();
@@ -246,21 +273,34 @@ export function createStory(
     clearTimeout(pressTimer);
     const x = downX;
     downX = undefined;
-    if (held) return api.resume();
+    springBack();
+    unhint();
+    const swiped = Math.hypot(dragX, dragY) > SWIPE_PX;
+    if (held) {
+      api.resume(); // a press that turned into a swipe is a swipe, never a stuck pause
+      if (!swiped) return;
+    }
+    e.preventDefault();
+    if (swiped) {
+      if (Math.abs(dragX) >= Math.abs(dragY)) return nav(dragX < 0 ? 1 : -1);
+      if (dragY > 0) api.pause();
+      return;
+    }
     const width = root.getBoundingClientRect().width || window.innerWidth;
     nav(x < width / 3 ? -1 : 1);
-    e.preventDefault();
   };
   // A touch pan or a release outside the page cancels the gesture: never leave the story stuck on pause.
   const onCancel = () => {
     if (downX === undefined) return;
     clearTimeout(pressTimer);
     downX = undefined;
+    springBack();
     if (held) api.resume();
   };
   const onKey = (e: KeyboardEvent) => {
     opts.soundtrack?.unlock();
     sfx.unlock();
+    unhint();
     if (e.key === 'ArrowRight') nav(1);
     else if (e.key === 'ArrowLeft') nav(-1);
     else if (e.key === ' ') (paused ? api.resume() : api.pause());
@@ -268,6 +308,7 @@ export function createStory(
 
   root.addEventListener('pointerdown', onDown);
   root.addEventListener('pointerup', onUp);
+  root.addEventListener('pointermove', onMove);
   root.addEventListener('pointercancel', onCancel);
   root.addEventListener('pointerleave', onCancel);
   document.addEventListener('keydown', onKey);
@@ -306,6 +347,7 @@ export function createStory(
       season.destroy();
       root.removeEventListener('pointerdown', onDown);
       root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointermove', onMove);
       root.removeEventListener('pointercancel', onCancel);
       root.removeEventListener('pointerleave', onCancel);
       document.removeEventListener('keydown', onKey);
