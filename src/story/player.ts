@@ -222,7 +222,7 @@ export function createStory(
       buzz: (p) => haptics.buzz(p),
       mark(target) {
         target.setAttribute('data-touch', '');
-        target.insertAdjacentHTML('beforeend', '<i class="touch-dot" aria-hidden="true"></i>');
+        (target instanceof SVGElement ? target.parentElement! : target).insertAdjacentHTML('beforeend', '<i class="touch-dot" aria-hidden="true"></i>'); // an <i> inside an <svg> never renders
       },
       dur: (s) => (reduced ? 0 : s),
       onLeave: (fn) => void leaves.push(fn),

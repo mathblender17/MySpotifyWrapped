@@ -30,3 +30,4 @@
 
 /* Touch: the days number is tappable. */
 .tor .hero[data-touch] { cursor: pointer; }
+.tor .hero .touch-dot { right: auto; left: 190px; top: 8px; } /* the number bleeds off the card: keep the dot on it */
