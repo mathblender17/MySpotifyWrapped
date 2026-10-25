@@ -3,76 +3,92 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Proof Stations Review</title>
+<title>Full Ride Review</title>
 <style>
   :root { --bg: #f4efe6; --ink: #111; --mute: #555; --line: #00a7db; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #14141a; --ink: #eee; --mute: #aaa; } }
   :root[data-theme="dark"] { --bg: #14141a; --ink: #eee; --mute: #aaa; }
   body { margin: 0; padding: 24px 16px 48px; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
   h1 { font-size: 28px; margin: 0 0 4px; }
-  .lede { color: var(--mute); margin: 0 0 24px; max-width: 70ch; }
-  section { border-top: 4px solid var(--line); padding-top: 12px; margin-bottom: 36px; }
+  .lede { color: var(--mute); margin: 0 0 24px; max-width: 72ch; }
+  section { border-top: 4px solid var(--line); padding-top: 12px; margin-bottom: 32px; }
   h2 { margin: 0 0 12px; font-size: 20px; }
   .pair { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
   figure { margin: 0; }
-  figure img { display: block; height: 520px; max-width: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 16px #0003; }
+  figure img { display: block; height: 460px; max-width: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 16px #0003; }
   figcaption { font-size: 13px; color: var(--mute); margin-top: 6px; }
-  .notes { flex: 1 1 260px; max-width: 46ch; }
-  .notes h3 { font-size: 14px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: .05em; }
-  .notes ul { margin: 0 0 12px; padding-left: 18px; }
+  .notes { flex: 1 1 240px; max-width: 46ch; }
+  .notes p { margin: 0 0 8px; }
   @media (max-width: 600px) { figure img { height: auto; width: 100%; } }
 </style>
 </head>
 <body>
-<h1>Art Plan 1: proof stations</h1>
-<p class="lede">Each built station (headless Chrome, 390×844 phone emulation, demo data, reduced motion) beside its approved mockup. Mockups show the shared sample slide (your #1 artist); the built slides show each station's own stats, so compare the language, not the content.</p>
+<h1>Art Plans 1 + 2: the full ride</h1>
+<p class="lede">Every station as built (headless Chrome, 390×844 phone emulation, demo data with sample genres, reduced motion), beside the approved mockup for its world. The mockups show one shared sample slide (your #1 artist), so compare the visual language, not the content. Torii and kanji share world C, and fuji and omikuji share world I.</p>
 
-<section>
-  <h2>1 · Departure → F wayfinding</h2>
-  <div class="pair">
-    <figure><img src="mock-F.png" alt="Mockup F"><figcaption>Mockup F</figcaption></figure>
-    <figure><img src="departure.png" alt="Built departure"><figcaption>Built</figcaption></figure>
-    <div class="notes">
-      <h3>Matches</h3><ul><li>Line-colour bar, OS number circle, huge Zen Kaku kanji, Archivo Black English.</li><li>Years are full-bleed platform strips; the amber LED chip is carried over.</li></ul>
-      <h3>Off</h3><ul><li>No hero number: the departure board has no single stat, so this is intentional.</li><li>With only two years the board is sparse. Fixed by centring the rows and adding a tactile platform strip.</li></ul>
-    </div>
-  </div>
-</section>
+<section><h2>1 · Departure → F wayfinding</h2><div class="pair">
+  <figure><img src="mock-F.png" alt="Mockup F"><figcaption>Mockup F</figcaption></figure>
+  <figure><img src="departure.png" alt="Built departure"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>The line bar, OS circle, platform strips and LED chip all carry over. There's no hero number, because the board has no single stat.</p></div></div></section>
 
-<section>
-  <h2>5 · Sumo → D shōnen manga</h2>
-  <div class="pair">
-    <figure><img src="mock-D.png" alt="Mockup D"><figcaption>Mockup D</figcaption></figure>
-    <figure><img src="sumo.png" alt="Built sumo"><figcaption>Built</figcaption></figure>
-    <div class="notes">
-      <h3>Matches</h3><ul><li>Ink-bordered panel grid, Hokusai Manga crops, speech bubble, speed-line splash, red ドン with ink stroke, one spot red.</li></ul>
-      <h3>Off</h3><ul><li>The mockup splash has a halftone ground behind the name; ours uses speed lines (closer to the mockup's other panel). It's fine.</li><li>The docked sign covered the speech bubble. Fixed by moving the bubble.</li></ul>
-    </div>
-  </div>
-</section>
+<section><h2>2 · Torii → C mega type</h2><div class="pair">
+  <figure><img src="mock-C.png" alt="Mockup C"><figcaption>Mockup C</figcaption></figure>
+  <figure><img src="torii.png" alt="Built torii"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the vermilion field, cream sun, cropped mega number, tilted navy band and marquee. The days count grows out of the station sign as it arrives. The 2D gates went; the 3D district keeps them.</p></div></div></section>
 
-<section>
-  <h2>8 · Gacha → K JRPG pixel</h2>
-  <div class="pair">
-    <figure><img src="mock-K.png" alt="Mockup K"><figcaption>Mockup K</figcaption></figure>
-    <figure><img src="gacha.png" alt="Built gacha"><figcaption>Built</figcaption></figure>
-    <div class="notes">
-      <h3>Matches</h3><ul><li>Stepped sunset bands, pixel mountains, blue menu windows with white borders, CRT scanlines, the typed "てにいれた!" box.</li></ul>
-      <h3>Off</h3><ul><li>The mockup's HP bar is not used: it would need a number we'd have to invent.</li><li>Fixed during the build: a mid-word line break, the label's fallback font, and the empty sky (a pixel sun added).</li></ul>
-    </div>
-  </div>
-</section>
+<section><h2>3 · Bento → J sports paper</h2><div class="pair">
+  <figure><img src="mock-J.png" alt="Mockup J"><figcaption>Mockup J</figcaption></figure>
+  <figure><img src="bento.png" alt="Built bento"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the blue masthead, red vertical headline, yellow kicker and halftone Kabukicho crop, credited. The genres sit in a league table. It only plays once genres exist; until then you can preview it with <code>?genres=sample</code>.</p></div></div></section>
 
-<section>
-  <h2>10 · Fuji → I sumi ink</h2>
-  <div class="pair">
-    <figure><img src="mock-I.png" alt="Mockup I"><figcaption>Mockup I</figcaption></figure>
-    <figure><img src="fuji.png" alt="Built fuji"><figcaption>Built</figcaption></figure>
-    <div class="notes">
-      <h3>Matches</h3><ul><li>Rice paper, vertical Yuji Syuku title, Shippori Mincho text, one red seal, the brushed ink mass.</li></ul>
-      <h3>Off</h3><ul><li>The weekly ridge is spiky, so it reads more like an ink skyline than a calm Fuji. It is the real data; smoothing it would misstate the weeks.</li><li>Fixed during the build: the hero number overflowed, the label collided with 富士, and the seal floated above the summit.</li></ul>
-    </div>
-  </div>
-</section>
+<section><h2>4 · Ganguro → G Y2K chrome</h2><div class="pair">
+  <figure><img src="mock-G.png" alt="Mockup G"><figcaption>Mockup G</figcaption></figure>
+  <figure><img src="ganguro.png" alt="Built ganguro"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the holographic pastels, chrome Rampart type, flip-phone sticker and pink stroked number. The share only appears when genre data has it.</p></div></div></section>
+
+<section><h2>5 · Sumo → D shōnen manga</h2><div class="pair">
+  <figure><img src="mock-D.png" alt="Mockup D"><figcaption>Mockup D</figcaption></figure>
+  <figure><img src="sumo.png" alt="Built sumo"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Unchanged from Art Plan 1. Its splash panel is now the source of the panel-to-cover morph into idol.</p></div></div></section>
+
+<section><h2>6 · Idol → Q gyaru magazine</h2><div class="pair">
+  <figure><img src="mock-Q.png" alt="Mockup Q"><figcaption>Mockup Q</figcaption></figure>
+  <figure><img src="idol.png" alt="Built idol"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the full-bleed night cover, the ぎゃる masthead, cover lines in fighting colours and the price box (the hero). The photo is the city, credited, and is never shown as the artist.</p></div></div></section>
+
+<section><h2>7 · Konbini → B neon riso</h2><div class="pair">
+  <figure><img src="mock-B.png" alt="Mockup B"><figcaption>Mockup B</figcaption></figure>
+  <figure><img src="konbini.png" alt="Built konbini"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the pink × navy duotone, halftone, off-register receipt ink and vertical shop sign. The total is the hero. It arrives by the neon-takeover morph.</p></div></div></section>
+
+<section><h2>8 · Gacha → K JRPG pixel</h2><div class="pair">
+  <figure><img src="mock-K.png" alt="Mockup K"><figcaption>Mockup K</figcaption></figure>
+  <figure><img src="gacha.png" alt="Built gacha"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Unchanged from Art Plan 1. It arrives by the pixel wipe.</p></div></div></section>
+
+<section><h2>9 · Weather → O 1960s modernism</h2><div class="pair">
+  <figure><img src="mock-O.png" alt="Mockup O"><figcaption>Mockup O</figcaption></figure>
+  <figure><img src="weather.png" alt="Built weather"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>One red sun snaps in, out of the gacha's pixels, and steps through four positions, one per season. Shown here at its winter stop. The loudest season is the hero.</p></div></div></section>
+
+<section><h2>10 · Fuji → I sumi ink</h2><div class="pair">
+  <figure><img src="mock-I.png" alt="Mockup I"><figcaption>Mockup I</figcaption></figure>
+  <figure><img src="fuji.png" alt="Built fuji"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>New: the arrival starts as weather's red sun draining into an ink ensō around 富.</p></div></div></section>
+
+<section><h2>11 · Shinkansen → L kaiju poster</h2><div class="pair">
+  <figure><img src="mock-L.png" alt="Mockup L"><figcaption>Mockup L</figcaption></figure>
+  <figure><img src="shinkansen.png" alt="Built shinkansen"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>Matches: the painted sunset, silhouette over the city, slanted Reggae One title and credits strip. It arrives by the ink-to-beast morph from Fuji's summit.</p></div></div></section>
+
+<section><h2>12 · Omikuji → I sumi ink</h2><div class="pair">
+  <figure><img src="mock-I.png" alt="Mockup I"><figcaption>Mockup I</figcaption></figure>
+  <figure><img src="omikuji.png" alt="Built omikuji"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>The closest to its mockup: the fortune brushed inside an ensō, Shippori text, the vertical personality and a red seal.</p></div></div></section>
+
+<section><h2>13 · Kanji → C + F share card</h2><div class="pair">
+  <figure><img src="mock-C.png" alt="Mockup C"><figcaption>Mockup C</figcaption></figure>
+  <figure><img src="kanji.png" alt="Built kanji"><figcaption>Built</figcaption></figure>
+  <div class="notes"><p>The mega kanji brushes on, under the blue wayfinding band, with the summary board. The stamped ticket lands beside it.</p></div></div></section>
 </body>
 </html>

@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { createStory, type Slide, type SlideContext } from '../../src/story/player';
 import { seasonFor } from '../../src/story/season';
 import { STATIONS } from '../../src/journey/stations';
+import { HOOKS } from '../../src/journey/hooks';
 import { makeDemoPlays } from '../../src/ingest/demo';
 import { computeAllYears } from '../../src/stats';
 
@@ -182,4 +183,10 @@ test('light accents (konbini cyan, gacha yellow) stamp in ink so they read on th
   expect(slots[7].classList.contains('light')).toBe(true);
   expect(slots[4].classList.contains('light')).toBe(false);
   s.destroy();
+});
+
+test('after a phone or tease arrival the guide picks the hook up again (her phone is never left blank)', () => {
+  const s = story({ startAt: 5 }); // idol arrives by tease
+  s.next(); // finish the arrival
+  expect(root.querySelector('.guide .jp')!.textContent).toBe(HOOKS.idol.jp);
 });

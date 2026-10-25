@@ -15,5 +15,5 @@ export const ganguro: Slide = ({ stats }) => {
     <div class="phone" data-beat="1"><div>ｷﾀ━━!! ☆<br>渋谷センター街</div></div>
     <div class="nm fit${size(genre)}" data-beat="2" data-fx="stamp">${esc(genre)}</div>
     ${pct === undefined ? '' : `<div class="hero" data-beat="3" data-fx="count" data-count="${pct}" data-suffix="%">${pct}%</div>`}
-    <div class="ft" data-beat="4">♡ ガングロ ✦ your #1 genre of ${stats!.year}</div>`);
+    <div class="ft" data-beat="4">♡ ガングロ ✦ #1 genre · ${stats!.year}</div>`);
 };

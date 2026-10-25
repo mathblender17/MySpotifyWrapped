@@ -162,6 +162,8 @@ export function createStory(
     const signIn = sign.show(s);
     const signDock = sign.dock();
     tl.add(trans, 0);
+    // The phone and tease show the hook themselves; once they're gone the guide's phone picks it up, never blank.
+    if (selfHooked) tl.add(guide.say(s.id).paused(false), trans.duration());
     tl.add(signIn.paused(false), trans.duration());
     tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());
