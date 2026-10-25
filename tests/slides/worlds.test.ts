@@ -5,6 +5,7 @@ import { sumo } from '../../src/slides/sumo';
 import { gacha } from '../../src/slides/gacha';
 import { fuji } from '../../src/slides/fuji';
 import { torii } from '../../src/slides/torii';
+import { bento } from '../../src/slides/bento';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -101,4 +102,18 @@ test('C torii: the days count is cropped mega type that grows out of the station
   expect(el.textContent).toContain('28,243');
   expect(el.querySelector('.g')).toBeNull(); // the gate tunnel lives in the 3D district now
   expect(css('c')).toMatch(/\.tor \.hero\s*{[^}]*var\(--face-num\)/);
+});
+
+test('J bento: a sports-paper league table of genres under a red vertical headline', () => {
+  const el = bento(ctx());
+  for (const g of STATS.genreShares.slice(0, 4)) { // top four; the rest fold into "other", as before
+    expect(el.textContent).toContain(g.genre.toUpperCase());
+    expect(el.textContent).toContain(`${Math.round(g.share * 100)}%`);
+  }
+  expect(el.querySelector('.h1')).not.toBeNull();
+  expect(el.querySelector('.box .row')).not.toBeNull(); // the table keeps class box (the cut target)
+  expect(el.querySelector('.h3')!.classList.contains('fit')).toBe(true);
+  expect(el.querySelector('.hero')!.textContent).toBe('42%');
+  expect(el.querySelector('.photo')).not.toBeNull();
+  expect(el.querySelector('.credit')).not.toBeNull();
 });
