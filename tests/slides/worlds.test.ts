@@ -11,6 +11,7 @@ import { idol } from '../../src/slides/idol';
 import { konbini } from '../../src/slides/konbini';
 import { weather } from '../../src/slides/weather';
 import { shinkansen } from '../../src/slides/shinkansen';
+import { omikuji } from '../../src/slides/omikuji';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -189,4 +190,14 @@ test('L shinkansen: a kaiju poster; the beast is the ink-morph target; the days 
   expect(climb.querySelector('.hero')!.textContent).toBe('7');
   const long = shinkansen(ctx({ stats: { ...STATS, fastestRiser: { artist: 'y'.repeat(40), via: 'race', days: 9 } } }));
   expect(long.querySelector('.title')!.classList.contains('l3')).toBe(true);
+});
+
+test('I omikuji: the fortune brushed inside an ink ensō, with a red seal', () => {
+  const el = omikuji(ctx());
+  expect(el.querySelector('.hero')!.textContent).toBe(STATS.fortune.jp);
+  for (const t of [STATS.fortune.en, STATS.personality.jp, STATS.personality.name, STATS.personality.line]) expect(el.textContent).toContain(t);
+  const id = (e: HTMLElement) => e.querySelector('.enso filter')!.id;
+  expect(id(el)).toMatch(/^brush-/);
+  expect(id(omikuji(ctx()))).not.toBe(id(el));
+  expect(el.querySelector('.seal')).not.toBeNull();
 });

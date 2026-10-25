@@ -26,14 +26,6 @@
 /* 11 shinkansen (round 3) */
 
 /* 12 omikuji (round 1) */
-.omi { background: #7a0c0c; align-items: center; }
-.omi .slip { background: #fdf8ec; width: 140px; flex: 1; font-family: 'Yuji Syuku', serif; color: #111; display: flex; flex-direction: column; align-items: center; padding: 10px 6px; border: 1px solid #c9a; box-sizing: border-box; text-align: center; }
-.omi .hd { font-size: 12px; border-bottom: 1px solid #111; width: 100%; padding-bottom: 4px; margin-bottom: 6px; }
-.omi .kk { writing-mode: vertical-rl; font-size: 54px; color: #c00; line-height: 1; }
-.omi .en { font-family: 'Zen Maru Gothic', sans-serif; font-size: 10px; font-weight: 900; }
-.omi .pj { font-size: 18px; margin-top: 8px; color: #ff2d95; }
-.omi .pn { font-family: 'Dela Gothic One', sans-serif; font-size: 13px; }
-.omi .ln { font-family: 'Zen Kurenaido', sans-serif; font-size: 11px; margin-top: 4px; }
 
 /* 13 Kanji of the Year (round 2) — share card */
 .kj { background: #f5f0e6; color: #111; font-family: 'Yuji Syuku', serif; align-items: center; text-align: center; }
