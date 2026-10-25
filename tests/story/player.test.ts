@@ -211,7 +211,7 @@ const fakeSoundtrack = () => {
   };
 };
 const flush = async () => { for (let i = 0; i < 5; i++) await Promise.resolve(); };
-const queue = ctx.stats!.topTracks.map((t) => t.name);
+const queue = ctx.stats!.topTracks!.map((t) => t.name);
 
 test('when a preview ends the next song in the mix plays', async () => {
   const st = fakeSoundtrack();

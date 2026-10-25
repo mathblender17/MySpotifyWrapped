@@ -98,7 +98,7 @@ test('with motion: a particle layer', () => {
 
 test('the soundtrack follows the stations and stops when the story is left', async () => {
   const calls: (string | undefined)[] = [];
-  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, muted: false, unlocked: false };
+  const soundtrack = { play: (u?: string) => calls.push(u), pause() {}, resume() {}, stop: vi.fn(), unlock() {}, mute() {}, onEnded() {}, muted: false, unlocked: false };
   const findPreview = vi.fn(async (artist: string, track: string) => `https://x/${artist}/${track}.m4a`);
   const s = story({ startAt: 1, soundtrack, findPreview });
   await Promise.resolve();
@@ -109,7 +109,7 @@ test('the soundtrack follows the stations and stops when the story is left', asy
 });
 
 test('the first tap or key anywhere in the story unlocks sound (not only the year pick)', () => {
-  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, muted: false, unlocked: false });
+  const make = () => ({ play() {}, pause() {}, resume() {}, stop() {}, unlock: vi.fn(), mute() {}, onEnded() {}, muted: false, unlocked: false });
   const a = make();
   story({ startAt: 0, soundtrack: a });
   root.dispatchEvent(new MouseEvent('pointerdown', { clientX: 900, bubbles: true }));
@@ -134,7 +134,7 @@ test('each arrival rings the station chime; muted or reduced, sound accents are 
   let canPlay = () => true;
   const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
   const makeSfx = (o: { canPlay: () => boolean }) => ((canPlay = o.canPlay), sfx);
-  const soundtrack = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, muted: true, unlocked: true };
+  const soundtrack = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, onEnded() {}, muted: true, unlocked: true };
   const s = story({ startAt: 1, soundtrack, makeSfx });
   advance(2000); // torii's ride and sign
   expect(sfx.chime).toHaveBeenCalledTimes(1);
