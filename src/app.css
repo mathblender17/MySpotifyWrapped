@@ -42,7 +42,7 @@ body {
   line-height: 1.05;
 }
 
-.demo {
+.demo, .mine {
   align-self: flex-start;
   font: 400 18px 'Dela Gothic One', sans-serif;
   color: #fff;
@@ -54,7 +54,7 @@ body {
   box-shadow: 4px 4px 0 #fff;
 }
 
-.demo:focus-visible, .drop:focus-within { outline: 3px solid #fff; outline-offset: 3px; }
+.demo:focus-visible, .mine:focus-visible, .drop:focus-within { outline: 3px solid #fff; outline-offset: 3px; }
 
 .drop {
   display: flex;
@@ -93,3 +93,4 @@ body {
 
 .credits { margin-top: 28px; font-size: 11px; line-height: 1.5; color: #fff8; max-width: 36em; }
 .credits a { color: inherit; }
+.mine[hidden] { display: none; }
