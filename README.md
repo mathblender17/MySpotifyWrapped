@@ -70,6 +70,7 @@ Captured at phone size from the built app.
 - Real exports are never part of this repository (`fixtures/private/` is git-ignored). The sample files in `fixtures/` are made-up.
 - The only thing that leaves your device is an **artist and song name**, sent to Apple's public iTunes search to find a 30-second preview clip for the soundtrack.
 - IP addresses and device details in the export are dropped when it is read, and private-session plays are left out.
+- The **My ride** button on the live site plays the owner's own history, shipped as `public/my-ride.json`. `scripts/strip-history.mjs` writes it with only artist, track, end time, minutes played and skipped. No IPs, devices, countries, albums, podcasts or private-session plays. Visitors should use the demo or drop in their own files.
 
 ### What it reads
 

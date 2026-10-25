@@ -4,6 +4,7 @@ import { withTimeout } from './timeout';
 import { prefersReducedMotion } from './journey/beats';
 import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
+import { loadMyRide } from './ingest/myride';
 import { withDemoSoundtrack } from './ingest/demoSoundtrack';
 import { withSampleGenres } from './ingest/sampleGenres';
 import { creditsLine } from './art/credits';
@@ -30,6 +31,7 @@ function landing(note?: string) {
     <main class="landing">
       <p class="kicker">♪ 音楽電車 · ONGAKU DENSHA ♪</p>
       <h1>Your year in music,<br>as a train ride<br>through Japan.</h1>
+      <button class="mine" type="button" hidden>My ride ▶</button>
       <button class="demo" type="button">Try the demo ▶</button>
       <label class="drop">
         <input type="file" multiple accept=".zip,.json,application/zip,application/json" hidden>
@@ -41,6 +43,15 @@ function landing(note?: string) {
       <p class="credits">${creditsLine()}</p>
     </main>`;
   app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true, undefined, true));
+  const mine = app.querySelector<HTMLButtonElement>('.mine')!;
+  // Shown only when the site ships a stripped history (public/my-ride.json).
+  fetch('./my-ride.json', { method: 'HEAD' }).then((r) => { mine.hidden = !r.ok; }, () => {});
+  mine.addEventListener('click', async () => {
+    mine.disabled = true;
+    const plays = await loadMyRide();
+    if (plays && !current) start(plays, [], true);
+    else mine.disabled = false;
+  });
   app.querySelector('.note .x')?.addEventListener('click', (e) => (e.currentTarget as HTMLElement).parentElement!.remove());
   const drop = app.querySelector<HTMLElement>('.drop')!;
   const input = drop.querySelector('input')!;
