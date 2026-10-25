@@ -14,7 +14,7 @@ const luminance = (hex: string) => {
 export function createTicket(stations: Station[], playable: boolean[], reduced = false) {
   const el = document.createElement('div');
   el.className = 'ticket';
-  el.innerHTML = `<div class="tt">音楽電車 乗車券</div><div class="slots"></div>`;
+  el.innerHTML = `<div class="tt">音楽電車 乗車券</div><div class="slots"></div><div class="back"></div>`;
   const slots = stations.map((s, i) => {
     const slot = document.createElement('span');
     slot.className = 'slot';
@@ -23,6 +23,7 @@ export function createTicket(stations: Station[], playable: boolean[], reduced =
     return slot;
   });
   el.querySelector('.slots')!.append(...slots);
+  const back = el.querySelector('.back')!;
 
   return {
     el,
@@ -41,6 +42,13 @@ export function createTicket(stations: Station[], playable: boolean[], reduced =
       });
       if (!reduced) tl.fromTo(slot, { scale: 2.4, rotation: -20, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.3, ease: 'back.out(2)' });
       return tl;
+    },
+    /** Turn the ticket over (Y rotation by CSS); the back shows today's date and how many stops are stamped, read now. */
+    flip() {
+      const on = !el.classList.contains('flipped');
+      el.style.setProperty('--flip', reduced ? '0s' : '0.5s');
+      if (on) back.innerHTML = `<b>${new Date().toLocaleDateString()}</b><span>${slots.filter((s) => s.classList.contains('on')).length} / ${stations.length}</span>`;
+      el.classList.toggle('flipped', on);
     },
     finale(): gsap.core.Timeline {
       const tl = gsap.timeline({ paused: true });

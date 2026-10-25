@@ -18,6 +18,7 @@ function fakeContext() {
     createOscillator: () => { made.oscillators++; return { ...node(), type: 'sine', frequency: param(), start() {}, stop() {} }; },
     createGain: () => ({ ...node(), gain: param(made.gains) }),
     createBuffer: (_c: number, n: number) => ({ getChannelData: () => new Float32Array(n) }),
+    createBiquadFilter: () => ({ ...node(), type: 'lowpass', frequency: param() }),
     createBufferSource: () => ({ ...node(), buffer: null, start() {}, stop() {} }),
     close: () => { made.closed = true; return Promise.resolve(); },
     resume: () => { made.resumed++; return Promise.resolve(); },
@@ -32,6 +33,7 @@ test('nothing plays, and no AudioContext is made, while sound is not allowed', (
   sfx.don();
   sfx.blip();
   sfx.bell();
+  sfx.rumble();
   expect(makeContext).not.toHaveBeenCalled();
 });
 
@@ -50,6 +52,7 @@ test('every accent stays at or under the -18 dB ceiling', () => {
   sfx.don();
   sfx.blip();
   sfx.bell();
+  sfx.rumble();
   expect(Math.max(...made.gains)).toBeLessThanOrEqual(0.125);
 });
 
@@ -72,4 +75,13 @@ test('unlock() inside the tap creates and resumes the context (iOS only allows i
   createSfx({ canPlay: () => true, makeContext }).unlock();
   expect(makeContext).toHaveBeenCalledTimes(1);
   expect(made.resumed).toBe(1);
+});
+
+test('rumble only plays when allowed', () => {
+  const off = fakeContext();
+  createSfx({ canPlay: () => false, makeContext: () => off.ctx }).rumble();
+  expect(off.made.oscillators).toBe(0);
+  const on = fakeContext();
+  createSfx({ canPlay: () => true, makeContext: () => on.ctx }).rumble();
+  expect(on.made.oscillators).toBe(1);
 });

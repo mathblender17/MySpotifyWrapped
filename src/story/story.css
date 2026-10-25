@@ -199,7 +199,15 @@
 .dock .guide .jp { font-size: 13px; }
 .dock .ticket { position: relative; top: auto; right: auto; flex: none; width: 84px; }
 .dock .ticket .slots { gap: 1px; }
+.ticket[data-touch] { pointer-events: auto; cursor: pointer; }
+.dock .ticket { transition: transform var(--flip, 0s) ease, box-shadow .8s; }
+.ticket .back { display: none; }
+.ticket.flipped { transform: perspective(400px) rotateY(180deg); }
+.ticket.flipped > :not(.back) { visibility: hidden; }
+.ticket.flipped .back { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40px; transform: rotateY(180deg); font: 900 9px/1.4 var(--face-text); }
+.ticket.flipped .back span { font: 14px/1.2 var(--face-num); }
 .dock .ticket.final { bottom: 0; transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }
+.dock .ticket.final.flipped { transform: perspective(400px) rotateY(180deg); }
 
 /* 3D world behind the story */
 .world { position: fixed; inset: 0; z-index: 0; background: #0b0b10; }
@@ -256,3 +264,10 @@
 .hint .finger { display: inline-block; animation: hint-swipe 1.4s ease-in-out infinite; }
 @keyframes hint-swipe { 0%, 20% { translate: 8px 0; } 70%, 100% { translate: -10px 0; opacity: 0.3; } }
 .story.reduced .hint .finger { animation: none; }
+
+/* Touch interactions (alive plan B): a marked element is never a ride gesture; the dot invites the first touch. */
+[data-touch] { cursor: pointer; position: relative; }
+[data-touch][data-drag] { touch-action: none; }
+.touch-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #ff2d95; pointer-events: none; animation: touch-pulse 1.2s ease-in-out infinite; }
+@keyframes touch-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+.story.reduced .touch-dot { animation: none; }

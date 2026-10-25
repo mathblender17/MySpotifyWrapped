@@ -9,6 +9,8 @@ export function prefersReducedMotion(): boolean {
 }
 
 const countText = (el: HTMLElement, n: number) => `${fmt(n)}${el.dataset.suffix ?? ''}`;
+/** Write a counted number into the element's text node, so a touch dot appended to it survives. */
+export const setCount = (el: HTMLElement, text: string) => (el.firstChild?.nodeType === 3 ? void (el.firstChild.nodeValue = text) : void (el.textContent = text));
 
 /** data-path="x0,y0,x1,y1,…" as [x, y] pairs. */
 const path = (el: HTMLElement) => {
@@ -33,10 +35,10 @@ function enter(tl: gsap.core.Timeline, el: HTMLElement, at: number) {
   if (fx.includes('count')) {
     const target = Number(el.dataset.count);
     const o = { n: 0 };
-    el.textContent = countText(el, 0);
+    setCount(el, countText(el, 0));
     if (fx.includes('grow')) grow();
     else tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.2 }, at);
-    tl.to(o, { n: target, duration: 1.2, ease: 'power2.out', onUpdate: () => void (el.textContent = countText(el, o.n)) }, at);
+    tl.to(o, { n: target, duration: 1.2, ease: 'power2.out', onUpdate: () => void setCount(el, countText(el, o.n)) }, at);
     return;
   }
   if (fx.includes('orbit')) {
@@ -83,7 +85,7 @@ export function playBeats(root: HTMLElement, opts: { reduced?: boolean } = {}): 
       for (const el of groups.get(n)!) {
         if (el.dataset.fx?.includes('flash')) tl.set(el, { opacity: 0 }, 0);
         else tl.set([el, ...(el.dataset.fx?.includes('type') ? el.children : [])], { opacity: 1 }, 0);
-        if (el.dataset.fx?.includes('count')) el.textContent = countText(el, Number(el.dataset.count));
+        if (el.dataset.fx?.includes('count')) setCount(el, countText(el, Number(el.dataset.count)));
         if (el.dataset.fx?.includes('orbit')) tl.set(el, { x: path(el).at(-1)![0], y: path(el).at(-1)![1] }, 0);
         if (el.dataset.fx?.includes('drain')) tl.set(el, { backgroundColor: 'rgba(0,0,0,0)', borderColor: '#141414' }, 0);
       }

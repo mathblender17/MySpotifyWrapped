@@ -7,16 +7,21 @@ const H = 150;
 const TOP = 104; // the mountain's top edge in the slide, design px
 let uid = 0;
 
+/** Design-px spacing between weekly points along the ridge. */
+export const fujiStep = (weeks: number): number => (weeks > 1 ? W / (weeks - 1) : 0);
+/** "Mar 10" for a week-start ISO date. */
+export const weekDate = (start: string): string => new Date(start + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
 // World I (sumi ink): the year's weekly listening is brushed as Fuji; the peak week carries the red seal.
 export const fuji: Slide = ({ stats }) => {
   const w = stats!.weekly!;
   const peak = stats!.peakWeek!;
   const max = Math.max(1, peak.value);
-  const step = w.length > 1 ? W / (w.length - 1) : 0;
+  const step = fujiStep(w.length);
   // The mountain's ridge is the year's weekly listening, so the summit really is the peak week.
   const pts = w.map((x, i) => `${(i * step).toFixed(1)},${(H - (x.value / max) * (H - 10)).toFixed(1)}`);
   const pi = w.findIndex((x) => x.start === peak.start);
-  const date = new Date(peak.start + 'T00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const date = weekDate(peak.start);
   const unit = stats!.minutes !== undefined ? 'min' : 'plays';
   const poly = `0,${H} ${pts.join(' ')} ${W},${H}`;
   // Two slides can be on stage during a transition: SVG ids must not clash.

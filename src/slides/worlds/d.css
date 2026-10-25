@@ -25,3 +25,11 @@
 /* Idle loop: the splash panel's ink flickers like a fresh print (the manga image never moves). */
 .ph.sumo.idle .p1 { animation: d-idle 2.4s ease-in-out infinite alternate; }
 @keyframes d-idle { to { filter: contrast(1.6); } }
+
+/* Touch: a tapped rank panel blows up within the panel row (grows upward/outward, clear of the top-left sign). */
+.sumo .pa, .sumo .pb { transition: transform .25s; }
+.sumo .pa { transform-origin: 100% 100%; }
+.sumo .pb { transform-origin: 0 100%; }
+.sumo .pa.zoom, .sumo .pb.zoom { transform: scale(1.35); z-index: 5; }
+.sumo .mins { display: none; position: absolute; right: 6px; top: 6px; background: #e60033; color: #fff; border: 2px solid #111; padding: 2px 5px; font: 11px/1 'Dela Gothic One', sans-serif; }
+.sumo .zoom .mins { display: block; }

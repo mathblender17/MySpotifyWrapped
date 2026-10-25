@@ -18,3 +18,8 @@
 /* Idle loop: the cover photo shimmers under the studio lights. */
 .ph.idol.idle .cover { animation: q-idle 3s ease-in-out infinite alternate; }
 @keyframes q-idle { to { filter: saturate(1.4) contrast(1.1) brightness(1.15); } } /* same function list as the base: it glides */
+
+/* Touch: tap the cover and a magazine sticker says the #1 song is playing. */
+.idol .cover[data-touch] { cursor: pointer; }
+.idol .now { position: absolute; left: 12px; bottom: 70px; background: #fff200; color: #111; font: 12px/1 var(--face-num); padding: 5px 9px; transform: rotate(-3deg); box-shadow: 3px 3px 0 #ff2d95; pointer-events: none; }
+.idol .cover .touch-dot { top: 12px; right: 14px; } /* the cover is the whole card: keep the dot off its rounded corner */

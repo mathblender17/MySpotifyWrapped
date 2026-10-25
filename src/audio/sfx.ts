@@ -1,6 +1,6 @@
 const PEAK = 0.125; // −18 dB under the music (art spec §8)
 
-export type Sfx = { unlock(): void; chime(): void; don(): void; blip(): void; bell(): void; dispose(): void };
+export type Sfx = { unlock(): void; chime(): void; don(): void; blip(): void; bell(): void; rumble(): void; dispose(): void };
 
 /**
  * Sound accents synthesised with Web Audio: no files, no licences. Nothing is created until a sound is allowed
@@ -78,6 +78,25 @@ export function createSfx(opts: { canPlay: () => boolean; makeContext?: () => Au
       tone(c, 'sine', 220, t, 2.5);
       tone(c, 'sine', 220 * 2.76, t, 1.6, PEAK / 2);
       tone(c, 'sine', 220 * 5.4, t, 0.9, PEAK / 4);
+    },
+    rumble() {
+      const c = ready();
+      if (!c) return;
+      const t = c.currentTime;
+      tone(c, 'sine', 60, t, 0.8);
+      const n = Math.floor(c.sampleRate * 0.8);
+      const buf = c.createBuffer(1, n, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) data[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource();
+      src.buffer = buf;
+      const lp = c.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 220;
+      src.connect(lp);
+      lp.connect(env(c, t, 0.8, PEAK / 2));
+      src.start(t);
+      src.stop(t + 0.85);
     },
     dispose() {
       ctx?.close().catch(() => {});

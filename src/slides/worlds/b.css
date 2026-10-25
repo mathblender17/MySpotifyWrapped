@@ -20,3 +20,8 @@
 /* Idle loop: the two riso inks slip out of register and back. */
 .ph.kon.idle .duo::after { animation: b-idle 2s steps(2) infinite; }
 @keyframes b-idle { 50% { translate: 1px -1px; } }
+
+/* Touch: tap the receipt and the playing line gets a 再生中 stamp. */
+.kon .rc[data-touch] { cursor: pointer; }
+.kon .r.now { background: #ff2d9533; }
+.kon .stamp { color: #c8102e; border: 1px solid #c8102e; padding: 0 2px; font-weight: 400; transform: rotate(-6deg); }

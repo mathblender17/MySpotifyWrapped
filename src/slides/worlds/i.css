@@ -16,6 +16,10 @@
 /* Omikuji: the fortune slip as calligraphy. */
 .omi { background: #f3eee2; color: #141414; font-family: 'Shippori Mincho', serif; }
 .omi .hd { position: absolute; left: 34px; top: 16px; font: 800 10px 'Shippori Mincho', serif; letter-spacing: 2px; color: #555; }
+.omi .kuji { position: absolute; left: 10px; top: 30px; width: 44px; height: 44px; }
+.omi .kuji svg { display: block; width: 44px; height: 44px; }
+.omi .kuji .slip { position: absolute; left: 19px; top: 40px; width: 6px; height: 18px; background: #fff; border: 1px solid #141414; opacity: 0; pointer-events: none; }
+.omi .kuji[data-touch] { cursor: pointer; }
 .omi .enso { position: absolute; left: 25px; top: 40px; width: 160px; height: 160px; }
 .omi .hero { position: absolute; left: 25px; top: 78px; width: 160px; text-align: center; font: 64px/1.3 'Yuji Syuku', serif; }
 .omi .en { position: absolute; left: 0; right: 0; top: 208px; text-align: center; font: 800 13px 'Shippori Mincho', serif; letter-spacing: 1px; }
@@ -27,3 +31,7 @@
 /* Idle loop: the ink slowly bleeds into the paper. */
 .ph.fuji.idle .wash, .ph.omi.idle .enso { animation: i-idle 5s ease-in-out infinite alternate; }
 @keyframes i-idle { to { filter: blur(0.6px); } }
+.fuji .marker { position: absolute; top: 104px; width: 0; height: 150px; border-left: 1.5px solid #141414; pointer-events: none; }
+.fuji .marker b { position: absolute; left: 0; top: -2px; transform: translate(-50%, -100%); white-space: nowrap; font: 800 9px/1.3 'Shippori Mincho', serif; background: #f3eee2; padding: 0 2px; text-align: center; }
+.fuji .marker b.r { transform: translate(-100%, -100%); }
+.fuji > .touch-dot { right: auto; left: 184px; top: 104px; } /* the drag target is the svg, which cannot hold the dot itself */

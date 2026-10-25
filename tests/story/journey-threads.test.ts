@@ -132,7 +132,7 @@ test('reduced motion: ticket stamps land without spinning, and the story is flag
 
 test('each arrival rings the station chime; muted or reduced, sound accents are not allowed', () => {
   let canPlay = () => true;
-  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), rumble: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
   const makeSfx = (o: { canPlay: () => boolean }) => ((canPlay = o.canPlay), sfx);
   const soundtrack = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, onEnded() {}, muted: true, unlocked: true };
   const s = story({ startAt: 1, soundtrack, makeSfx });
@@ -151,7 +151,7 @@ test('each arrival rings the station chime; muted or reduced, sound accents are 
 });
 
 test('the sumo Yokozuna lands with a ドン', () => {
-  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), rumble: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
   const sumoSlide = () => Object.assign(document.createElement('div'), { className: 'ph', innerHTML: '<b data-beat="1">a</b><b data-beat="2" data-sfx="don">y</b>' });
   story({ startAt: 4, makeSfx: () => sfx, slides: { ...slides, sumo: sumoSlide } });
   expect(sfx.don).not.toHaveBeenCalled();
@@ -160,7 +160,7 @@ test('the sumo Yokozuna lands with a ドン', () => {
 });
 
 test('tapping to skip an arrival does not fire its queued sounds as one chord', () => {
-  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
+  const sfx = { chime: vi.fn(), don: vi.fn(), blip: vi.fn(), bell: vi.fn(), rumble: vi.fn(), dispose: vi.fn(), unlock: vi.fn() };
   const sumoSlide = () => Object.assign(document.createElement('div'), { className: 'ph', innerHTML: '<b data-beat="1">a</b><b data-beat="2" data-sfx="don">y</b>' });
   const s = story({ startAt: 4, makeSfx: () => sfx, slides: { ...slides, sumo: sumoSlide } });
   advance(100);
