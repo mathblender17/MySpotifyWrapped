@@ -22,3 +22,8 @@ test('dev preview: ?genres=sample asks for sample genres; anything else is ignor
   expect(parseRoute('?data=demo&genres=sample').genres).toBe('sample');
   expect(parseRoute('?genres=real').genres).toBeUndefined();
 });
+
+test('dev check: ?previews=silent swaps song previews for short silent clips; anything else is ignored', () => {
+  expect(parseRoute('?data=demo&previews=silent').previews).toBe('silent');
+  expect(parseRoute('?previews=loud').previews).toBeUndefined();
+});

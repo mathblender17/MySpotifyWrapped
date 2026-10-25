@@ -199,7 +199,7 @@
 .dock .guide .jp { font-size: 13px; }
 .dock .ticket { position: relative; top: auto; right: auto; flex: none; width: 84px; }
 .dock .ticket .slots { gap: 1px; }
-.dock .ticket.final { transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }
+.dock .ticket.final { bottom: 0; transform: none; box-shadow: 0 0 0 3px #ff2d95, 0 0 24px #ff2d95; }
 
 /* 3D world behind the story */
 .world { position: fixed; inset: 0; z-index: 0; background: #0b0b10; }
