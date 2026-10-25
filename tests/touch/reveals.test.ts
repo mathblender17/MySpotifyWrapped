@@ -126,3 +126,33 @@ test('omikuji: a shake past the threshold acts like a tap; the listener goes whe
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
+
+test('reduced motion: shinkansen tap still shows an instant, brief response', () => {
+  vi.useFakeTimers();
+  const el = shinkansen(ctx());
+  const { kit } = fake();
+  (kit as { dur: (s: number) => number }).dur = () => 0;
+  TOUCH.shinkansen!(el, kit);
+  const beast = el.querySelector<HTMLElement>('.beastwrap')!;
+  beast.click();
+  expect(beast.classList.contains('rumbling')).toBe(true);
+  vi.advanceTimersByTime(700);
+  expect(beast.classList.contains('rumbling')).toBe(false);
+  vi.useRealTimers();
+});
+
+test('reduced motion: omikuji tap still shows the slip, then puts it away', () => {
+  vi.useFakeTimers();
+  const el = omikuji(ctx());
+  const { kit, log } = fake();
+  (kit as { dur: (s: number) => number }).dur = () => 0;
+  TOUCH.omikuji!(el, kit);
+  el.querySelector<HTMLElement>('.kuji')!.click();
+  const slip = el.querySelector<HTMLElement>('.slip')!;
+  expect(slip.style.opacity).toBe('1');
+  expect(log.release).toBe(0);
+  vi.advanceTimersByTime(1600);
+  expect(slip.style.opacity).toBe('0');
+  expect(log.release).toBe(1);
+  vi.useRealTimers();
+});

@@ -41,12 +41,13 @@ export function shinkansen(el: HTMLElement, kit: TouchKit): void {
   if (!beast) return;
   const riser = kit.stats.soundtrack?.riserTrack;
   kit.mark(beast);
-  const take = retakeable(kit, () => { gsap.killTweensOf(beast, 'x'); gsap.set(beast, { x: 0 }); });
+  let flash: ReturnType<typeof setTimeout> | undefined;
+  const take = retakeable(kit, () => { clearTimeout(flash); beast.classList.remove('rumbling'); gsap.killTweensOf(beast, 'x'); gsap.set(beast, { x: 0 }); });
   beast.addEventListener('click', () => {
     take((end) => {
       const d = kit.dur(0.5);
       if (d > 0) gsap.to(beast, { keyframes: { x: [4, -4, 4, -4, 4, -4, 4, -4, 4, -4, 4, -4, 0] }, duration: d, ease: 'none', onComplete: end });
-      else end();
+      else { beast.classList.add('rumbling'); flash = setTimeout(() => { beast.classList.remove('rumbling'); end(); }, 600); } // reduced: no tween, a brief held pose
     });
     kit.sfx.rumble();
     kit.buzz([30, 30, 30]);
@@ -63,13 +64,19 @@ export function omikuji(el: HTMLElement, kit: TouchKit): void {
   const slip = document.createElement('i');
   slip.className = 'slip';
   kuji.append(slip);
-  const take = retakeable(kit, () => { gsap.killTweensOf([kuji, slip, hero]); gsap.set(kuji, { x: 0 }); gsap.set(slip, { y: 0, opacity: 0 }); });
+  let flash: ReturnType<typeof setTimeout> | undefined;
+  const take = retakeable(kit, () => { clearTimeout(flash); gsap.killTweensOf([kuji, slip, hero]); gsap.set(kuji, { x: 0 }); gsap.set(slip, { y: 0, opacity: 0 }); });
   let last = -Infinity;
   const draw = () => {
     last = Date.now();
     kit.buzz(10);
     take((end) => {
-      if (kit.dur(1) === 0) { gsap.set(hero, { opacity: 1, scale: 1, rotation: 0 }); end(); return; }
+      if (kit.dur(1) === 0) { // reduced: show the slip at its end state, then put it away
+        gsap.set(hero, { opacity: 1, scale: 1, rotation: 0 });
+        gsap.set(slip, { y: 30, opacity: 1 });
+        flash = setTimeout(() => { gsap.set(slip, { y: 0, opacity: 0 }); end(); }, 1500);
+        return;
+      }
       gsap.timeline({ onComplete: end })
         .to(kuji, { keyframes: { x: [3, -3, 3, -3, 3, -3, 0] }, duration: 0.4, ease: 'none' })
         .fromTo(slip, { y: 0, opacity: 1 }, { y: 30, duration: 0.3, ease: 'power2.out' })

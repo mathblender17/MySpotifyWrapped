@@ -169,3 +169,40 @@ test('the first touch on the ticket removes its dot; leaving kanji undoes the ti
   expect(t.querySelector('.touch-dot')).toBeNull();
   expect(t.classList.contains('flipped')).toBe(false);
 });
+
+test('a stale kit (card left) cannot freeze the new hold or cancel its cue lookup', async () => {
+  const s = story({ startAt: TORII, holdMs: 3000 });
+  const old = kit;
+  s.next(); // finish the arrival
+  s.next(); // new card; the outgoing kit is stale
+  const at = s.index;
+  const release = old.busy();
+  expect(await old.playTrack({ name: 'x', artist: 'y' })).toBe(false);
+  s.next(); // finish the new arrival: the hold starts now
+  advance(6000);
+  expect(s.index).toBeGreaterThan(at); // the stale busy() left no busy>0 behind
+  release();
+});
+
+const swipe = (el: Element) => {
+  fire(el, 'pointerdown', 900);
+  fire(el, 'pointermove', 800);
+  fire(el, 'pointerup', 800);
+};
+
+test('a swipe starting on a tap-only target navigates; a tap on it does not; a drag target keeps the gesture', () => {
+  const s = story({ startAt: TORII, holdMs: 3000 });
+  advance(3000);
+  const thing = root.querySelector('.thing')!;
+  tap(thing);
+  expect(s.index).toBe(TORII);
+  swipe(thing);
+  expect(s.index).toBeGreaterThan(TORII);
+  s.destroy();
+  const s2 = story({ startAt: TORII, holdMs: 3000 });
+  advance(3000);
+  const drag = root.querySelectorAll('.thing')[root.querySelectorAll('.thing').length - 1];
+  drag.setAttribute('data-drag', '');
+  swipe(drag);
+  expect(s2.index).toBe(TORII);
+});

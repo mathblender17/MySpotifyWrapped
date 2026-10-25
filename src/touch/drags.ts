@@ -40,6 +40,7 @@ export function weather(el: HTMLElement, kit: TouchKit): void {
   const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
   let near = 0;
   kit.mark(sun);
+  sun.setAttribute('data-drag', '');
   drag(sun, el, kit, (px, py) => {
     // The sun is 100 design px wide: its x/y is the top-left, so centre it under the finger.
     const x = clamp(px - 50, x0, x1), y = clamp(py - 50, y0, y1);
@@ -67,6 +68,7 @@ export function fuji(el: HTMLElement, kit: TouchKit): void {
   let marker: HTMLElement | undefined;
   let label: HTMLElement;
   kit.mark(svg);
+  svg.setAttribute('data-drag', '');
   drag(svg as unknown as HTMLElement, el, kit, (px) => {
     if (!marker) {
       marker = document.createElement('i');

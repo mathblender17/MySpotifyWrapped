@@ -41,6 +41,8 @@ const HOLD_PRESS_MS = 200;
 const SWIPE_PX = 40;
 const SLOP_PX = 10;
 const INTERACTIVE = 'button, a, input, label, [data-touch]';
+// Drag targets own the whole gesture; tap-only targets still swipe and hold, only their plain tap is theirs.
+const OWNS_GESTURE = 'button, a, input, label, [data-drag]';
 
 export function createStory(
   root: HTMLElement,
@@ -208,16 +210,17 @@ export function createStory(
       reduced,
       ticket,
       busy() {
+        if (gen !== cardGen) return () => {}; // a tap on the outgoing card must not freeze the new one
         busy++;
         freezeHold();
         let released = false;
         return () => {
-          if (released || gen !== cardGen) return;
+          if (released) return;
           released = true;
           if (--busy === 0 && !paused && !animating()) armHold();
         };
       },
-      playTrack: (t) => playTrack(t, gen),
+      playTrack: (t) => (gen !== cardGen ? Promise.resolve(false) : playTrack(t, gen)),
       sfx,
       buzz: (p) => haptics.buzz(p),
       mark(target) {
@@ -333,10 +336,12 @@ export function createStory(
   /** One input, one action: finish what's animating, otherwise move. */
   const nav = (dir: 1 | -1) => (animating() ? finish() : step(dir));
 
+  let downOnTarget = false;
   const onDown = (e: MouseEvent) => {
     const touched = (e.target as Element).closest('[data-touch]');
     if (touched) for (const d of [...(current?.querySelectorAll('.touch-dot') ?? []), ...touched.querySelectorAll('.touch-dot')]) d.remove(); // the ticket sits outside the card
-    if ((e.target as Element).closest(INTERACTIVE)) return;
+    if ((e.target as Element).closest(OWNS_GESTURE)) return;
+    downOnTarget = !!(e.target as Element).closest('[data-touch]');
     downX = e.clientX;
     downY = e.clientY;
     dragX = dragY = 0;
@@ -377,6 +382,7 @@ export function createStory(
       return;
     }
     if (Math.hypot(dragX, dragY) > SLOP_PX) return; // an abandoned swipe: the card springs back, nothing else
+    if (downOnTarget) return; // a plain tap on a touch target is the target's own click
     const width = root.getBoundingClientRect().width || window.innerWidth;
     nav(x < width / 3 ? -1 : 1);
   };
