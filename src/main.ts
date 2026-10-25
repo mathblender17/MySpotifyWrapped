@@ -5,6 +5,7 @@ import { prefersReducedMotion } from './journey/beats';
 import { STATIONS } from './journey/stations';
 import { makeDemoPlays } from './ingest/demo';
 import { withDemoSoundtrack } from './ingest/demoSoundtrack';
+import { withSampleGenres } from './ingest/sampleGenres';
 import { loadInWorker } from './ingest/loadInWorker';
 import { parseRoute } from './route';
 import { esc, plays as nPlays } from './slides/fmt';
@@ -75,7 +76,9 @@ function problemsNote(problems: string[]) {
 
 function start(plays: Play[], problems: string[], lifetime: boolean, at?: { station?: number; year?: number }, demo = false) {
   const computed = computeAllYears(plays, { lifetime });
-  const ds = demo ? withDemoSoundtrack(computed) : computed;
+  const withSound = demo ? withDemoSoundtrack(computed) : computed;
+  // Genres arrive with Last.fm later; until then bento and ganguro can only be previewed in dev with sample shares.
+  const ds = import.meta.env.DEV && route.genres === 'sample' ? withSampleGenres(withSound) : withSound;
   if (!ds.stats.size) {
     const counts = ds.years.map((y) => `${y.year}: ${nPlays(y.plays)}`).join(', ') || 'no songs found';
     const why = `No year has enough listening yet (needs 50+ plays of 30 seconds or more). Found ${esc(counts)}.`;
