@@ -24,13 +24,6 @@
 /* 10 Mt. Fuji (round 3) — ridge is the weekly graph */
 
 /* 11 shinkansen (round 3) */
-.shk { background: linear-gradient(#cfe8ff, #fff); color: #0b3d91; }
-.shk .t { font-family: 'Dela Gothic One', sans-serif; font-size: 22px; line-height: 1.1; }
-.shk .nose { position: absolute; left: -40px; right: -10px; top: 130px; height: 70px; background: #fff; border-radius: 120px 0 0 30px; box-shadow: 0 6px 14px #0002; border-bottom: 8px solid #0b3d91; }
-.shk .nose::after { content: ''; position: absolute; left: 40px; right: 0; bottom: 6px; height: 4px; background: #ff2d95; }
-.shk .win { position: absolute; left: 30px; top: 142px; width: 60px; height: 18px; background: #123; border-radius: 20px 4px 4px 4px; }
-.shk .nm { margin-top: auto; font-family: 'Dela Gothic One', sans-serif; font-size: 22px; line-height: 1.1; overflow-wrap: anywhere; }
-.shk .s { font-family: 'Zen Maru Gothic', sans-serif; font-size: 12px; font-weight: 900; margin-top: 4px; }
 
 /* 12 omikuji (round 1) */
 .omi { background: #7a0c0c; align-items: center; }
@@ -53,4 +46,3 @@
 .kj .hk { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: #c4002f; color: #fff; font-size: 9px; line-height: 1.1; display: flex; align-items: center; justify-content: center; }
 
 /* Phase 2a: beat helpers */
-.shk .train { position: absolute; inset: 0; pointer-events: none; }

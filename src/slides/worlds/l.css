@@ -1,0 +1,15 @@
+/* World L: Shōwa kaiju poster (art spec §5, mockup L). Painted sunset, giant silhouette, slanted brush title. */
+.shk { background: #e9dcbf; color: #1a1410; font-family: var(--face-text); padding: 0; }
+.shk .sky { position: absolute; left: 0; right: 0; top: 0; height: 196px; background: linear-gradient(180deg, #c8102e 0%, #ff7a2b 60%, #f6c26b 100%); }
+.shk .beastwrap { position: absolute; left: 40px; top: 22px; width: 130px; height: 162px; }
+.shk .beast { width: 100%; height: 100%; display: block; }
+.shk .city { position: absolute; left: 0; right: 0; top: 146px; height: 52px; background: #1a1410;
+  clip-path: polygon(0 100%, 0 40%, 8% 40%, 8% 20%, 16% 20%, 16% 55%, 24% 55%, 24% 10%, 30% 10%, 30% 45%, 40% 45%, 40% 30%, 48% 30%, 48% 60%, 58% 60%, 58% 15%, 64% 15%, 64% 50%, 74% 50%, 74% 35%, 82% 35%, 82% 65%, 90% 65%, 90% 25%, 100% 25%, 100% 100%); }
+.shk .t { position: absolute; right: 10px; top: 14px; font: 900 8px var(--face-text); letter-spacing: 3px; color: #fff6e0; }
+.shk .title { position: absolute; left: 10px; right: 10px; top: 206px; transform: rotate(-6deg); transform-origin: 0 0; font: 30px/1 'Reggae One', var(--face-num); color: #c8102e; -webkit-text-stroke: 3px #1a1410; paint-order: stroke fill; letter-spacing: -1px; }
+.shk .fit { overflow-wrap: anywhere; }
+.shk .fit.l2 { font-size: 24px; }
+.shk .fit.l3 { font-size: 15px; -webkit-text-stroke-width: 2px; }
+.shk .s { position: absolute; left: 12px; right: 8px; bottom: 40px; font: 900 11px/1.35 var(--face-text); }
+.shk .hero { font: 28px/1 var(--face-num); font-weight: 400; color: #c8102e; font-variant-numeric: tabular-nums; }
+.shk .credits { position: absolute; left: 0; right: 0; bottom: 0; background: #1a1410; color: #e9dcbf; font: 900 7px var(--face-text); padding: 5px 10px; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

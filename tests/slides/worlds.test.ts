@@ -10,6 +10,7 @@ import { ganguro } from '../../src/slides/ganguro';
 import { idol } from '../../src/slides/idol';
 import { konbini } from '../../src/slides/konbini';
 import { weather } from '../../src/slides/weather';
+import { shinkansen } from '../../src/slides/shinkansen';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -176,4 +177,16 @@ test('I fuji: its arrival starts as the red sun draining into an ink ensō', () 
   const lowest = Math.min(...[...el.querySelectorAll<HTMLElement>('[data-beat]')].map((b) => Number(b.dataset.beat)));
   expect(Number(enso.dataset.beat)).toBe(lowest);
   expect(enso.dataset.fx).toBe('drain');
+});
+
+test('L shinkansen: a kaiju poster; the beast is the ink-morph target; the days are the hero', () => {
+  const el = shinkansen(ctx());
+  expect(el.textContent).toContain('Hoshino Rei');
+  expect(el.textContent).toContain('0 → top 5 in 105 days');
+  expect(el.querySelector('.beast')).not.toBeNull();
+  expect(el.querySelector('.hero')!.textContent).toBe('105');
+  const climb = shinkansen(ctx({ stats: { ...STATS, fastestRiser: { artist: 'Late', via: 'halves', climb: 7 } } }));
+  expect(climb.querySelector('.hero')!.textContent).toBe('7');
+  const long = shinkansen(ctx({ stats: { ...STATS, fastestRiser: { artist: 'y'.repeat(40), via: 'race', days: 9 } } }));
+  expect(long.querySelector('.title')!.classList.contains('l3')).toBe(true);
 });

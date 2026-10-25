@@ -42,7 +42,7 @@ export const STATIONS: Station[] = [
   { id: 'gacha', n: 8, act: 2, nameJp: 'ガチャ', nameEn: 'Gacha', needs: ['topTracks'], transitionIn: 'baton', song: 'top', cut: { from: '.kon .bc', to: '.gac .card' }, morph: 'pixelate', world: 'K', accent: '#ffe36b' },
   { id: 'weather', n: 9, act: 3, nameJp: '天気', nameEn: 'Forecast', needs: ['seasons'], transitionIn: 'breather', world: 'O', accent: '#c8102e' },
   { id: 'fuji', n: 10, act: 3, nameJp: '富士', nameEn: 'Fuji', needs: ['weekly', 'peakWeek'], transitionIn: 'ride', world: 'I', accent: '#c8102e' },
-  { id: 'shinkansen', n: 11, act: 3, nameJp: '新幹線', nameEn: 'Shinkansen', needs: ['fastestRiser'], transitionIn: 'cut', song: 'riserTrack', cut: { from: '.fuji svg', to: '.shk .nose' }, world: 'L', accent: '#ff7a2b' },
+  { id: 'shinkansen', n: 11, act: 3, nameJp: '新幹線', nameEn: 'Shinkansen', needs: ['fastestRiser'], transitionIn: 'cut', song: 'riserTrack', cut: { from: '.fuji svg', to: '.shk .beast' }, world: 'L', accent: '#ff7a2b' },
   { id: 'omikuji', n: 12, act: 4, nameJp: 'おみくじ', nameEn: 'Omikuji', needs: ['personality', 'fortune'], transitionIn: 'ride', world: 'I', accent: '#c8102e' },
   { id: 'kanji', n: 13, act: 4, nameJp: '今年の漢字', nameEn: 'Kanji of the Year', needs: ['kanji', 'topArtists', 'topTracks'], transitionIn: 'tease', song: 'top', world: 'C', accent: '#ff3b1f' },
 ];
