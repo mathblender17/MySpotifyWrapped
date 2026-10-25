@@ -12,6 +12,7 @@ import { konbini } from '../../src/slides/konbini';
 import { weather } from '../../src/slides/weather';
 import { shinkansen } from '../../src/slides/shinkansen';
 import { omikuji } from '../../src/slides/omikuji';
+import { kanji } from '../../src/slides/kanji';
 import { ctx, STATS } from './fixture';
 
 const css = (w: string) => readFileSync(`src/slides/worlds/${w}.css`, 'utf8');
@@ -200,4 +201,14 @@ test('I omikuji: the fortune brushed inside an ink ensō, with a red seal', () =
   expect(id(el)).toMatch(/^brush-/);
   expect(id(omikuji(ctx()))).not.toBe(id(el));
   expect(el.querySelector('.seal')).not.toBeNull();
+});
+
+test('C+F kanji: the mega kanji brushes on over the F band, with the summary board', () => {
+  const el = kanji(ctx());
+  const hero = el.querySelector<HTMLElement>('.hero')!;
+  expect(hero.textContent).toBe(STATS.kanji.kanji);
+  expect(hero.dataset.fx).toBe('brush');
+  expect(el.querySelector('.band')!.textContent).toContain('今年の漢字');
+  for (const t of [STATS.kanji.meaning, '28,243', STATS.topArtists[0].name, STATS.topTracks[0].name]) expect(el.textContent).toContain(t);
+  expect(el.querySelectorAll('.sum .clip')).toHaveLength(3);
 });

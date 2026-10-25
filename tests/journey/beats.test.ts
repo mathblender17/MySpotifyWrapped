@@ -111,3 +111,16 @@ test('drain turns a solid red sun into an ink ring', () => {
   expect(b.style.backgroundColor).toBe('rgba(0, 0, 0, 0)');
   expect(b.style.borderColor).toBe('rgb(20, 20, 20)');
 });
+
+test('brush wipes an element on from left to right, and is instant when reduced', () => {
+  const el = html('<b data-beat="1" data-fx="brush">夜</b>');
+  const tl = playBeats(el);
+  tl.progress(0.3);
+  const b = el.querySelector('b')!;
+  expect(b.style.clipPath).toMatch(/inset\(0(px)? [1-9]/);
+  tl.progress(1);
+  expect(b.style.clipPath).toMatch(/inset\(0(px)? 0%? 0(px)? 0(px)?\)/);
+  const r = html('<b data-beat="1" data-fx="brush">夜</b>');
+  playBeats(r, { reduced: true }).progress(1);
+  expect(r.querySelector('b')!.style.opacity).toBe('1');
+});

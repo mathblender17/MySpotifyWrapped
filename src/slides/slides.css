@@ -28,13 +28,5 @@
 /* 12 omikuji (round 1) */
 
 /* 13 Kanji of the Year (round 2) — share card */
-.kj { background: #f5f0e6; color: #111; font-family: 'Yuji Syuku', serif; align-items: center; text-align: center; }
-.kj .hd { font-size: 14px; }
-.kj .big { font-size: 120px; line-height: 1.1; }
-.kj .mn { text-transform: uppercase; font-family: 'Dela Gothic One', sans-serif; font-size: 14px; letter-spacing: 4px; color: #ff2d95; }
-.kj .sum { margin-top: auto; width: 100%; font-family: 'Zen Maru Gothic', sans-serif; font-size: 10px; text-align: left; }
-.kj .sum div { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid #1113; padding: 3px 0; }
-.kj .sum b { font-weight: 900; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.kj .hk { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; background: #c4002f; color: #fff; font-size: 9px; line-height: 1.1; display: flex; align-items: center; justify-content: center; }
 
 /* Phase 2a: beat helpers */

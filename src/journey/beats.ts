@@ -46,7 +46,11 @@ function enter(tl: gsap.core.Timeline, el: HTMLElement, at: number) {
     p.slice(1).forEach(([x, y], k) => tl.to(el, { x, y, duration: 0.4, ease: 'power2.inOut' }, at + (k + 2) * GAP));
   }
   if (fx.includes('grow')) grow();
-  else if (fx.includes('steps')) tl.fromTo(el, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'steps(6)' }, at);
+  else if (fx.includes('brush')) {
+    // brush: wiped on left to right, like a stroke of the brush (the kanji of the year).
+    tl.set(el, { opacity: 1 }, at);
+    tl.fromTo(el, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power2.inOut' }, at);
+  } else if (fx.includes('steps')) tl.fromTo(el, { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'steps(6)' }, at);
   else if (fx.includes('drain')) {
     // drain: a solid red sun empties to an ink ring (weather's sun arriving at Fuji).
     tl.set(el, { opacity: 1 }, at);
