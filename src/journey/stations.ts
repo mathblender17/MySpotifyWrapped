@@ -1,4 +1,5 @@
 import type { YearStats } from '../types';
+import type { Morph } from './transitions';
 
 export type Transition = 'title' | 'ride' | 'cut' | 'phone' | 'tease' | 'baton' | 'breather';
 
@@ -23,7 +24,7 @@ export type Station = {
   song?: 'top' | 'topArtistTrack' | 'riserTrack';
   world: World;
   /** Arrival morph (art spec §6), used when its source shape is on screen. */
-  morph?: 'pixelate';
+  morph?: Morph;
   /** The world's accent: colours the station sign and this station's ticket stamp. */
   accent: string;
 };
@@ -34,10 +35,10 @@ const GENRES_LATER = 'Genres arrive in a later update';
 export const STATIONS: Station[] = [
   { id: 'departure', n: 1, act: 1, nameJp: '出発', nameEn: 'Departure', needs: [], transitionIn: 'title', waitForInput: true, song: 'top', world: 'F', accent: '#00a7db' },
   { id: 'torii', n: 2, act: 1, nameJp: '鳥居', nameEn: 'Torii Gates', needs: ['plays', 'daysListened'], transitionIn: 'ride', song: 'top', world: 'C', accent: '#ff3b1f' },
-  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut', lockedHint: GENRES_LATER, cut: { from: '.tor .hero', to: '.ben .box' }, world: 'J', accent: '#e60012' },
+  { id: 'bento', n: 3, act: 1, nameJp: '弁当', nameEn: 'Bento', needs: ['genreShares'], transitionIn: 'cut', lockedHint: GENRES_LATER, cut: { from: '.tor .hero', to: '.ben .h1' }, morph: 'shrink', world: 'J', accent: '#e60012' },
   { id: 'ganguro', n: 4, act: 1, nameJp: 'ガングロ', nameEn: 'Ganguro', needs: ['topGenre'], transitionIn: 'phone', lockedHint: GENRES_LATER, world: 'G', accent: '#b48cff' },
   { id: 'sumo', n: 5, act: 2, nameJp: '番付', nameEn: 'Banzuke', needs: ['topArtists'], transitionIn: 'ride', world: 'D', accent: '#e60033' },
-  { id: 'idol', n: 6, act: 2, nameJp: '推し', nameEn: 'Oshi', needs: ['topArtists'], transitionIn: 'tease', song: 'topArtistTrack', world: 'Q', accent: '#ff2d95' },
+  { id: 'idol', n: 6, act: 2, nameJp: '推し', nameEn: 'Oshi', needs: ['topArtists'], transitionIn: 'tease', song: 'topArtistTrack', cut: { from: '.sumo .splash', to: '.idol .cover' }, morph: 'cover', world: 'Q', accent: '#ff2d95' },
   { id: 'konbini', n: 7, act: 2, nameJp: 'コンビニ', nameEn: 'Konbini', needs: ['topTracks'], transitionIn: 'cut', cut: { from: '.idol .cover', to: '.kon .rc' }, world: 'B', accent: '#3cf6ff' },
   { id: 'gacha', n: 8, act: 2, nameJp: 'ガチャ', nameEn: 'Gacha', needs: ['topTracks'], transitionIn: 'baton', song: 'top', cut: { from: '.kon .bc', to: '.gac .card' }, morph: 'pixelate', world: 'K', accent: '#ffe36b' },
   { id: 'weather', n: 9, act: 3, nameJp: '天気', nameEn: 'Forecast', needs: ['seasons'], transitionIn: 'breather', world: 'O', accent: '#c8102e' },

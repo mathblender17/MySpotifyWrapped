@@ -2,6 +2,9 @@ import { gsap } from 'gsap';
 import { DESIGN_W } from '../story/frame';
 import type { Transition } from './stations';
 
+/** Art spec §6 morphs: pixelate, shrink-to-headline, panel-to-cover. */
+export type Morph = 'pixelate' | 'shrink' | 'cover';
+
 export type TransitionOpts = {
   stage: HTMLElement;
   cut?: { from: string; to: string };
@@ -12,7 +15,7 @@ export type TransitionOpts = {
   from?: number;
   to?: number;
   /** A style morph on arrival (art spec §6). Falls back to a ride when its source shape is missing. */
-  morph?: 'pixelate';
+  morph?: Morph;
 };
 
 const WORLD_RIDE = 1.6;
@@ -73,6 +76,30 @@ function pixelWipe(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, 
   return [grid];
 }
 
+/**
+ * A flight morph: a clone of `from` lands on `to`'s box by moving and *scaling* (so a big number's text shrinks into a
+ * headline, a panel grows into a cover). The old slide fades out, the new one in. 0.8 s from `at`.
+ */
+function flight(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement, from: Element, to: Element, at = 0) {
+  const a = boxIn(stage, from);
+  const b = boxIn(stage, to);
+  const clone = from.cloneNode(true) as HTMLElement;
+  clone.classList.add('cut-clone');
+  Object.assign(clone.style, { position: 'absolute', margin: '0', left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`, zIndex: '5', transformOrigin: '0 0' });
+  stage.append(clone);
+  tl.to(out, { opacity: 0, duration: 0.3 }, at);
+  tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, at + 0.4);
+  const scale = (n: number, d: number) => (d ? n / d : 1);
+  tl.fromTo(
+    clone,
+    { x: 0, y: 0, scaleX: 1, scaleY: 1 },
+    { x: b.left - a.left, y: b.top - a.top, scaleX: scale(b.width, a.width), scaleY: scale(b.height, a.height), duration: 0.6, ease: 'power3.inOut' },
+    at,
+  );
+  tl.to(clone, { opacity: 0, duration: 0.2 }, at + 0.6);
+  return [clone];
+}
+
 /** With a world, a ride hands the screen over: the card flies off, the train travels, the next card drops in. */
 function worldRide(tl: gsap.core.Timeline, out: HTMLElement | null, inEl: HTMLElement, travel: gsap.core.Timeline) {
   if (out) tl.to(out, { scale: 0.7, yPercent: -120, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0);
@@ -110,14 +137,31 @@ export function runTransition(type: Transition, out: HTMLElement | null, inEl: H
     if (out) tl.to(out, { opacity: 0, duration: 0.2 }, 0);
     if (moving) tl.add(travel(0.2), 0);
     parallel = false;
+  } else if (o.morph) {
+    const from = out && o.cut ? out.querySelector(o.cut.from) : null;
+    const to = o.cut ? inEl.querySelector(o.cut.to) : null;
+    if (!from || (o.morph !== 'pixelate' && !to)) {
+      // The station before may have been passed through: no shape to carry over, so just ride.
+      extras = anyRide();
+      parallel = false;
+    } else if (o.morph === 'pixelate') extras = pixelWipe(tl, out!, inEl, stage);
+    else if (o.morph === 'shrink') extras = flight(tl, out!, inEl, stage, from, to!);
+    else {
+      // cover: the tease card holds the hook, then the splash panel flies onto the magazine cover.
+      const card = overlay(stage, 'tease', `<p></p>`);
+      card.querySelector('p')!.textContent = o.hook?.en ?? '';
+      tl.fromTo(card, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0);
+      tl.set(out, { opacity: 0 }, 0.3);
+      tl.set(inEl, { opacity: 0 }, 0);
+      tl.to(card, { opacity: 0, duration: 0.3 }, 0.6);
+      extras = [card, ...flight(tl, out!, inEl, stage, from, to!, 0.6)];
+    }
   } else if (type === 'title') {
     tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
   } else if (type === 'cut' || type === 'baton') {
     const from = out && o.cut ? out.querySelector(o.cut.from) : null;
     const to = o.cut ? inEl.querySelector(o.cut.to) : null;
-    if (from && o.morph === 'pixelate') {
-      extras = pixelWipe(tl, out!, inEl, stage);
-    } else if (!from || !to) {
+    if (!from || !to) {
       // The station before this one may have been passed through: no shape to carry over, so just ride.
       extras = anyRide();
       parallel = false;

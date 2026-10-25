@@ -49,7 +49,11 @@ test('every station declares its art world and a #rrggbb accent', () => {
   expect(STATIONS.map((s) => s.world).join('')).toBe('FCJGDQBKOILIC');
 });
 
-test('the gacha arrives by the pixel-wipe morph', () => {
-  expect(STATIONS.find((s) => s.id === 'gacha')!.morph).toBe('pixelate');
-  expect(STATIONS.filter((s) => s.morph)).toHaveLength(1);
+test('arrivals by morph follow the art spec (§6)', () => {
+  const m = Object.fromEntries(STATIONS.filter((s) => s.morph).map((s) => [s.id, [s.morph, s.cut!.from, s.cut!.to]]));
+  expect(m).toEqual({
+    bento: ['shrink', '.tor .hero', '.ben .h1'],
+    idol: ['cover', '.sumo .splash', '.idol .cover'],
+    gacha: ['pixelate', '.kon .bc', '.gac .card'],
+  });
 });
