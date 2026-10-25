@@ -124,8 +124,21 @@ describe('flight morphs: shrink-to-headline and panel-to-cover', () => {
     tl.progress(0.74);
     const clone = stage.querySelector<HTMLElement>('.cut-clone')!;
     expect(clone.style.width).toBe('200px');
+    // One uniform scale (text keeps its shape), centred on the target box.
     expect(Number(gsap.getProperty(clone, 'scaleX'))).toBeCloseTo(0.2, 1);
+    expect(Number(gsap.getProperty(clone, 'scaleY'))).toBeCloseTo(0.2, 1);
     expect(Number(gsap.getProperty(clone, 'x'))).toBeCloseTo(160, 0);
+    expect(Number(gsap.getProperty(clone, 'y'))).toBeCloseTo(20, 0);
+  });
+
+  test("the clone keeps its slide's look: it flies inside a host carrying the source slide's class", () => {
+    const tl = runTransition('cut', toriiOut(), slideEl('ben', '<div class="h1">首位</div>'), { stage, cut: shrinkCut, morph: 'shrink' });
+    tl.progress(0.3);
+    const host = stage.querySelector<HTMLElement>('.cut-clone')!.parentElement!;
+    expect(host.classList.contains('cut-host')).toBe(true);
+    expect(host.classList.contains('tor')).toBe(true);
+    expect(host.classList.contains('ph')).toBe(false);
+    expect(host.classList.contains('grain')).toBe(false);
   });
 
   test('shrink takes 0.8 s and leaves only the new slide', () => {
@@ -146,6 +159,8 @@ describe('flight morphs: shrink-to-headline and panel-to-cover', () => {
     expect(tl.duration()).toBeCloseTo(1.4);
     tl.progress(0.2);
     expect(stage.textContent).toContain(hook.en);
+    // The panel stays hidden while the hook card is up (it would cover the hook).
+    expect(Number(gsap.getProperty(stage.querySelector('.cut-host')!, 'opacity'))).toBe(0);
     tl.progress(0.75);
     expect(stage.querySelector('.cut-clone')).not.toBeNull();
     tl.progress(1);
@@ -185,6 +200,24 @@ describe('overlay morphs: neon-takeover and ink-to-beast', () => {
     tl.progress(1);
     expect([...stage.children]).toEqual([inEl]);
     expect(inEl.style.opacity).toBe('1');
+  });
+
+  test('at its biggest the ink blot covers every corner of the stage, even from a summit near the top', () => {
+    const { out, inEl } = pair('fuji', '<svg></svg>', 'shk', '<svg class="beast"></svg>');
+    const r = (el: Element, left: number, top: number, width: number, height: number) =>
+      (el.getBoundingClientRect = () => ({ left, top, width, height, right: left + width, bottom: top + height, x: left, y: top, toJSON() {} }));
+    r(stage, 0, 0, 210, 373);
+    r(out.querySelector('svg')!, 16, 104, 178, 150);
+    r(inEl.querySelector('.beast')!, 40, 22, 130, 162);
+    const tl = runTransition('cut', out, inEl, { stage, cut: { from: '.fuji svg', to: '.shk .beast' }, morph: 'ink' });
+    tl.seek(0.45); // the slides swap under the blot at 0.45 s
+    const blot = stage.querySelector<HTMLElement>('.ink-blot')!;
+    const size = parseFloat(blot.style.width);
+    const cx = parseFloat(blot.style.left) + size / 2;
+    const cy = parseFloat(blot.style.top) + size / 2;
+    // The rough brush edge dips to ~80% of the circle: count only that inner radius as covered.
+    const inner = (Number(gsap.getProperty(blot, 'scale')) * size) / 2 * 0.8;
+    for (const [x, y] of [[0, 0], [210, 0], [0, 373], [210, 373]]) expect(inner).toBeGreaterThanOrEqual(Math.hypot(x - cx, y - cy));
   });
 
   test('ink grows a blot from the summit, swaps the slides under it, and shrinks it into the beast (0.9 s)', () => {

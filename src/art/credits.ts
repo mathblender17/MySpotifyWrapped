@@ -5,7 +5,7 @@ export const CREDITS = [
   {
     file: 'kabukicho.webp',
     required: true,
-    html: '<i>Kabukicho red gate and colorful neon street signs at night</i>, Basile Morin, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> (recoloured)',
+    html: '<a href="https://commons.wikimedia.org/w/index.php?curid=81420139" target="_blank" rel="noopener"><i>Kabukicho red gate and colorful neon street signs at night</i></a>, Basile Morin, via Wikimedia Commons; adapted (recoloured, halftoned) and shared under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>',
   },
 ];
 

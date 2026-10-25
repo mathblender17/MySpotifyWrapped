@@ -139,6 +139,10 @@
 .stage > .ph { position: absolute; top: 0; left: 0; }
 .tx-overlay { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 .pixwipe { overflow: hidden; }
+/* A flight morph's clone flies inside a host with the source slide's class (so its CSS applies), minus the slide's own
+   ground and frame. */
+.stage > .cut-host { position: absolute; inset: 0; z-index: 5; padding: 0; overflow: visible; pointer-events: none;
+  background: none !important; border: 0 !important; box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 .neon { background: #ff2d95; }
 .neon-a { right: 50%; background: #ff2d95; mix-blend-mode: multiply; }
 .neon-b { left: 50%; background: #1b1f7a; mix-blend-mode: screen; }

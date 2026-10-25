@@ -13,6 +13,8 @@ test('the landing credits line names every found picture and links the CC BY-SA 
   expect(el.textContent).toContain('Hokusai');
   expect(el.textContent).toContain('Basile Morin');
   expect(el.querySelector('a[href="https://creativecommons.org/licenses/by-sa/4.0/"]')).not.toBeNull();
+  expect(el.querySelector('a[href="https://commons.wikimedia.org/w/index.php?curid=81420139"]')).not.toBeNull();
+  expect(el.textContent).toMatch(/adapted.*shared under CC BY-SA 4\.0/);
 });
 
 test('the photo credit is plain, visible text outside any beat', () => {
@@ -31,6 +33,7 @@ test('every slide that shows the Kabukicho photo carries its credit, even after 
     const credit = el.querySelector<HTMLElement>('.credit');
     expect(credit?.textContent, id).toBe(PHOTO);
     expect(credit!.closest('[data-beat]'), id).toBeNull();
+    expect(credit!.parentElement, id).toBe(el); // at the slide's root: a filtered parent would trap it under the grain
   }
 });
 

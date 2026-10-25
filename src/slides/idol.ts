@@ -10,7 +10,7 @@ const size = (s: string) => ([...s].length > 24 ? ' l3' : [...s].length > 12 ? '
 export const idol: Slide = ({ stats }) => {
   const a = stats!.topArtists![0];
   const share = stats!.topArtistShare;
-  return slide('idol', `<div class="cover">${photoCredit()}</div>
+  return slide('idol', `<div class="cover"></div>${photoCredit()}
     <div class="mast" data-beat="1">ぎゃる</div>
     <div class="issue" data-beat="1">${stats!.year} 推し号</div>
     <div class="cl cl1" data-beat="2">♡ 今年の推し ♡</div>

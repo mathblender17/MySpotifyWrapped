@@ -119,7 +119,7 @@ test('brush wipes an element on from left to right, and is instant when reduced'
   const b = el.querySelector('b')!;
   expect(b.style.clipPath).toMatch(/inset\(0(px)? [1-9]/);
   tl.progress(1);
-  expect(b.style.clipPath).toMatch(/inset\(0(px)? 0%? 0(px)? 0(px)?\)/);
+  expect(b.style.clipPath).toBe(''); // cleared at the end, so the text-shadow isn't clipped
   const r = html('<b data-beat="1" data-fx="brush">夜</b>');
   playBeats(r, { reduced: true }).progress(1);
   expect(r.querySelector('b')!.style.opacity).toBe('1');

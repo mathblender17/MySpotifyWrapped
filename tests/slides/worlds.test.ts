@@ -147,7 +147,8 @@ test('Q idol: a gyaru magazine cover of the city, the #1 artist in the cover lin
   expect(t).toContain('14%');
   expect(t).toContain('980');
   expect(t).toContain('3,826');
-  expect(el.querySelector('.cover .credit')).not.toBeNull();
+  expect(el.querySelector('.cover')).not.toBeNull();
+  expect(el.querySelector(':scope > .credit')).not.toBeNull();
   expect(el.querySelector('.oshi')!.classList.contains('fit')).toBe(true);
   expect(el.querySelector('.hero')!.textContent).toContain('3,826');
 });

@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { DESIGN_W } from '../story/frame';
+import { DESIGN_H, DESIGN_W } from '../story/frame';
 import type { Transition } from './stations';
 
 /** Art spec §6 morphs: pixelate, shrink-to-headline, panel-to-cover, neon-takeover, ink-to-beast. */
@@ -77,27 +77,33 @@ function pixelWipe(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, 
 }
 
 /**
- * A flight morph: a clone of `from` lands on `to`'s box by moving and *scaling* (so a big number's text shrinks into a
- * headline, a panel grows into a cover). The old slide fades out, the new one in. 0.8 s from `at`.
+ * A flight morph: a clone of `from` lands on `to`'s box with one uniform scale (so a big number's text shrinks into a
+ * headline without distorting, a panel grows into a cover). The clone flies inside a host carrying the source slide's
+ * class, so the slide's own CSS (`.tor .hero`, `.sumo .splash`) still styles it. Hidden until `at`; 0.8 s from `at`.
  */
 function flight(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage: HTMLElement, from: Element, to: Element, at = 0) {
   const a = boxIn(stage, from);
   const b = boxIn(stage, to);
+  const host = document.createElement('div');
+  host.className = [...out.classList].filter((c) => c !== 'ph' && c !== 'grain' && c !== 'dark').concat('cut-host').join(' ');
   const clone = from.cloneNode(true) as HTMLElement;
   clone.classList.add('cut-clone');
-  Object.assign(clone.style, { position: 'absolute', margin: '0', left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`, zIndex: '5', transformOrigin: '0 0' });
-  stage.append(clone);
+  Object.assign(clone.style, { position: 'absolute', margin: '0', left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`, transformOrigin: '0 0', opacity: '1' });
+  host.append(clone);
+  stage.append(host);
+  const k = a.width && a.height ? Math.min(b.width / a.width, b.height / a.height) : 1;
+  tl.set(host, { opacity: 0 }, 0);
+  tl.set(host, { opacity: 1 }, at);
   tl.to(out, { opacity: 0, duration: 0.3 }, at);
   tl.fromTo(inEl, { opacity: 0 }, { opacity: 1, duration: 0.4 }, at + 0.4);
-  const scale = (n: number, d: number) => (d ? n / d : 1);
   tl.fromTo(
     clone,
-    { x: 0, y: 0, scaleX: 1, scaleY: 1 },
-    { x: b.left - a.left, y: b.top - a.top, scaleX: scale(b.width, a.width), scaleY: scale(b.height, a.height), duration: 0.6, ease: 'power3.inOut' },
+    { x: 0, y: 0, scale: 1 },
+    { x: b.left + (b.width - a.width * k) / 2 - a.left, y: b.top + (b.height - a.height * k) / 2 - a.top, scale: k, duration: 0.6, ease: 'power3.inOut' },
     at,
   );
   tl.to(clone, { opacity: 0, duration: 0.2 }, at + 0.6);
-  return [clone];
+  return [host];
 }
 
 /** Neon takeover (Q → B): the cover's neon floods the screen pink, the slides swap under it, and it splits into the
@@ -129,7 +135,10 @@ function ink(tl: gsap.core.Timeline, out: HTMLElement, inEl: HTMLElement, stage:
   const cx = a.left + a.width / 2 - BLOT / 2; // the summit: top centre of the mountain
   const cy = a.top - BLOT / 2;
   Object.assign(blot.style, { inset: 'auto', left: `${cx}px`, top: `${cy}px`, width: `${BLOT}px`, height: `${BLOT}px` });
-  const fill = Math.hypot(DESIGN_W, 373) / BLOT; // big enough to cover the stage from anywhere on it
+  // Cover the farthest stage corner from the blot's centre; the rough brush edge dips to ~80% of the circle.
+  const [ox, oy] = [cx + BLOT / 2, cy + BLOT / 2];
+  const reach = Math.max(...[[0, 0], [DESIGN_W, 0], [0, DESIGN_H], [DESIGN_W, DESIGN_H]].map(([x, y]) => Math.hypot(x - ox, y - oy)));
+  const fill = (reach / 0.8) / (BLOT / 2);
   tl.set(inEl, { opacity: 0 }, 0);
   tl.fromTo(blot, { scale: 0.2 }, { scale: fill, duration: 0.45, ease: 'power2.in' }, 0);
   tl.set(out, { opacity: 0 }, 0.45);
