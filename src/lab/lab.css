@@ -1,0 +1,23 @@
+.lab { position: fixed; inset: 0; overflow-y: auto; background: #0b0f2b; color: #fff; font-family: 'Zen Maru Gothic', sans-serif; padding: 20px 16px 24px; }
+.lab-head { font: 900 20px 'Dela Gothic One', sans-serif; margin: 12px 0 4px; }
+.lab-sub { color: #f4ede0; opacity: 0.75; margin: 0 0 16px; font-size: 14px; }
+.lab button { font: inherit; color: inherit; cursor: pointer; }
+.lab-item { display: grid; gap: 4px; width: 100%; min-height: 64px; text-align: left; padding: 14px 16px; margin-bottom: 12px; border-radius: 18px; border: 2px solid #2fd3e6; background: linear-gradient(#232a6b, #141a45); box-shadow: 0 6px 0 #0a0f3a, 0 12px 20px #0008; }
+.lab-item-title { font-size: 17px; }
+.lab-item-blurb { font-size: 13px; opacity: 0.8; }
+.lab-item-layer { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #f2c14e; }
+.lab-copy { min-height: 48px; padding: 0 20px; border-radius: 24px; border: 1.5px solid #fff6; background: #ffffff1f; }
+.lab-export { display: block; width: 100%; height: 160px; margin-top: 12px; background: #05071a; color: #f4ede0; border: 1px solid #fff3; border-radius: 12px; padding: 8px; font: 12px monospace; }
+.lab-top { margin-bottom: 8px; }
+.lab-title { font: 900 18px 'Dela Gothic One', sans-serif; }
+.lab-stage { position: relative; width: 100%; height: calc(100% - 200px); min-height: 360px; overflow: hidden; border-radius: 22px; background: linear-gradient(#141a45, #0b0f2b); touch-action: none; user-select: none; -webkit-user-select: none; }
+.lab-check { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font-size: 16px; opacity: 0.85; }
+.lab-foot { position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: #05071acc; backdrop-filter: blur(10px); }
+.lab-back, .lab-score-open, .lab-save, .lab-val { min-width: 48px; min-height: 48px; padding: 0 16px; border-radius: 24px; border: 2px solid #2fd3e6; background: #fff; color: #0b0f2b !important; font-weight: 900; }
+.lab-score-open, .lab-save { background: linear-gradient(#ff6a44, #c92a10); color: #fff !important; border-color: #fff8; }
+.lab-note { margin: 0; font-size: 12px; opacity: 0.85; flex: 1; }
+.lab-sheet { position: fixed; left: 12px; right: 12px; bottom: 76px; padding: 16px; border-radius: 22px; background: #141a45; border: 2px solid #2fd3e6; box-shadow: 0 20px 40px #000a; }
+.lab-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.lab-row-name { width: 96px; font-size: 13px; text-transform: capitalize; }
+.lab-val.on { background: #f2c14e; border-color: #fff; }
+.lab-text { width: 100%; min-height: 48px; margin: 4px 0 10px; padding: 0 12px; border-radius: 14px; border: 1px solid #fff4; background: #05071a; color: #fff; font: inherit; }

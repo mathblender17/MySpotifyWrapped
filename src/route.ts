@@ -1,4 +1,4 @@
-export type Route = { data?: 'demo'; station?: number; year?: number; world?: true; genres?: 'sample'; previews?: 'silent' };
+export type Route = { data?: 'demo'; station?: number; year?: number; world?: true; genres?: 'sample'; previews?: 'silent'; lab?: true };
 
 /** Dev shortcuts: ?data=demo&station=N&year=YYYY opens straight at a station; ?world=1&station=N previews a 3D district. */
 export function parseRoute(search: string): Route {
@@ -6,6 +6,7 @@ export function parseRoute(search: string): Route {
   const r: Route = {};
   if (q.get('data') === 'demo') r.data = 'demo';
   if (q.get('world') === '1') r.world = true;
+  if (q.get('lab') === '1') r.lab = true; // the UX lab (ux spec §2); main.ts loads it behind this flag only
   if (q.get('genres') === 'sample') r.genres = 'sample'; // dev preview only: main.ts ignores it in builds
   if (q.get('previews') === 'silent') r.previews = 'silent'; // dev check only: main.ts ignores it in builds
   const station = Number(q.get('station'));
