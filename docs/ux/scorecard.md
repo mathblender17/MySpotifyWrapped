@@ -6,3 +6,11 @@ Keep an experiment when goosebumps, clarity and speed are all at least 2. Kill i
 
 | experiment | goosebumps | clarity | speed | verdict | device | date |
 |---|---|---|---|---|---|---|
+| f1-momentum |  |  |  |  |  |  |
+| f2-tilt |  |  |  |  |  |  |
+| f3-stamp |  |  |  |  |  |  |
+| f4-beds |  |  |  |  |  |  |
+| f5-heavy |  |  |  |  |  |  |
+| f6-cord |  |  |  |  |  |  |
+| f7-speed |  |  |  |  |  |  |
+| f8-grammar |  |  |  |  |  |  |
