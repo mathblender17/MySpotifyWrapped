@@ -3,5 +3,6 @@ import { check } from './experiments/check';
 import { f1 } from './experiments/f1-momentum';
 import { f2 } from './experiments/f2-tilt';
 import { f3 } from './experiments/f3-stamp';
+import { f4 } from './experiments/f4-beds';
 
-export const EXPERIMENTS: Experiment[] = [check, f1, f2, f3];
+export const EXPERIMENTS: Experiment[] = [check, f1, f2, f3, f4];
