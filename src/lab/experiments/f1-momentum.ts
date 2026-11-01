@@ -95,7 +95,7 @@ export const f1: Experiment = {
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
       try {
-        stage.setPointerCapture?.(e.pointerId);
+        strip.setPointerCapture?.(e.pointerId); // capture on the element that listens, or move and up never arrive
       } catch {
         // pointer capture is a nicety; the strip still follows the finger without it
       }

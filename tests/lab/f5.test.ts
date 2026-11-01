@@ -66,3 +66,28 @@ test('leaving unsubscribes from tilt', () => {
   kit.leave();
   expect(off).toHaveBeenCalled();
 });
+
+test('a smoothed tilt (many small steps) still bounces once on a sharp tilt', () => {
+  vi.useFakeTimers();
+  mount();
+  const bounces = () => Number(num().dataset.bounces ?? 0);
+  tiltHandler()(0, 0);
+  for (let y = 0.12; y <= 0.61; y += 0.12) {
+    vi.advanceTimersByTime(16);
+    tiltHandler()(0, y);
+  }
+  expect(bounces()).toBe(1);
+  vi.useRealTimers();
+});
+
+test('slow drift never bounces', () => {
+  vi.useFakeTimers();
+  mount();
+  tiltHandler()(0, 0);
+  for (let i = 1; i <= 60; i++) {
+    vi.advanceTimersByTime(16);
+    tiltHandler()(0, i * 0.01);
+  }
+  expect(Number(num().dataset.bounces ?? 0)).toBe(0);
+  vi.useRealTimers();
+});

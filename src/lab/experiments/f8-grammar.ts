@@ -47,11 +47,6 @@ export const f8: Experiment = {
     let asked = false;
     const down = (e: PointerEvent) => {
       samples = [{ t: e.timeStamp, x: e.clientX, y: e.clientY }];
-      if (!asked) {
-        asked = true;
-        const dm = (window as unknown as { DeviceMotionEvent?: { requestPermission?: () => Promise<string> } }).DeviceMotionEvent;
-        void dm?.requestPermission?.(); // iOS only allows the permission prompt inside a tap
-      }
     };
     const move = (e: PointerEvent) => {
       if (samples.length) samples.push({ t: e.timeStamp, x: e.clientX, y: e.clientY });
@@ -59,6 +54,12 @@ export const f8: Experiment = {
     const up = (e: PointerEvent) => {
       if (!samples.length) return;
       samples.push({ t: e.timeStamp, x: e.clientX, y: e.clientY });
+      if (!asked && !kit.reduced) {
+        asked = true;
+        // iOS reliably allows the permission prompt on release (a finished tap); a refusal is not an error
+        const dm = (window as unknown as { DeviceMotionEvent?: { requestPermission?: () => Promise<string> } }).DeviceMotionEvent;
+        void Promise.resolve(dm?.requestPermission?.()).catch(() => {});
+      }
       const g = classify(samples);
       samples = [];
       name(g.kind);

@@ -64,3 +64,19 @@ test('every control is a real button with a 48px class hook', () => {
   expect(app.querySelectorAll('button').length).toBeGreaterThan(0);
   expect(app.querySelector('.lab')).not.toBeNull();
 });
+
+test('the first tap inside an experiment unlocks the feel sounds too', () => {
+  mountLab(app, { makeKit: make(), store: memStore() });
+  click('button[data-exp="check"]');
+  app.querySelector('.lab')!.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+  expect(kits[0].fx.unlock).toHaveBeenCalled();
+});
+
+test('the phone back gesture (the hash clears) returns to the list and stops the experiment', () => {
+  mountLab(app, { makeKit: make(), store: memStore() });
+  click('button[data-exp="check"]');
+  location.hash = '';
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
+  expect(app.querySelector('button[data-exp]')).not.toBeNull();
+  expect(kits[0].leave).toHaveBeenCalledTimes(1);
+});

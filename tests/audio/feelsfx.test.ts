@@ -69,3 +69,17 @@ test('dispose closes the context', () => {
   fx.dispose();
   expect(f.made.closed).toBe(true);
 });
+
+test('unlock resumes the context once allowed and makes none before', () => {
+  const f = fakeContext();
+  const resume = vi.fn(() => Promise.resolve());
+  (f.ctx as unknown as { resume: unknown }).resume = resume;
+  let allowed = false;
+  const makeContext = vi.fn(() => f.ctx);
+  const fx = createFeelSfx({ canPlay: () => allowed, makeContext });
+  fx.unlock();
+  expect(makeContext).not.toHaveBeenCalled();
+  allowed = true;
+  fx.unlock();
+  expect(resume).toHaveBeenCalledTimes(1);
+});

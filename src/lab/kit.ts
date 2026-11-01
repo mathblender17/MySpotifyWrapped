@@ -10,7 +10,15 @@ import type { MadeKit } from './types';
  * under reduced motion, the same rule the ride uses (alive spec §4).
  */
 export function makeKit(o: { reduced: boolean; unlocked: () => boolean }): MadeKit {
-  const canPlay = () => o.unlocked() && !o.reduced;
+  /** The ride's mute switch (ongaku:muted) silences the lab too. */
+  const muted = () => {
+    try {
+      return localStorage.getItem('ongaku:muted') === '1';
+    } catch {
+      return false; // storage blocked: treat as not muted
+    }
+  };
+  const canPlay = () => o.unlocked() && !o.reduced && !muted();
   const haptics = createHaptics({ canBuzz: canPlay });
   const sfx = createSfx({ canPlay });
   const fx = createFeelSfx({ canPlay });

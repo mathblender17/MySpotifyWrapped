@@ -27,6 +27,7 @@ export function mountLab(app: HTMLElement, o: { makeKit?: (reduced: boolean) => 
     () => {
       unlocked = true;
       kit?.sfx.unlock();
+      kit?.fx.unlock(); // the feel sounds have their own context; start it inside the same tap
     },
     true,
   );
@@ -128,6 +129,11 @@ export function mountLab(app: HTMLElement, o: { makeKit?: (reduced: boolean) => 
     root.append(top, stage, foot);
     e.mount(stage, kit);
   };
+
+  // The phone's back gesture clears the hash: go back to the list (and stop the experiment) instead of leaving it running.
+  window.addEventListener('hashchange', () => {
+    if (!location.hash && kit) showList();
+  });
 
   const first = EXPERIMENTS.find((e) => e.id === location.hash.slice(1));
   if (first) open(first);

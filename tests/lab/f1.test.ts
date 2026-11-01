@@ -77,3 +77,14 @@ test('leaving cancels the animation frame and removes the listeners', () => {
   expect(strip().dataset.index).toBe(before);
   cancel.mockRestore();
 });
+
+test('pointer capture is taken on the strip, so move and up still reach it', () => {
+  mount();
+  const onStage = vi.fn();
+  const onStrip = vi.fn();
+  (stage as unknown as { setPointerCapture: unknown }).setPointerCapture = onStage;
+  (strip() as unknown as { setPointerCapture: unknown }).setPointerCapture = onStrip;
+  strip().dispatchEvent(ptr('pointerdown', 300, 0));
+  expect(onStrip).toHaveBeenCalledWith(1);
+  expect(onStage).not.toHaveBeenCalled();
+});

@@ -120,3 +120,34 @@ test('leaving removes the pointer and devicemotion listeners', () => {
   ptr('pointerup', 50, 100);
   expect(label().dataset.kind).not.toBe('tap');
 });
+
+test('motion permission is asked on release, not on press', () => {
+  const requestPermission = vi.fn(async () => 'granted');
+  (window as unknown as { DeviceMotionEvent: unknown }).DeviceMotionEvent = { requestPermission };
+  mount();
+  ptr('pointerdown', 0, 100);
+  expect(requestPermission).not.toHaveBeenCalled();
+  ptr('pointerup', 50, 100);
+  expect(requestPermission).toHaveBeenCalledTimes(1);
+});
+
+test('a rejected permission request is handled and never asked again', async () => {
+  const requestPermission = vi.fn(() => Promise.reject(new Error('NotAllowedError')));
+  (window as unknown as { DeviceMotionEvent: unknown }).DeviceMotionEvent = { requestPermission };
+  mount();
+  ptr('pointerdown', 0, 100);
+  ptr('pointerup', 50, 100);
+  await new Promise((r) => setTimeout(r, 0));
+  ptr('pointerdown', 100, 100);
+  ptr('pointerup', 150, 100);
+  expect(requestPermission).toHaveBeenCalledTimes(1);
+});
+
+test('reduced motion never asks for motion permission', () => {
+  const requestPermission = vi.fn(async () => 'granted');
+  (window as unknown as { DeviceMotionEvent: unknown }).DeviceMotionEvent = { requestPermission };
+  mount({ reduced: true });
+  ptr('pointerdown', 0, 100);
+  ptr('pointerup', 50, 100);
+  expect(requestPermission).not.toHaveBeenCalled();
+});

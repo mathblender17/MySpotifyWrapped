@@ -4,7 +4,9 @@ import type { Experiment } from '../types';
 const TARGET = 28613; // demo minutes
 const COUNT_S = 1.4;
 const BACK = 2.2; // how far the count overshoots
-const BOUNCE_AT = 0.4; // tilt change that shakes the digits loose
+const BOUNCE_AT = 0.25; // tilt change, within WINDOW_MS, that shakes the digits loose (readings are smoothed, so one step is small)
+const WINDOW_MS = 300;
+const COOLDOWN_MS = 600;
 
 /** The shown value `u` (0..1) of the way through the count: back-out easing, so it overshoots the target then settles. */
 export function countAt(target: number, u: number): number {
@@ -65,15 +67,20 @@ export const f5: Experiment = {
       run();
     });
 
-    let last: number | undefined;
+    let recent: { t: number; y: number }[] = [];
+    let lastBounce = -Infinity;
     let bounces = 0;
     const off = kit.tilt.on((_x, y) => {
-      if (last !== undefined && Math.abs(y - last) > BOUNCE_AT) {
+      const now = Date.now();
+      recent = recent.filter((r) => now - r.t <= WINDOW_MS);
+      const oldest = recent[0];
+      recent.push({ t: now, y });
+      if (oldest && Math.abs(y - oldest.y) > BOUNCE_AT && now - lastBounce >= COOLDOWN_MS) {
+        lastBounce = now;
         bounces++;
         num.dataset.bounces = String(bounces);
         gsap.fromTo(num, { y: -22 }, { y: 0, duration: 0.7, ease: 'elastic.out(1,0.4)' });
       }
-      last = y;
     });
 
     kit.onLeave(() => {

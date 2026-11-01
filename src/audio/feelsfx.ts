@@ -1,6 +1,6 @@
 const PEAK = 0.125; // −18 dB under the music, the same ceiling as the ride's accents (src/audio/sfx.ts)
 
-export type FeelSfx = { clack(): void; slam(): void; tick(): void; dispose(): void };
+export type FeelSfx = { unlock(): void; clack(): void; slam(): void; tick(): void; dispose(): void };
 
 /**
  * Feel-layer sounds (ux spec §3), synthesised with Web Audio: no files. Nothing is created until a sound is allowed,
@@ -53,6 +53,10 @@ export function createFeelSfx(opts: { canPlay: () => boolean; makeContext?: () =
   };
 
   return {
+    /** Call inside a tap: iOS only starts or resumes an AudioContext during a user gesture. */
+    unlock() {
+      ready()?.resume().catch(() => {});
+    },
     clack() {
       const c = ready();
       if (!c) return;
