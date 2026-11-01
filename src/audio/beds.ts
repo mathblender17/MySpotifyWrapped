@@ -25,6 +25,7 @@ export function createBeds(o: { canPlay: () => boolean; makeContext?: () => Audi
     } catch {
       return undefined; // no Web Audio: stay silent
     }
+    if (ctx.state === 'suspended') ctx.resume?.().catch(() => {});
     return ctx;
   };
   const env = (c: AudioContext, t: number, len: number, peak = PEAK) => {

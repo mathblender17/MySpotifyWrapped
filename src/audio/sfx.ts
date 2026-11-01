@@ -16,6 +16,7 @@ export function createSfx(opts: { canPlay: () => boolean; makeContext?: () => Au
     } catch {
       return undefined; // no Web Audio: stay silent
     }
+    if (ctx.state === 'suspended') ctx.resume?.().catch(() => {});
     return ctx;
   };
 

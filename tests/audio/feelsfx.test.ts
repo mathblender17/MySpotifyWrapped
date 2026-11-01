@@ -83,3 +83,11 @@ test('unlock resumes the context once allowed and makes none before', () => {
   fx.unlock();
   expect(resume).toHaveBeenCalledTimes(1);
 });
+
+test('a suspended context is resumed when a sound plays (Chrome on Android starts suspended)', () => {
+  const f = fakeContext();
+  const resume = vi.fn(() => Promise.resolve());
+  Object.assign(f.ctx, { state: 'suspended', resume });
+  createFeelSfx({ canPlay: () => true, makeContext: () => f.ctx }).slam();
+  expect(resume).toHaveBeenCalled();
+});

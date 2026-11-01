@@ -16,6 +16,7 @@ export function createFeelSfx(opts: { canPlay: () => boolean; makeContext?: () =
     } catch {
       return undefined;
     }
+    if (ctx.state === 'suspended') ctx.resume?.().catch(() => {});
     return ctx;
   };
   const env = (c: AudioContext, t: number, len: number, peak = PEAK) => {
