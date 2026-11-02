@@ -2,7 +2,11 @@ import { gsap } from 'gsap';
 import { mixQueue } from '../audio/mix';
 import { findPreview as itunes } from '../audio/previews';
 import { createSfx, type Sfx } from '../audio/sfx';
+import { createBeds, type BedKind, type Beds } from '../audio/beds';
+import { createFeelSfx, type FeelSfx } from '../audio/feelsfx';
 import type { Soundtrack } from '../audio/soundtrack';
+import { SLAM } from '../feel/patterns';
+import { createTilt, type Tilt } from '../feel/tilt';
 import { beatTime, playBeats, prefersReducedMotion } from '../journey/beats';
 import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
@@ -36,6 +40,8 @@ export type StoryWorld = {
   destroy(): void;
 };
 
+/** The ambience a station plays under the song: wind at the torii and Fuji, the door chime at the konbini, the gacha ratchet. */
+const BEDS: Record<string, BedKind> = { torii: 'wind', fuji: 'wind', konbini: 'chime', gacha: 'ratchet' };
 const HOLD_PRESS_MS = 200;
 /** Travel that makes a press a swipe, and the finger movement that rules out a hold (alive spec §4). */
 const SWIPE_PX = 40;
@@ -59,6 +65,10 @@ export function createStory(
     makeSfx?: (o: { canPlay: () => boolean }) => Sfx;
     /** Test seam: build the haptics. */
     makeHaptics?: (o: { canBuzz: () => boolean }) => Haptics;
+    /** Test seams: the feel sounds, the world sound beds and the phone tilt. */
+    makeFx?: (o: { canPlay: () => boolean }) => FeelSfx;
+    makeBeds?: (o: { canPlay: () => boolean }) => Beds;
+    makeTilt?: (o: { reduced: boolean }) => Tilt;
   },
 ) {
   const reduced = opts.reduced ?? prefersReducedMotion();
@@ -91,6 +101,16 @@ export function createStory(
   const sfx = (opts.makeSfx ?? createSfx)({ canPlay });
   // Haptics share sound's rules: only after the unlocking tap, never muted, never with reduced motion.
   const haptics = (opts.makeHaptics ?? createHaptics)({ canBuzz: canPlay });
+  // Feel layer (ux spec F1, F2, F3, F4): rail clack, stamp slam, a bed of ambience per world, tilt parallax. Same rules as sound.
+  const fx = (opts.makeFx ?? createFeelSfx)({ canPlay });
+  const beds = (opts.makeBeds ?? createBeds)({ canPlay });
+  const tilt = (opts.makeTilt ?? createTilt)({ reduced });
+  let tiltOff: (() => void) | undefined;
+  const startTilt = () => {
+    if (tiltOff || reduced) return;
+    tiltOff = tilt.on((x, y) => void gsap.set(frame.stage, { transformPerspective: 900, rotationY: x * 2.5, rotationX: -y * 2 }));
+    void tilt.request().catch(() => {}); // a refusal or a desktop leaves the card flat
+  };
   /** Arrival sound: the temple bell at the last station, the station chime everywhere else. */
   const arrivalSound = (id: string) => (id === 'kanji' ? sfx.bell() : sfx.chime());
 
@@ -312,8 +332,20 @@ export function createStory(
     tl.add(beats.paused(false), beatsAt);
     at(trans.duration(), () => {
       arrivalSound(s.id);
+      fx.clack();
       haptics.buzz(20);
+      const bed = BEDS[s.id];
+      if (bed) beds.start(bed);
+      else beds.stop();
     });
+    // The stamp lands on the ticket: a slam, a short jolt of the card and a heavy buzz.
+    if (playable[i]) {
+      at(trans.duration() + 0.3, () => {
+        fx.slam();
+        haptics.buzz(SLAM);
+        gsap.fromTo(frame.stage, { y: -3 }, { y: 0, duration: 0.25, ease: 'elastic.out(1,0.4)' });
+      });
+    }
     // A tap of the finger on each stamp and drop; the gacha SSR gets its own pattern (data-haptic="ssr").
     for (const b of el.querySelectorAll<HTMLElement>('[data-fx~="stamp"], [data-fx~="drop"]')) {
       at(beatsAt + beatTime(el, b, reduced), () => haptics.buzz(b.dataset.haptic === 'ssr' ? [15, 40, 15] : 10));
@@ -364,6 +396,8 @@ export function createStory(
   const onUp = (e: MouseEvent) => {
     opts.soundtrack?.unlock(); // any tap is a gesture the browser accepts for sound
     sfx.unlock();
+    fx.unlock();
+    startTilt();
     unhint(); // any first touch — the card, a control, a year — shows the rider already knows
     if (downX === undefined) return;
     clearTimeout(pressTimer);
@@ -436,6 +470,11 @@ export function createStory(
       runLeaves();
       opts.soundtrack?.stop();
       sfx.dispose();
+      fx.dispose();
+      beds.stop();
+      beds.dispose();
+      tiltOff?.();
+      tilt.stop();
       world?.destroy();
       world = null;
       master?.kill();

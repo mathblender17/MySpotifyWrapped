@@ -370,7 +370,7 @@ test('the hint shows on the departure board and goes on the first tap', () => {
   expect(root.querySelector('.hint')).toBeNull();
 });
 
-test('arrival buzzes 20 ms and each stamp 10 ms; nothing when muted or reduced or skipped', () => {
+test('arrival buzzes 20 ms, the ticket stamp slams, and each beat stamp 10 ms; nothing when muted or reduced or skipped', () => {
   const stampy: Record<string, Slide> = { ...slides, sumo: () => Object.assign(document.createElement('div'), { id: 'sumo', className: 'ph', innerHTML: '<b data-beat="1" data-fx="stamp">a</b><b data-beat="2" data-fx="drop">b</b><b data-beat="3" data-fx="stamp" data-haptic="ssr">c</b>' }) };
   const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
   const run = (o: Partial<Parameters<typeof createStory>[1]>, finishEarly = false) => {
@@ -382,7 +382,7 @@ test('arrival buzzes 20 ms and each stamp 10 ms; nothing when muted or reduced o
     return buzzes;
   };
   const sound = { play() {}, pause() {}, resume() {}, stop() {}, unlock() {}, mute() {}, onEnded() {}, muted: false, unlocked: true };
-  expect(run({ soundtrack: sound })).toEqual([20, 10, 10, [15, 40, 15]]);
+  expect(run({ soundtrack: sound })).toEqual([20, [40, 20, 15], 10, 10, [15, 40, 15]]);
   expect(run({ soundtrack: { ...sound, muted: true } })).toEqual([]);
   expect(run({ soundtrack: sound, reduced: true })).toEqual([]);
   expect(run({ soundtrack: sound }, true)).toEqual([]);
@@ -454,4 +454,45 @@ test('the hint goes on the first control tap and never rides past departure', ()
   root.querySelector<HTMLButtonElement>('.controls button[aria-label="Next"]')!.click();
   expect(root.querySelector('.hint')).toBeNull();
   expect(localStorage.getItem('ongaku:hinted')).toBe('1');
+});
+
+test('the feel layer: a clack on arrival, a slam on the ticket stamp, and a bed per world', () => {
+  const calls: string[] = [];
+  const fx = { unlock() {}, clack: () => calls.push('clack'), slam: () => calls.push('slam'), tick() {}, dispose() {} };
+  const beds = { start: (k: string) => calls.push(`bed:${k}`), stop: () => calls.push('bed:stop'), playing: null, dispose() {} };
+  const torii = STATIONS.findIndex((x) => x.id === 'torii');
+  story({ startAt: torii, holdMs: 60000, makeFx: () => fx, makeBeds: () => beds as never });
+  advance(6000);
+  expect(calls).toEqual(['clack', 'bed:wind', 'slam']);
+});
+
+test('a station with no bed stops the one before it', () => {
+  const calls: string[] = [];
+  const beds = { start: (k: string) => calls.push(`bed:${k}`), stop: () => calls.push('bed:stop'), playing: null, dispose() {} };
+  const sumo = STATIONS.findIndex((x) => x.id === 'sumo');
+  story({ startAt: sumo, holdMs: 60000, makeBeds: () => beds as never });
+  advance(6000);
+  expect(calls).toContain('bed:stop');
+  expect(calls.some((c) => c.startsWith('bed:') && c !== 'bed:stop')).toBe(false);
+});
+
+test('the feel sounds follow the ride rules: nothing under reduced motion', () => {
+  let allowed: boolean | undefined;
+  story({ reduced: true, holdMs: 60000, makeFx: (o) => ({ unlock() {}, clack() { allowed = o.canPlay(); }, slam() {}, tick() {}, dispose() {} }) });
+  advance(6000);
+  expect(allowed === undefined || allowed === false).toBe(true);
+});
+
+test('tilt moves the card a little and is never asked for under reduced motion', () => {
+  const subs: ((x: number, y: number) => void)[] = [];
+  const request = vi.fn(async () => true);
+  const tilt = { state: 'idle', request, stop() {}, on: (fn: (x: number, y: number) => void) => (subs.push(fn), () => {}) };
+  story({ reduced: true, makeTilt: () => tilt as never });
+  tap(root.querySelector('.stage')!);
+  expect(request).not.toHaveBeenCalled();
+  story({ makeTilt: () => tilt as never });
+  tap(root.querySelector('.stage')!);
+  expect(request).toHaveBeenCalledTimes(1);
+  subs[0](1, 0);
+  expect(gsap.getProperty(root.querySelector('.stage')!, 'rotationY')).toBeGreaterThan(0);
 });
