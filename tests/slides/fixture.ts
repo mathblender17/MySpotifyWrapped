@@ -40,7 +40,7 @@ export const STATS: Required<YearStats> = {
   personality: { id: 'nightowl', name: 'The Night Owl', jp: '夜行性', line: 'Your best listening happened after 10 PM.' },
   fortune: { jp: '末吉', en: 'Future blessing' },
   kanji: { kanji: '夜', meaning: 'night' },
-  soundtrack: {},
+  soundtrack: {}, twists: [],
 };
 
 export const ctx = (over: Partial<SlideContext> = {}): SlideContext => ({

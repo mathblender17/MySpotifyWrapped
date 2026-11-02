@@ -3,10 +3,11 @@ import { localYear, qualifying, topN, totals, valueOf } from './basics';
 import { fortune, kanji, personality, traits } from './readings';
 import { fastestRiser } from './riser';
 import { peakWeek, seasons, weekly } from './time';
+import { computeTwists } from './twists';
 
 const MIN_PLAYS = 50;
 
-function yearStats(year: number, ps: Play[], raw: Play[], firstSeen: Map<string, Date>, coversPriorYears: boolean): YearStats {
+function yearStats(year: number, ps: Play[], raw: Play[], firstSeen: Map<string, Date>, coversPriorYears: boolean, before?: Play[]): YearStats {
   const topArtists = topN(ps, 'artist', 5);
   const topArtistShare = valueOf(ps.filter((p) => p.artist === topArtists[0].name)) / valueOf(ps);
   const seasonStats = seasons(ps);
@@ -31,6 +32,7 @@ function yearStats(year: number, ps: Play[], raw: Play[], firstSeen: Map<string,
     personality: persona,
     fortune: fortune(t),
     kanji: kanji(persona.id, peakSeason),
+    twists: computeTwists(ps, coversPriorYears ? before : undefined),
     soundtrack: { top: topTracks[0], topArtistTrack: songOf(topArtists[0].name), riserTrack: songOf(riser?.artist) },
   };
 }
@@ -63,7 +65,7 @@ export function computeAllYears(plays: Play[], opts: { lifetime?: boolean } = {}
     // Data that starts inside this year (or only a few months before it) can't tell "new this year" from "new to the export".
     const coversPriorYears = earliest! < new Date(year, 0, 1) && (opts.lifetime || earliest! <= new Date(year - 1, 0, 1));
     const raw = plays.filter((p) => localYear(p.ts) === year);
-    stats.set(year, yearStats(year, byYear.get(year)!, raw, firstSeen, coversPriorYears));
+    stats.set(year, yearStats(year, byYear.get(year)!, raw, firstSeen, coversPriorYears, q.filter((p) => p.ts < new Date(year, 0, 1))));
   }
   return { years, stats };
 }

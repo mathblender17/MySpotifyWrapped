@@ -1,3 +1,4 @@
+import type { Twist } from './stats/twists';
 export type Play = {
   ts: Date;
   track: string;
@@ -46,6 +47,8 @@ export type YearStats = {
   fortune?: Fortune;
   kanji?: KanjiReading;
   /** Songs the story plays: the #1 song, the #1 artist's most-played song, the riser's most-played song. */
+  /** Surprise beats the guide can tell, computed only when the data holds them. */
+  twists?: Twist[];
   soundtrack?: { top?: Ranked; topArtistTrack?: Ranked; riserTrack?: Ranked };
 };
 

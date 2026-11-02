@@ -150,9 +150,15 @@ test('keyboard: arrows move, space toggles pause', () => {
 });
 
 test('the guide texts each station’s hook', () => {
-  story({ startAt: 1 });
+  story({ startAt: 1, ctx: { ...ctx, stats: { ...ctx.stats!, twists: [] } } });
   advance(2000);
   expect(root.querySelector('.guide')!.textContent).toContain('First up');
+});
+
+test('the guide tells a twist the data holds at its station', () => {
+  story({ startAt: 1, ctx: { ...ctx, stats: { ...ctx.stats!, twists: [{ kind: 'streak', days: 23 }] } } });
+  advance(2000);
+  expect(root.querySelector('.guide')!.textContent).toContain('23 days in a row');
 });
 
 test('genre stations explain they are coming, not that an export would unlock them', () => {
