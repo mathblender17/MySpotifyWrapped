@@ -94,3 +94,5 @@ body {
 .credits { margin-top: 28px; font-size: 11px; line-height: 1.5; color: #fff8; max-width: 36em; }
 .credits a { color: inherit; }
 .mine[hidden] { display: none; }
+
+.build { margin: 8px 0 0; font-size: 11px; opacity: .55; text-align: center; }

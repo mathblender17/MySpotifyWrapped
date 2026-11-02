@@ -41,6 +41,7 @@ function landing(note?: string) {
       <div class="status" role="status"></div>
       ${note ? `<div class="note">${note}<button type="button" class="x" aria-label="Dismiss">×</button></div>` : ''}
       <p class="credits">${creditsLine()}</p>
+      <p class="build">build ${typeof __BUILD__ === 'string' ? __BUILD__ : 'dev'}</p>
     </main>`;
   app.querySelector('.demo')!.addEventListener('click', () => start(makeDemoPlays(), [], true, undefined, true));
   const mine = app.querySelector<HTMLButtonElement>('.mine')!;
