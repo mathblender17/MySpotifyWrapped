@@ -27,3 +27,9 @@ test('dev check: ?previews=silent swaps song previews for short silent clips; an
   expect(parseRoute('?data=demo&previews=silent').previews).toBe('silent');
   expect(parseRoute('?previews=loud').previews).toBeUndefined();
 });
+
+test('?lab=1 sets lab', () => {
+  expect(parseRoute('?lab=1')).toEqual({ lab: true });
+  expect(parseRoute('?lab=0')).not.toHaveProperty('lab');
+  expect(parseRoute('')).not.toHaveProperty('lab');
+});

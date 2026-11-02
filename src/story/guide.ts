@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
-import { HOOKS } from '../journey/hooks';
+import type { YearStats } from '../types';
+import { lineFor } from './conductor';
 
 const PER_CHAR = 0.04;
 
@@ -13,9 +14,9 @@ export function createGuide() {
 
   return {
     el,
-    say(id: string): gsap.core.Timeline {
+    say(id: string, stats?: YearStats): gsap.core.Timeline {
       const tl = gsap.timeline({ paused: true });
-      const hook = HOOKS[id];
+      const hook = lineFor(id, stats);
       jp.textContent = '';
       en.textContent = '';
       if (!hook) return tl;

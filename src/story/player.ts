@@ -4,13 +4,13 @@ import { findPreview as itunes } from '../audio/previews';
 import { createSfx, type Sfx } from '../audio/sfx';
 import type { Soundtrack } from '../audio/soundtrack';
 import { beatTime, playBeats, prefersReducedMotion } from '../journey/beats';
-import { HOOKS } from '../journey/hooks';
 import { isPlayable, STATIONS } from '../journey/stations';
 import { runTransition } from '../journey/transitions';
 import type { YearStats, YearSummary } from '../types';
 import { createFrame } from './frame';
 import { createControls } from './controls';
 import { createGuide } from './guide';
+import { lineFor } from './conductor';
 import { createHaptics, type Haptics } from './haptics';
 import { createHint } from './hint';
 import { createRouteMap } from './routemap';
@@ -273,7 +273,7 @@ export function createStory(
       sign.show(s).progress(1);
       sign.dock().progress(1);
       playBeats(el, { reduced }).progress(1);
-      guide.say(s.id).progress(1);
+      guide.say(s.id, opts.ctx.stats).progress(1);
       ticket.stamp(i, s.accent).progress(1);
       if (s.id === 'kanji') ticket.finale().progress(1);
       current = el;
@@ -284,7 +284,7 @@ export function createStory(
     const tl = gsap.timeline({ paused: true, onComplete: () => (settle(el), armHold()) });
     const at = (t: number, fn: () => void) => tl.call(() => void (skipping || fn()), undefined, t);
     const selfHooked = s.transitionIn === 'phone' || s.transitionIn === 'tease';
-    if (!selfHooked) tl.add(guide.say(s.id).paused(false), 0);
+    if (!selfHooked) tl.add(guide.say(s.id, opts.ctx.stats).paused(false), 0);
     else guide.clear();
     // Build the transition first: beats render their start state at once (scaled, offset), and a match cut must
     // measure its target where it will come to rest.
@@ -292,7 +292,7 @@ export function createStory(
       stage: frame.stage,
       cut: s.cut,
       morph: s.morph,
-      hook: HOOKS[s.id],
+      hook: lineFor(s.id, opts.ctx.stats),
       reduced,
       world: world ?? undefined,
       from: from < 0 ? undefined : from,
@@ -304,7 +304,7 @@ export function createStory(
     const signDock = sign.dock();
     tl.add(trans, 0);
     // The phone and tease show the hook themselves; once they're gone the guide's phone picks it up, never blank.
-    if (selfHooked) tl.add(guide.say(s.id).paused(false), trans.duration());
+    if (selfHooked) tl.add(guide.say(s.id, opts.ctx.stats).paused(false), trans.duration());
     tl.add(signIn.paused(false), trans.duration());
     tl.add(ticket.stamp(i, s.accent).paused(false), trans.duration());
     tl.add(signDock.paused(false), trans.duration() + signIn.duration());

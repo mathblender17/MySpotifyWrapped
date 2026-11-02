@@ -175,7 +175,8 @@ async function ride(ds: Dataset, year: number, startAt: number, note?: string) {
 }
 
 const route = parseRoute(location.search);
-if (route.world && import.meta.env.DEV) previewWorld(route.station ?? 1); // dev-only district preview
+if (route.lab) import('./lab/lab').then((m) => m.mountLab(app)); // the UX lab: a separate chunk, fetched only behind ?lab=1
+else if (route.world && import.meta.env.DEV) previewWorld(route.station ?? 1); // dev-only district preview
 else if (route.data === 'demo') start(makeDemoPlays(), [], true, route, true);
 else landing();
 
